@@ -1,5 +1,6 @@
 {
-  "tasks": {
-    "serve": "deno run --allow-read --allow-net --allow-run --allow-write --no-check main.ts"
+  "imports": {
+    "@deno-plc/vite-plugin-deno": "jsr:@deno-plc/vite-plugin-deno@^2.2.1",
+    "@familyboat/deno-fetch-mirror": "jsr:@familyboat/deno-fetch-mirror@^0.1.0"
   }
 }

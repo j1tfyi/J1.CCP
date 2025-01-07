@@ -1,10 +1,6 @@
-import { BrowserRouter, React, ReactDOM } from "../deps.client.ts";
+import { React, ReactDOM } from "../deps.client.ts";
 import App from "./App.tsx";
 
-// Bind react app to <div id="app" />
-const root = ReactDOM.createRoot(document.getElementById("app"));
-root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
-);
+const rootElem = document.getElementById("root")!;
+const root = ReactDOM.createRoot(rootElem);
+root.render(<App />);

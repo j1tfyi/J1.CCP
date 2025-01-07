@@ -1,21 +1,13 @@
-import { Navigate, React, Route, Routes } from "../deps.client.ts";
-import { NavBar } from "./components/NavBar.tsx";
-import { HomePage } from "./pages/HomePage.tsx";
-import { GettingStartedPage } from "./pages/GettingStartedPage.tsx";
-import { UserPage } from "./pages/UserPage.tsx";
-import { Footer } from "./components/Footer.tsx";
+import { React } from "../deps.client.ts";
 
-export default function App(props) {
+export default function App() {
+  const [count, setCount] = React.useState(0);
+
   return (
-    <div>
-      <NavBar />
-      <Routes>
-        <Route exact path="/" element={<HomePage />} />
-        <Route exact path="/getting-started" element={<GettingStartedPage />} />
-        <Route path="/users/:username" element={<UserPage />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-      <Footer />
+    <div style={{ fontFamily: "sans-serif" }}>
+      <h1>Hello from Deno + React 18!</h1>
+      <p>Count is {count}</p>
+      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
     </div>
   );
 }
