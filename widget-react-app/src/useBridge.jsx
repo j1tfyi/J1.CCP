@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 
 // For Vite environment variables:
 // e.g. VITE_SCRIPT_URL="https://app.debridge.finance/assets/scripts/widget.js"
-const SCRIPT_URL = import.meta.env.VITE_SCRIPT_URL;
+const SCRIPT_URL = "https://app.debridge.finance/assets/scripts/widget.js";
+  console.log("SCRIPT_URL:", SCRIPT_URL);
 
 const loadScript = (src, callback) => {
   const script = document.createElement("script");
