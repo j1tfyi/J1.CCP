@@ -1,9 +1,8 @@
-.DS_Store
-node_modules/
 dist/
-*.log
-package-lock.json
+*.lock
+.DS_Store
+allfiles.txt
 .vscode/
 .idea/
 *.env
-*.lock
+node_modules/
