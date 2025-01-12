@@ -2,5 +2,13 @@
   "imports": {
     "@deno-plc/vite-plugin-deno": "jsr:@deno-plc/vite-plugin-deno@^2.2.1",
     "@familyboat/deno-fetch-mirror": "jsr:@familyboat/deno-fetch-mirror@^0.1.0"
+  },
+  "deploy": {
+    "project": "e5ef0b31-ab33-49ae-86f6-a4b5f0db9522",
+    "exclude": [
+      "**/node_modules"
+    ],
+    "include": [],
+    "entrypoint": "main.ts"
   }
 }

@@ -1,5 +1,56 @@
 import { serve } from "https://deno.land/std@0.193.0/http/server.ts";
 import { serveDir } from "https://deno.land/std@0.193.0/http/file_server.ts";
+import { gzip } from "https://deno.land/x/denoflate@1.2.1/mod.ts";
+
+// Constants
+const STATIC_CACHE_MAX_AGE = 31536000; // 1 year in seconds
+const DYNAMIC_CACHE_MAX_AGE = 3600;     // 1 hour in seconds
+
+// Rate limiting configuration with lower thresholds for testing
+const RATE_LIMIT = 50; // requests per window
+const RATE_WINDOW = 30000; // 30 seconds in milliseconds
+const rateLimitStore = new Map<string, { count: number; timestamp: number }>();
+
+// Enhanced rate limiting function with more detailed tracking
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number; reset: number } {
+ const now = Date.now();
+ const userRateLimit = rateLimitStore.get(ip);
+
+ if (!userRateLimit) {
+   rateLimitStore.set(ip, { count: 1, timestamp: now });
+   return { allowed: true, remaining: RATE_LIMIT - 1, reset: now + RATE_WINDOW };
+ }
+
+ if (now - userRateLimit.timestamp > RATE_WINDOW) {
+   rateLimitStore.set(ip, { count: 1, timestamp: now });
+   return { allowed: true, remaining: RATE_LIMIT - 1, reset: now + RATE_WINDOW };
+ }
+
+ if (userRateLimit.count >= RATE_LIMIT) {
+   return { allowed: false, remaining: 0, reset: userRateLimit.timestamp + RATE_WINDOW };
+ }
+
+ userRateLimit.count++;
+ rateLimitStore.set(ip, userRateLimit);
+ return { allowed: true, remaining: RATE_LIMIT - userRateLimit.count, reset: userRateLimit.timestamp + RATE_WINDOW };
+}
+
+// Helper function to add rate limit headers
+function addRateLimitHeaders(headers: Headers, rateLimitInfo: { remaining: number; reset: number }): void {
+ headers.set("X-RateLimit-Limit", RATE_LIMIT.toString());
+ headers.set("X-RateLimit-Remaining", rateLimitInfo.remaining.toString());
+ headers.set("X-RateLimit-Reset", Math.ceil(rateLimitInfo.reset / 1000).toString());
+}
+
+// Clean up old rate limit entries more frequently
+setInterval(() => {
+ const now = Date.now();
+ for (const [ip, data] of rateLimitStore.entries()) {
+   if (now - data.timestamp > RATE_WINDOW) {
+     rateLimitStore.delete(ip);
+   }
+ }
+}, RATE_WINDOW / 2);
 
 // Widget configuration and helper functions
 const DEBRIDGE_REFERRAL_CODE = "31021";
@@ -17,7 +68,7 @@ function getAffiliateFeeRecipient(inputChain: number): string {
   if (SUPPORTED_CHAINS.SOLANA.includes(inputChain)) {
     return SOLANA_PUBLIC_KEY;
   }
-  if (SUPPORTED_CHAINS.EVM.includes(inputChain)) {
+  if (SUPPORTED_CHAINS.EVM.includes( inputChain)) {
     return EVM_RECIPIENT;
   }
   throw new Error(`Unsupported chain ID: ${inputChain}`);
@@ -89,7 +140,6 @@ const WIDGET_CONFIG = {
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
         "0x6b175474e89094c44da98b954eedeac495271d0f",
         "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-        "0x506beb7965fc7053059006c7ab4c62c02c2d989f",
       ],
       10: [
         "",
@@ -119,6 +169,7 @@ const WIDGET_CONFIG = {
         "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
         "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",
         "0x4200000000000000000000000000000000000006",
+        "0x506beb7965fc7053059006c7ab4c62c02c2d989f",
       ],
       42161: [
         "",
@@ -149,7 +200,6 @@ const WIDGET_CONFIG = {
         "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
         "0x6b175474e89094c44da98b954eedeac495271d0f",
         "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-        "0x506beb7965fc7053059006c7ab4c62c02c2d989f",
       ],
       10: [
         "",
@@ -179,6 +229,7 @@ const WIDGET_CONFIG = {
         "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
         "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",
         "0x4200000000000000000000000000000000000006",
+        "0x506beb7965fc7053059006c7ab4c62c02c2d989f",
       ],
       42161: [
         "",
@@ -206,28 +257,121 @@ const WIDGET_CONFIG = {
 };
 
 // ---------------------- Serve logic ----------------------
-console.log("Deno server running at http://localhost:8000");
+async function compressResponse(response: Response): Promise<Response> {
+ const body = await response.text();
+ const compressed = gzip(new TextEncoder().encode(body));
+ 
+ const headers = new Headers(response.headers);
+ headers.set('Content-Encoding', 'gzip');
+ headers.set('Content-Length', compressed.length.toString());
 
-// Serve logic
+ return new Response(compressed, {
+   status: response.status,
+   headers
+ });
+}
+
 serve(async (req) => {
-  const url = new URL(req.url);
+ const startTime = performance.now();
+ 
+ try {
+   const clientIP = req.headers.get("x-forwarded-for")?.split(',')[0] || 
+                   req.headers.get("x-real-ip") || 
+                   "unknown";
 
-  // Serve widget configuration at `/widget-config`
-  if (url.pathname === "/widget-config") {
-    return new Response(JSON.stringify(WIDGET_CONFIG), {
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+   // Enhanced rate limit check
+   const rateLimitInfo = checkRateLimit(clientIP);
+   
+   if (!rateLimitInfo.allowed) {
+     const headers = new Headers({
+       "Content-Type": "text/plain",
+       "Retry-After": Math.ceil((rateLimitInfo.reset - Date.now()) / 1000).toString(),
+     });
+     addRateLimitHeaders(headers, rateLimitInfo);
+     
+     return new Response("Rate limit exceeded", {
+       status: 429,
+       headers
+     });
+   }
 
-  // Serve static files from `dist` folder
-  if (url.pathname === "/" || url.pathname.startsWith("/assets")) {
-    return await serveDir(req, {
-      fsRoot: "./widget-react-app/dist",
-      urlRoot: "",
-      quiet: true,
-    });
-  }
+   const url = new URL(req.url);
+   let response: Response;
 
-  // Return 404 for other paths
-  return new Response("Not Found", { status: 404 });
+   // [Keep your existing static file mapping...]
+
+   const acceptsGzip = req.headers.get('accept-encoding')?.includes('gzip') ?? false;
+
+   // Widget config endpoint
+   if (url.pathname === "/widget-config") {
+     try {
+       const config = JSON.stringify(WIDGET_CONFIG);
+       console.log("Widget config size:", config.length);
+       
+       const headers = new Headers({
+         "Content-Type": "application/json",
+         "Cache-Control": `public, max-age=${DYNAMIC_CACHE_MAX_AGE}`,
+         "X-Content-Type-Options": "nosniff",
+         "Access-Control-Allow-Origin": "*",
+         "Access-Control-Allow-Methods": "GET, OPTIONS",
+         "Access-Control-Allow-Headers": "Content-Type"
+       });
+       addRateLimitHeaders(headers, rateLimitInfo);
+
+       response = new Response(config, { headers });
+       return acceptsGzip ? await compressResponse(response) : response;
+     } catch (configError) {
+       console.error("Widget config error:", configError);
+       throw configError;
+     }
+   }
+
+   // Static file handling
+   if (url.pathname === "/" || url.pathname.startsWith('/assets/')) {
+     response = await serveDir(req, {
+       fsRoot: "./widget-react-app/dist",
+       urlRoot: "",
+       quiet: true
+     });
+
+     response.headers.set("Cache-Control", 
+       url.pathname.startsWith('/assets/') 
+         ? `public, max-age=${STATIC_CACHE_MAX_AGE}`
+         : `public, max-age=${DYNAMIC_CACHE_MAX_AGE}`
+     );
+     response.headers.set("X-Content-Type-Options", "nosniff");
+     response.headers.set("X-Frame-Options", "DENY");
+     response.headers.set("X-XSS-Protection", "1; mode=block");
+     addRateLimitHeaders(response.headers, rateLimitInfo);
+
+     return acceptsGzip ? await compressResponse(response) : response;
+   }
+
+   // 404 handling
+   const headers = new Headers({
+     'Content-Type': 'text/plain',
+     'Cache-Control': 'no-store'
+   });
+   addRateLimitHeaders(headers, rateLimitInfo);
+
+   return new Response("Not Found", { 
+     status: 404,
+     headers
+   });
+
+ } catch (error) {
+   console.error(`Error processing request to ${req.url}:`, error);
+   const duration = performance.now() - startTime;
+   if (duration > 1000) {
+     console.warn(`Slow request to ${req.url}: ${duration.toFixed(2)}ms`);
+   }
+   
+   return new Response('Internal Server Error', {
+     status: 500,
+     headers: {
+       'Content-Type': 'text/plain',
+       'Cache-Control': 'no-store'
+     }
+   });
+ }
 });

@@ -259,13 +259,5 @@ deployctl logs --project=<your-project-name>
 
 Replace <your-project-name> with the name of your Deno Deploy project.
 
-Notes
-  • Ensure your .gitignore file excludes unnecessary files (e.g., node_modules, dist, .env) to keep the repository clean.
-  • Always test locally before pushing or deploying changes.
-
-For any issues, feel free to reach out or consult the GitHub Docs or Deno Deploy Docs.
-
----
-
-Feel free to copy this `README.md` file and customize it as needed. Let me know if you'd like to add more details or specific commands!
+deployctl deploy --token ddp_QfyEC17P8L0nTILiZYcK7K4mBtYsXF0ffNJ8 --project=j1tfyi-bridgegate --prod main.ts
 
