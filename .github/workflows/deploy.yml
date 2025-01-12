@@ -22,29 +22,31 @@ jobs:
         with:
           deno-version: v1.x
 
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies and build React app
+        working-directory: widget-react-app
+        run: |
+          npm install
+          npm run build
+
       - name: List directory contents
         run: |
           echo "Current directory:"
           ls -la
           echo "Widget app directory:"
-          ls -la widget-react-app || echo "widget-react-app not found"
+          ls -la widget-react-app
           echo "Dist directory:"
-          ls -la widget-react-app/dist || echo "dist not found"
+          ls -la widget-react-app/dist
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "j1tfyi-portal"
           entrypoint: "main.ts"
-          import-map: "./import_map.json"
           include: |
             main.ts
             widget-react-app/dist/**/*
-
-      - name: Debug on failure
-        if: failure()
-        run: |
-          echo "Debug information:"
-          cat main.ts
-          echo "Environment:"
-          env
