@@ -27,9 +27,8 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "j1tfyi-portal"  # Remove the .deno.dev suffix
+          project: "j1tfyi-portal-app"
           entrypoint: "./main.ts"
           root: "."
-          import-map: "./deno.json"
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
