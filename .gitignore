@@ -8,3 +8,4 @@ allfiles.txt
 node_modules/
 rate_limit_test.log
 rate_limit_test.sh
+main.ts
