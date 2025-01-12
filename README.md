@@ -259,5 +259,4 @@ deployctl logs --project=<your-project-name>
 
 Replace <your-project-name> with the name of your Deno Deploy project.
 
-deployctl deploy --token ddp_QfyEC17P8L0nTILiZYcK7K4mBtYsXF0ffNJ8 --project=j1tfyi-bridgegate --prod main.ts
 
