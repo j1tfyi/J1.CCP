@@ -281,7 +281,11 @@ serve(async (req) => {
   const url = new URL(req.url);
   
   console.log(`Incoming request: ${req.method} ${url.pathname}`);
-  console.log(`Current directory contents:`, await Deno.readDir(".").next());
+  const dirContents = [];
+  for await (const entry of Deno.readDir(".")) {
+    dirContents.push(entry.name);
+  }
+  console.log(`Current directory contents:`, dirContents);
   
   try {
     const clientIP = req.headers.get("x-forwarded-for")?.split(',')[0] || 
