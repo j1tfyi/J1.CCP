@@ -1,9 +1,5 @@
 name: Deploy
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: main
+on: [push]
 
 jobs:
   deploy:
@@ -17,39 +13,23 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
 
-      - name: Install Deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v1.x
-
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install dependencies and build React app
+      - name: Build React app
         working-directory: widget-react-app
         run: |
           npm install
           npm run build
 
-      - name: List directory contents
-        run: |
-          echo "Current directory:"
-          ls -la
-          echo "Widget app directory:"
-          ls -la widget-react-app
-          echo "Dist directory:"
-          ls -la widget-react-app/dist
-
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "j1tfyi-portal.deno.dev" 
+          project: "j1tfyi-portal"  # Remove the .deno.dev suffix
           entrypoint: "./main.ts"
           root: "."
-          include: |
-            main.ts
-            widget-react-app/dist/**/*
+          import-map: "./deno.json"
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
