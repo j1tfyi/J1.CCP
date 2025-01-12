@@ -50,3 +50,5 @@ jobs:
           include: |
             main.ts
             widget-react-app/dist/**/*
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
