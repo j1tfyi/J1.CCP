@@ -393,4 +393,11 @@ serve(async (req) => {
     }
     
     return new Response('Internal Server Error', {
-      status
+      status: 500,
+      headers: {
+        'Content-Type': 'text/plain',
+        'Cache-Control': 'no-store'
+      }
+    });
+  }
+});
