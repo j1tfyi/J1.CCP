@@ -45,8 +45,9 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "j1tfyi-portal"
-          entrypoint: "main.ts"
+          project: "j1tfyi-portal.deno.dev" 
+          entrypoint: "./main.ts"
+          root: "."
           include: |
             main.ts
             widget-react-app/dist/**/*
