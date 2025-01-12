@@ -25,10 +25,13 @@ jobs:
           npm run build
 
       - name: Create main.ts from secret
-        shell: bash
         run: |
-          echo '${{ secrets.MAIN_TS_CONTENT }}' > main.ts
-          cat main.ts  # Debug: verify content
+          echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts
+
+      - name: Verify file content
+        run: |
+          ls -la
+          head -n 5 main.ts
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
