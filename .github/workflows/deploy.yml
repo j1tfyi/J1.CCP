@@ -24,11 +24,24 @@ jobs:
           npm install
           npm run build
 
+      - name: Create main.ts from secret
+        run: |
+          echo "${{ secrets.MAIN_TS_CONTENT }}" > main.ts
+
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "j1tfyi-portal-app"
           entrypoint: "./main.ts"
-          root: "."
+          include: |
+            main.ts
+            deno.json
+            deps.client.ts
+            deps.server.ts
+            widget-react-app/dist/**/*
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+
+      - name: Cleanup
+        if: always()
+        run: rm -f main.ts
