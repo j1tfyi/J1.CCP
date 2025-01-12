@@ -22,8 +22,18 @@ jobs:
         with:
           deno-version: v1.x
 
+      - name: Verify static files
+        run: |
+          echo "Content of widget-react-app/dist:"
+          ls -la widget-react-app/dist/
+          echo "Content of index.html:"
+          cat widget-react-app/dist/index.html
+
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "j1tfyi-portal"
           entrypoint: "main.ts"
+          include: |
+            main.ts
+            widget-react-app/dist/**/*

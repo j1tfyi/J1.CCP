@@ -6,3 +6,5 @@ allfiles.txt
 .idea/
 *.env
 node_modules/
+rate_limit_test.log
+rate_limit_test.sh
