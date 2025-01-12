@@ -21,10 +21,10 @@ jobs:
       - name: Create sensitive files
         run: |
           echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts
-          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > widget-react-app/src/useBridge.jsx
+          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx
 
       - name: Build React app
-        working-directory: widget-react-app
+        working-directory: bridge-react-app
         run: |
           npm install
           npm run build
@@ -35,7 +35,7 @@ jobs:
           echo "Checking main.ts:"
           head -n 5 main.ts
           echo "Checking useBridge.jsx:"
-          head -n 5 widget-react-app/src/useBridge.jsx
+          head -n 5 bridge-react-app/src/useBridge.jsx
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
@@ -47,7 +47,7 @@ jobs:
             deno.json
             deps.client.ts
             deps.server.ts
-            widget-react-app/dist/**/*
+            bridge-react-app/dist/**/*
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
 
@@ -55,4 +55,4 @@ jobs:
         if: always()
         run: |
           rm -f main.ts
-          rm -f widget-react-app/src/useBridge.jsx
+          rm -f bridge-react-app/src/useBridge.jsx
