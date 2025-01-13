@@ -1,19 +1,32 @@
+# Directories
 dist/
-*.lock
-.DS_Store
-allfiles.txt
+node_modules/
 .vscode/
 .idea/
+
+# Operating System Files
+.DS_Store
+
+# Sensitive and Generated Files
 *.env
-node_modules/
-rate_limit_test.log
-rate_limit_test.sh
+*.lock
+*.base64
+
+# Specific Project Files
 main.ts
 main.template.ts
 main.ts.backup
-main.ts.base64
 widget-react-app/main.ts
-widget-react-app/src/useBridge.jsx
-useBridge.base64
-useBridge.base64
-bridge-react-app/src/App.jsx
+
+# Specific Source Files
+**/src/useBridge.jsx
+**/src/App.jsx
+
+# Logs and Test Files
+rate_limit_test.log
+rate_limit_test.sh
+allfiles.txt
+
+# Wildcard Base64 Ignore
+*/*.base64
+**/*.base64
