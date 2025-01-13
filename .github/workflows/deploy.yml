@@ -22,6 +22,7 @@ jobs:
         run: |
           echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts
           echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx
+          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx
 
       - name: Build React app
         working-directory: bridge-react-app
@@ -36,6 +37,8 @@ jobs:
           head -n 5 main.ts
           echo "Checking useBridge.jsx:"
           head -n 5 bridge-react-app/src/useBridge.jsx
+          echo "Checking App.jsx:"
+          head -n 5 bridge-react-app/src/App.jsx
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
@@ -56,3 +59,4 @@ jobs:
         run: |
           rm -f main.ts
           rm -f bridge-react-app/src/useBridge.jsx
+          rm -f bridge-react-app/src/App.jsx
