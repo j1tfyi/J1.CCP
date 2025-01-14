@@ -1,8 +1,8 @@
-# J1T.FYI deBridge Gate Portal: Cross-Chain Liquidity Networking
+# J1.CrossChain Protocol: Cross-Chain Liquidity Networking
 
 ## 🌐 Project Overview
 
-J1TFYI Portal is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
+J1.CrossChain Protocol is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
 
 ## 🚀 Core Value Proposition
 
@@ -102,7 +102,7 @@ deBridge enables:
 - **Twitter**: [J1TFYI Twitter](https://x.com/j1tfyi)
 
 ### Token Information
-- **Contract Address**: `HAqD46mR4LgY3aJiMZSabfefZoysG3Uuj6wn2ZKYE14v`
+- **$J1TFYI Contract Address**: `HAqD46mR4LgY3aJiMZSabfefZoysG3Uuj6wn2ZKYE14v`
 
 For inquiries, technical discussions, or potential collaborations, please reach out through our social channels or contact the project maintainers.
 
