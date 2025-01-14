@@ -17,28 +17,86 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          
+      - name: Debug environment
+        run: |
+          echo "Node version:"
+          node --version
+          echo "NPM version:"
+          npm --version
+          echo "Working directory:"
+          pwd
+          echo "Directory structure before file creation:"
+          ls -R
 
       - name: Create sensitive files
         run: |
-          echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts
-          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx
-          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx
+          # Create directories if they don't exist
+          mkdir -p bridge-react-app/src
+          
+          # Decode and create files with error checking
+          echo "Creating main.ts..."
+          echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts || exit 1
+          
+          echo "Creating useBridge.jsx..."
+          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx || exit 1
+          
+          echo "Creating App.jsx..."
+          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx || exit 1
+          
+          # Set proper permissions
+          chmod 644 main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
+
+      - name: Verify file creation
+        run: |
+          echo "Directory structure after file creation:"
+          ls -R
+          
+          echo "File permissions:"
+          ls -l main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
+          
+          echo "File sizes:"
+          wc -c main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
+          
+          echo "Content verification - main.ts:"
+          head -n 5 main.ts
+          
+          echo "Content verification - useBridge.jsx:"
+          head -n 5 bridge-react-app/src/useBridge.jsx
+          
+          echo "Content verification - App.jsx:"
+          cat bridge-react-app/src/App.jsx
+
+      - name: Install dependencies
+        working-directory: bridge-react-app
+        run: |
+          echo "Package.json content:"
+          cat package.json
+          
+          echo "Installing dependencies..."
+          npm install
+          
+          echo "Installed packages:"
+          npm list --depth=0
+
+      - name: Verify source files before build
+        working-directory: bridge-react-app
+        run: |
+          echo "Source directory contents:"
+          ls -la src/
+          echo "App.jsx content:"
+          cat src/App.jsx
+          echo "useBridge.jsx content:"
+          cat src/useBridge.jsx
 
       - name: Build React app
         working-directory: bridge-react-app
         run: |
-          npm install
+          echo "Starting build..."
           npm run build
-
-      - name: Verify files
-        run: |
-          ls -la
-          echo "Checking main.ts:"
-          head -n 5 main.ts
-          echo "Checking useBridge.jsx:"
-          head -n 5 bridge-react-app/src/useBridge.jsx
-          echo "Checking App.jsx:"
-          head -n 5 bridge-react-app/src/App.jsx
+          
+          echo "Build output:"
+          ls -R dist/
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
@@ -57,6 +115,10 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
+          echo "Cleaning up sensitive files..."
           rm -f main.ts
           rm -f bridge-react-app/src/useBridge.jsx
           rm -f bridge-react-app/src/App.jsx
+          echo "Verifying cleanup:"
+          ls -la
+          ls -la bridge-react-app/src/
