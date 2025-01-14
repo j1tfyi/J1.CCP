@@ -42,15 +42,26 @@ jobs:
           echo "Length of MAIN_TS_BASE64:"
           echo "${{ secrets.MAIN_TS_BASE64 }}" | wc -c
           
-          # Decode and create files with error checking and debug output
+          # Decode and create files with error checking
           echo "Creating main.ts..."
-          echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d | tee main.ts || exit 1
+          echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts || exit 1
           
           echo "Creating useBridge.jsx..."
-          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d | tee bridge-react-app/src/useBridge.jsx || exit 1
+          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx || exit 1
           
           echo "Creating App.jsx..."
-          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d | tee bridge-react-app/src/App.jsx || exit 1
+          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx || exit 1
+          
+          # Verify files exist and have content without showing the content
+          echo "Verifying files:"
+          for file in main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx; do
+            if [ -s "$file" ]; then
+              echo "✓ $file exists and has content"
+            else
+              echo "✗ $file is empty or missing"
+              exit 1
+            fi
+          done
           
           # Verify file creation and content
           echo "File sizes after creation:"
