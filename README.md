@@ -69,7 +69,7 @@ deBridge enables:
 2. Clone the Repository
    ```bash
    git clone https://github.com/WhiskeySic/j1tfyi-portal.git
-   cd J1TFYI_deBridge_Gate
+   cd j1tfyi-portal
    ```
 
 3. Prepare Frontend
