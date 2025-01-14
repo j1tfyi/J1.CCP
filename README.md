@@ -1,8 +1,8 @@
-# J1.CrossChain Protocol: Cross-Chain Liquidity Networking
+# J1.CrossChain Portal: Cross-Chain Liquidity Networking
 
 ## 🌐 Project Overview
 
-J1.CrossChain Protocol is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
+J1.CrossChain Portal is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
 
 ## 🚀 Core Value Proposition
 
