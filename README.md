@@ -14,7 +14,7 @@ Our platform leverages deBridge's Liquidity Network Protocol (DLN) to provide:
 - **Native Asset Preservation**: Trade without the risks of wrapped tokens
 - **Minimal Fee Structure**: Pay only for successful transactions
 
-## 🔗 Technical Foundation: deBridge Infrastructure
+## 🔗 Technical Foundation: Using deBridge Infrastructure
 
 ### Core Infrastructure Capabilities
 - **Decentralized Validation**: Secure, independent validator network ensuring transaction integrity
