@@ -34,13 +34,11 @@ jobs:
           # Create directories if they don't exist
           mkdir -p bridge-react-app/src
           
-          # Debug secret lengths
-          echo "Length of APP_JSX_BASE64:"
-          echo "${{ secrets.APP_JSX_BASE64 }}" | wc -c
-          echo "Length of BRIDGE_JSX_BASE64:"
-          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | wc -c
-          echo "Length of MAIN_TS_BASE64:"
-          echo "${{ secrets.MAIN_TS_BASE64 }}" | wc -c
+          # Debug secret lengths without exposing content
+          echo "Verifying secret lengths:"
+          echo "APP_JSX_BASE64 length: $(echo "${{ secrets.APP_JSX_BASE64 }}" | wc -c)"
+          echo "BRIDGE_JSX_BASE64 length: $(echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | wc -c)"
+          echo "MAIN_TS_BASE64 length: $(echo "${{ secrets.MAIN_TS_BASE64 }}" | wc -c)"
           
           # Decode and create files with error checking
           echo "Creating main.ts..."
@@ -56,39 +54,15 @@ jobs:
           echo "Verifying files:"
           for file in main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx; do
             if [ -s "$file" ]; then
-              echo "â $file exists and has content"
+              echo "✓ $file exists and has content ($(wc -c < "$file") bytes)"
             else
-              echo "â $file is empty or missing"
+              echo "✗ $file is empty or missing"
               exit 1
             fi
           done
           
-          # Verify file creation and content
-          echo "File sizes after creation:"
-          ls -l main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
-          
           # Set proper permissions
           chmod 644 main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
-
-      - name: Verify file creation
-        run: |
-          echo "Directory structure after file creation:"
-          ls -R
-          
-          echo "File permissions:"
-          ls -l main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
-          
-          echo "File sizes:"
-          wc -c main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
-          
-          echo "Content verification - main.ts:"
-          head -n 5 main.ts
-          
-          echo "Content verification - useBridge.jsx:"
-          head -n 5 bridge-react-app/src/useBridge.jsx
-          
-          echo "Content verification - App.jsx:"
-          cat bridge-react-app/src/App.jsx
 
       - name: Install dependencies
         working-directory: bridge-react-app
@@ -101,16 +75,6 @@ jobs:
           
           echo "Installed packages:"
           npm list --depth=0
-
-      - name: Verify source files before build
-        working-directory: bridge-react-app
-        run: |
-          echo "Source directory contents:"
-          ls -la src/
-          echo "App.jsx content:"
-          cat src/App.jsx
-          echo "useBridge.jsx content:"
-          cat src/useBridge.jsx
 
       - name: Build React app
         working-directory: bridge-react-app
