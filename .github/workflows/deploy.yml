@@ -56,9 +56,9 @@ jobs:
           echo "Verifying files:"
           for file in main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx; do
             if [ -s "$file" ]; then
-              echo "✓ $file exists and has content"
+              echo "â $file exists and has content"
             else
-              echo "✗ $file is empty or missing"
+              echo "â $file is empty or missing"
               exit 1
             fi
           done
