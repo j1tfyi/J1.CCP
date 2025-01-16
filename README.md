@@ -1,4 +1,4 @@
-# Just 1.CrossChain Portal (J1.CCP): Cross-Chain Liquidity Networking
+# J1.CrossChain Portal (J1.CCP): Cross-Chain Liquidity Networking
 
 ## 🌐 Project Overview
 
@@ -16,7 +16,7 @@ Our platform leverages deBridge's Liquidity Network Protocol (DLN) to provide:
 
 ## 🔗 Technical Foundation: Using deBridge Infrastructure
 
-### Core Infrastructure Capabilities
+### deBridge Core Infrastructure Capabilities
 - **Decentralized Validation**: Secure, independent validator network ensuring transaction integrity
 - **Advanced Security Mechanisms**: 
   - Delegated staking
