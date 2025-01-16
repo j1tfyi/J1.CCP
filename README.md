@@ -1,4 +1,4 @@
-# J1.CrossChain Portal (J1.CCP): Cross-Chain Liquidity Networking
+# J1.CrossChain Portal (J1.CCP): 1.token, 1.portal, ∞.possibilities
 
 ## 🌐 Project Overview
 
