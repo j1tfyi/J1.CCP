@@ -50,6 +50,13 @@ deBridge enables:
     - Optimism
     - Avalanche (C-Chain)
     - Base
+    - Fantom
+    - Linea
+    - Neon
+    - Gnosis
+    - Metis
+    - Bitrock
+    - Sonic
   - **Non-EVM**:
     - Solana
 
