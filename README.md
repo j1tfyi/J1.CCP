@@ -40,7 +40,7 @@ deBridge enables:
 ### Infrastructure Components
 - **Backend**: Deno
 - **Frontend**: React 18
-- **Core Protocol**: J1.CCP built on the deBridge DLN
+- **Core Protocol**: J1.CCP built on the deBridge DLN smart contracts
 - **Supported Chains**: 
   - **EVM Chains**:
     - Ethereum (ETH)
