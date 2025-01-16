@@ -8,7 +8,7 @@ J1.CrossChain Portal is a cross-chain networking solution built on the cutting-e
 
 ### Transforming Cross-Chain Interactions
 
-Our platform leverages deBridge's Liquidity Network Protocol (DLN) to provide:
+Our platform leverages deBridge's Liquidity Network Protocol (DLN) smart contracts to provide:
 - **Instant Cross-Chain Transactions**: Move assets seamlessly across blockchain networks
 - **Zero Slippage Trading**: Guaranteed rates with minimal friction
 - **Native Asset Preservation**: Trade without the risks of wrapped tokens
