@@ -33,7 +33,7 @@ deBridge enables:
 ### Unique Value Propositions
 - **Global Accessibility**: Connect users across different blockchain networks
 - **Reduced Complexity**: Simplified cross-chain interactions
-- **Enhanced Liquidity**: Unlock capital trapped in siloed blockchain environments
+- **Enhanced Liquidity**: Unlock capital trapped in siloed blockchain environments.
 
 ## 🌍 Technical Architecture
 
