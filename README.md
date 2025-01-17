@@ -111,6 +111,6 @@ deBridge enables:
 ### Token Information
 - **$J1TFYI Contract Address**: `HAqD46mR4LgY3aJiMZSabfefZoysG3Uuj6wn2ZKYE14v`
 
-For inquiries, technical discussions, or potential collaborations, please reach out through our social channels or contact the project maintainers.
+For inquiries, technical discussions, or potential collaborations, please reach out through our social channels or contact the project maintainers on github.
 
 **Note**: Powered by deBridge, pioneering the future of cross-chain liquidity networking.
