@@ -1,42 +1,70 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
   text-align: center;
+  background-color: #000000;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #CD0101);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #CD0101);
+/* Widget container styling */
+#debridgeWidget {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Custom header styling */
+#customHeader {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Home button responsive styling */
+#homeButton {
+  width: 100%;
+  max-width: 580px;
+  height: 40px;
+  font-size: clamp(14px, 4vw, 16px);
+  font-family: Audiowide, sans-serif;
+  color: white;
+  background: #800304;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  #root {
+    padding: 0;
   }
-  to {
-    transform: rotate(360deg);
+  
+  #debridgeWidget {
+    padding: 0 0.5rem;
+  }
+  
+  #customHeader {
+    padding: 0.5rem;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* Widget iframe responsive handling */
+#debridgeWidget iframe {
+  width: 100% !important;
+  min-height: 700px;
+  border: none;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 480px) {
+  #debridgeWidget iframe {
+    min-height: 800px;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #CD0101;
 }
