@@ -17,97 +17,57 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          
-      - name: Debug environment
-        run: |
-          echo "Node version:"
-          node --version
-          echo "NPM version:"
-          npm --version
-          echo "Working directory:"
-          pwd
-
-      - name: Debug secrets presence
-        run: |
-          echo "Checking if secrets are present:"
-          if [ -n "${{ secrets.APP_JSX_BASE64 }}" ]; then
-            echo "APP_JSX_BASE64 is set"
-          else
-            echo "APP_JSX_BASE64 is empty"
-          fi
-          
-          if [ -n "${{ secrets.BRIDGE_JSX_BASE64 }}" ]; then
-            echo "BRIDGE_JSX_BASE64 is set"
-          else
-            echo "BRIDGE_JSX_BASE64 is empty"
-          fi
-          
-          if [ -n "${{ secrets.MAIN_TS_BASE64 }}" ]; then
-            echo "MAIN_TS_BASE64 is set"
-          else
-            echo "MAIN_TS_BASE64 is empty"
-          fi
-          
-          # Test base64 decoding (without showing content)
-          echo "Testing base64 decoding:"
-          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > /dev/null 2>&1
-          if [ $? -eq 0 ]; then
-            echo "APP_JSX_BASE64 is valid base64"
-          else
-            echo "APP_JSX_BASE64 is not valid base64"
-          fi
 
       - name: Create sensitive files
         run: |
-          # Create directories if they don't exist
-          mkdir -p bridge-react-app/src
-          
-          # Create files with verbose error handling
-          echo "Creating main.ts..."
-          if ! echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts 2>main.ts.error; then
-            echo "Error creating main.ts:"
-            cat main.ts.error
-            exit 1
-          fi
-          
-          echo "Creating useBridge.jsx..."
-          if ! echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx 2>useBridge.jsx.error; then
-            echo "Error creating useBridge.jsx:"
-            cat useBridge.jsx.error
-            exit 1
-          fi
-          
-          echo "Creating App.jsx..."
-          if ! echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx 2>app.jsx.error; then
-            echo "Error creating App.jsx:"
-            cat app.jsx.error
-            exit 1
-          fi
-          
-          # Verify file creation
-          echo "Verifying files (sizes only):"
-          wc -c main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx || echo "Failed to check file sizes"
-          
-          # Set proper permissions
-          chmod 644 main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx
+          echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts
+          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx
+          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx
 
-      - name: Install dependencies
-        working-directory: bridge-react-app
+      - name: Decode and Verify App.jsx Base64
         run: |
-          npm install
-          
-          echo "Installed packages:"
-          npm list --depth=0
+          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > decoded_app.jsx
+          echo "Decoded App.jsx content:"
+          cat decoded_app.jsx
+          echo "Decoded file details:"
+          file decoded_app.jsx
+          echo "File size:"
+          wc -c decoded_app.jsx
+      
+      - name: Verify App.jsx content
+        run: cat bridge-react-app/src/App.jsx
+
+      - name: Debug App.jsx
+        run: |
+          echo "Content of App.jsx:"
+          cat bridge-react-app/src/App.jsx || echo "File not found"
+          echo "Directory contents:"
+          ls -R bridge-react-app/src
+          echo "APP_JSX_BASE64 secret length:"
+          echo "${{ secrets.APP_JSX_BASE64 }}" | wc -c
 
       - name: Build React app
         working-directory: bridge-react-app
         run: |
+          npm install
+          echo "Content of App.jsx before build:"
+          cat src/App.jsx || echo "File not found"
           npm run build
+
+      - name: Verify files
+        run: |
+          ls -la
+          echo "Checking main.ts:"
+          head -n 5 main.ts
+          echo "Checking useBridge.jsx:"
+          head -n 5 bridge-react-app/src/useBridge.jsx
+          echo "Checking App.jsx:"
+          cat bridge-react-app/src/App.jsx
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "j1tfyi-ccp"
+          project: "j1tfyi-portal-app"
           entrypoint: "./main.ts"
           include: |
             main.ts
@@ -121,6 +81,6 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          rm -f main.ts main.ts.error
-          rm -f bridge-react-app/src/useBridge.jsx useBridge.jsx.error
-          rm -f bridge-react-app/src/App.jsx app.jsx.error
+          rm -f main.ts
+          rm -f bridge-react-app/src/useBridge.jsx
+          rm -f bridge-react-app/src/App.jsx
