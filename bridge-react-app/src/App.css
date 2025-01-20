@@ -1,3 +1,11 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root styles */
 :root {
   font-family: Inter, system-ui, Audiowide, sans-serif;
   line-height: 1.5;
@@ -11,6 +19,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Root container */
 #root {
   display: flex;
   flex-direction: column;
@@ -18,41 +27,46 @@
   align-items: center;
   min-height: 100vh;
   gap: 0;
-  max-width: none; /* Remove max-width constraint */
-  padding: 0; /* Remove padding */
+  max-width: none;
+  padding: 0;
 }
 
-/* Style container for both header and widget */
+/* Header and widget container */
 #customHeader,
 #debridgeWidget {
-  width: 600px !important; /* Force same width */
+  width: 100%;
+  max-width: 600px; /* Allow responsiveness */
   box-sizing: border-box;
   margin: 0 auto;
+  text-align: center;
+  overflow: hidden; /* Prevent overflow */
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Ensure single-line text */
 }
 
-/* Home button specific styles to match connect wallet button */
+/* Home button specific styles */
 #homeButton {
-  width: 100% !important; /* Match parent width */
-  height: 48px !important; /* Match connect wallet height */
-  padding: 0 16px !important;
-  border-radius: 8px !important;
-  font-size: 16px !important;
-  font-family: Audiowide, sans-serif !important;
-  font-weight: 500 !important;
-  background-color: #800304 !important;
-  color: #FFFFFF !important;
-  border: none !important;
+  width: 100%;
+  max-width: 600px;
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: Audiowide, sans-serif;
+  font-weight: 500;
+  background-color: #800304;
+  color: #FFFFFF;
+  border: none;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin: 12px 0 !important;
-  box-shadow: none !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #homeButton:hover {
-  background-color: #9b0404 !important;
+  background-color: #9b0404;
   transform: scale(1.02);
 }
 
@@ -63,6 +77,7 @@ button {
   cursor: pointer;
 }
 
+/* Global body styles */
 body {
   margin: 0;
   padding: 0;
@@ -72,15 +87,32 @@ body {
   justify-content: center;
 }
 
-/* Media query for smaller screens */
-@media screen and (max-width: 640px) {
+/* Media query for tablets */
+@media screen and (max-width: 768px) {
   #customHeader,
   #debridgeWidget {
-    width: 100% !important;
+    width: 100%;
     padding: 0 16px;
   }
-  
+
   #homeButton {
-    width: calc(100% - 32px) !important;
+    width: calc(100% - 32px);
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+/* Media query for mobile devices */
+@media screen and (max-width: 480px) {
+  #customHeader,
+  #debridgeWidget {
+    width: 100%;
+    padding: 0 8px;
+  }
+
+  #homeButton {
+    width: calc(100% - 16px);
+    height: 36px;
+    font-size: 12px;
   }
 }
