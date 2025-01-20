@@ -67,7 +67,7 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "j1tfyi-portalapp"
+          project: "j1tfyi-ccp"
           entrypoint: "./main.ts"
           include: |
             main.ts
