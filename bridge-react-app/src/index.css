@@ -13,7 +13,6 @@
   color-scheme: light dark;
   color: rgba(205, 1, 1, 1);
   background-color: #000000;
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -38,9 +37,8 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0;
+  gap: 1rem; /* Add consistent spacing */
   min-height: 100vh;
-  background-color: inherit;
   width: 100%;
 }
 
@@ -54,6 +52,8 @@ body {
   color: white;
   text-align: center;
   box-sizing: border-box;
+  font-size: 1rem; /* Responsive font size */
+  word-wrap: break-word; /* Ensure long words break */
 }
 
 /* Widget container */
@@ -67,13 +67,14 @@ body {
 
 /* Widget iframe */
 #debridgeWidget iframe {
-  width: 100% !important;
+  width: 100%;
   min-height: 700px;
   border: none;
   border-radius: 10px;
 }
 
-/* Home button */
+/* Buttons */
+button,
 #homeButton {
   width: 100%;
   max-width: 600px;
@@ -83,52 +84,35 @@ body {
   font-size: 16px;
   font-weight: 500;
   background-color: #800304;
-  color: #FFFFFF;
+  color: white;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+button:hover,
 #homeButton:hover {
   background-color: #9b0404;
   transform: scale(1.02);
 }
 
-/* Links */
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+/* Responsive Text Scaling */
+#customHeader p,
+#debridgeWidget p {
+  font-size: 1rem;
+  line-height: 1.4;
+  margin: 0.5rem 0;
 }
 
-a:hover {
-  color: #CD0101;
-}
-
-/* Buttons */
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #CD0101;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #CD0101;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* Text Scaling for Specific Lines */
+#customHeader .line {
+  font-size: 1.1rem;
+  white-space: nowrap; /* Prevent breaking into multiple lines */
+  overflow: hidden; /* Avoid content overflow */
+  text-overflow: ellipsis; /* Add ellipsis if content overflows */
 }
 
 /* Media Query: Tablets */
@@ -147,6 +131,10 @@ button:focus-visible {
   #homeButton {
     height: 40px;
     font-size: 14px;
+  }
+
+  #customHeader .line {
+    font-size: 0.9rem; /* Adjust for smaller screens */
   }
 }
 
@@ -167,20 +155,12 @@ button:focus-visible {
     height: 36px;
     font-size: 12px;
   }
-}
 
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color: white;
-    background-color: #000000;
+  #customHeader .line {
+    font-size: 0.8rem; /* Further adjust font size */
   }
 
-  a:hover {
-    color: #CD0101;
-  }
-
-  button {
-    background-color: #CD0101;
+  #customHeader p {
+    font-size: 0.9rem;
   }
 }
