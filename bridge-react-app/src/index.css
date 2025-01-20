@@ -51,9 +51,16 @@ body {
   color: white;
   box-sizing: border-box;
   font-size: 1.1rem; /* Responsive font size */
-  white-space: nowrap; /* Ensure text stays on one line */
-  overflow: hidden;
-  text-overflow: ellipsis; /* Handle overflow gracefully */
+}
+
+/* Ensure text stays on one line */
+#customHeader .line {
+  font-size: 1rem; /* Adjusted font size */
+  white-space: nowrap; /* Prevent breaking into multiple lines */
+  overflow: hidden; /* Ensure overflow handling */
+  text-overflow: ellipsis;
+  display: block; /* Ensure consistent block display */
+  margin: 0.5rem 0;
 }
 
 /* Widget container */
@@ -107,15 +114,6 @@ button:hover,
   margin: 0.5rem 0;
 }
 
-/* Text Adjustment for Lines */
-#customHeader .line {
-  font-size: 1rem; /* Adjusted font size */
-  white-space: nowrap; /* Prevent breaking into multiple lines */
-  overflow: hidden; /* Ensure overflow handling */
-  text-overflow: ellipsis;
-  display: block; /* Ensure consistent block display */
-}
-
 /* Media Query: Tablets */
 @media screen and (max-width: 768px) {
   #customHeader,
@@ -136,6 +134,7 @@ button:hover,
 
   #customHeader .line {
     font-size: 0.9rem; /* Adjusted for smaller screens */
+    white-space: nowrap; /* Ensure the text doesn't wrap */
   }
 }
 
@@ -159,9 +158,17 @@ button:hover,
 
   #customHeader .line {
     font-size: 0.85rem; /* Further adjust font size */
+    letter-spacing: -0.02rem; /* Adjust letter spacing for better fit */
+    white-space: nowrap; /* Prevent breaking into multiple lines */
   }
 
   #customHeader p {
     font-size: 0.9rem;
   }
+}
+
+/* Text Overflow Behavior */
+#customHeader .line {
+  overflow: hidden;
+  text-overflow: ellipsis; /* Gracefully handle overflowed text */
 }
