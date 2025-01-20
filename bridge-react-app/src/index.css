@@ -1,60 +1,115 @@
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Root styles */
 :root {
-  font-family: Inter, system-ui, Audiowide, Audiowide, Audiowide, sans-serif;
+  font-family: Audiowide, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(205, 1, 1, 1);
   background-color: #000000;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000000;
+  color: white;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Root container */
 #root {
   display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  justify-content: center; /* Align everything horizontally */
-  align-items: center; /* Align everything vertically */
-  min-height: 100vh; /* Full height for centering */
-  gap: 0px; /* Space between header and widget */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  min-height: 100vh;
+  background-color: inherit;
+  width: 100%;
 }
 
-#customHeader,
-#widget {
-  width: 600px; /* Consistent width */
-  display: flex; /* Ensure alignment inside */
-  justify-content: center; /* Center content */
-  margin: 0 auto; /* Center align on page */
-  text-align: center; /* Align text */
+/* Header styling */
+#customHeader {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  background-color: #000000;
+  color: white;
+  text-align: center;
+  box-sizing: border-box;
 }
 
+/* Widget container */
+#debridgeWidget {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* Widget iframe */
+#debridgeWidget iframe {
+  width: 100% !important;
+  min-height: 700px;
+  border: none;
+  border-radius: 10px;
+}
+
+/* Home button */
+#homeButton {
+  width: 100%;
+  max-width: 600px;
+  height: 48px;
+  padding: 0 16px;
+  margin: 1rem 0;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: #800304;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#homeButton:hover {
+  background-color: #9b0404;
+  transform: scale(1.02);
+}
+
+/* Links */
 a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #CD0101;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  border-radius: 15px;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-  border-radius: 15px;
-}
-
+/* Buttons */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -66,22 +121,65 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #CD0101;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Media Query: Tablets */
+@media screen and (max-width: 768px) {
+  #customHeader,
+  #debridgeWidget,
+  #homeButton {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+
+  #debridgeWidget iframe {
+    min-height: 600px;
+  }
+
+  #homeButton {
+    height: 40px;
+    font-size: 14px;
+  }
+}
+
+/* Media Query: Mobile */
+@media screen and (max-width: 480px) {
+  #customHeader,
+  #debridgeWidget,
+  #homeButton {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+
+  #debridgeWidget iframe {
+    min-height: 500px;
+  }
+
+  #homeButton {
+    height: 36px;
+    font-size: 12px;
+  }
+}
+
+/* Dark Mode */
 @media (prefers-color-scheme: dark) {
   :root {
-    color: #000000;
+    color: white;
     background-color: #000000;
   }
+
   a:hover {
     color: #CD0101;
   }
+
   button {
     background-color: #CD0101;
   }
