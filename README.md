@@ -2,7 +2,7 @@
 
 ## 🌐 Project Overview
 
-J1.CrossChain Portal is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility
+J1.CrossChain Portal is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
 
 ## 🚀 Core Value Proposition
 
@@ -111,6 +111,6 @@ deBridge enables:
 ### Token Information
 - **$J1TFYI Contract Address**: `HAqD46mR4LgY3aJiMZSabfefZoysG3Uuj6wn2ZKYE14v`
 
-For inquiries about technical discussions, or potential collaborations, please reach out through our social channels or contact the project maintainers on github.
+For inquiries, technical discussions, or potential collaborations, please reach out through our social channels or contact the project maintainers on github.
 
 **Note**: Powered by deBridge, pioneering the future of cross-chain liquidity networking.

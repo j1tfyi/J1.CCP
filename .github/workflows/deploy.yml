@@ -10,64 +10,54 @@ jobs:
       contents: read
 
     steps:
+      # Step 1: Clone Repository
       - name: Clone repository
         uses: actions/checkout@v3
 
+      # Step 2: Install Node.js
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Step 3: Create Sensitive Files
       - name: Create sensitive files
         run: |
           echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts
           echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx
           echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx
+          echo "${{ secrets.SERVICE_WORKER_BASE64 }}" | base64 -d > service-worker.js
+          echo "${{ secrets.MANIFEST_BASE64 }}" | base64 -d > site.webmanifest
 
-      - name: Decode and Verify App.jsx Base64
+      # Step 4: Decode and Verify Files
+      - name: Decode and Verify Files
         run: |
-          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > decoded_app.jsx
-          echo "Decoded App.jsx content:"
-          cat decoded_app.jsx
-          echo "Decoded file details:"
-          file decoded_app.jsx
-          echo "File size:"
-          wc -c decoded_app.jsx
-      
-      - name: Verify App.jsx content
-        run: cat bridge-react-app/src/App.jsx
+          echo "Decoding and verifying files:"
+          echo "Main.ts:"
+          cat main.ts
+          echo "Service Worker:"
+          cat service-worker.js
+          echo "Manifest:"
+          cat site.webmanifest
 
-      - name: Debug App.jsx
-        run: |
-          echo "Content of App.jsx:"
-          cat bridge-react-app/src/App.jsx || echo "File not found"
-          echo "Directory contents:"
-          ls -R bridge-react-app/src
-          echo "APP_JSX_BASE64 secret length:"
-          echo "${{ secrets.APP_JSX_BASE64 }}" | wc -c
-
+      # Step 5: Build React App
       - name: Build React app
         working-directory: bridge-react-app
         run: |
           npm install
-          echo "Content of App.jsx before build:"
-          cat src/App.jsx || echo "File not found"
           npm run build
 
-      - name: Verify files
+      # Step 6: Verify Build Output
+      - name: Verify Build Output
         run: |
-          ls -la
-          echo "Checking main.ts:"
-          head -n 5 main.ts
-          echo "Checking useBridge.jsx:"
-          head -n 5 bridge-react-app/src/useBridge.jsx
-          echo "Checking App.jsx:"
-          cat bridge-react-app/src/App.jsx
+          echo "Build output:"
+          ls -R bridge-react-app/dist
 
+      # Step 7: Upload to Deno Deploy
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "j1tfyi-ccp"
+          project: "j1tfyi-portal-app"
           entrypoint: "./main.ts"
           include: |
             main.ts
@@ -75,12 +65,17 @@ jobs:
             deps.client.ts
             deps.server.ts
             bridge-react-app/dist/**/*
+            service-worker.js
+            site.webmanifest
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
 
+      # Step 8: Cleanup
       - name: Cleanup
         if: always()
         run: |
           rm -f main.ts
           rm -f bridge-react-app/src/useBridge.jsx
           rm -f bridge-react-app/src/App.jsx
+          rm -f service-worker.js
+          rm -f site.webmanifest
