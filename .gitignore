@@ -17,6 +17,7 @@ main.ts
 main.template.ts
 main.ts.backup
 widget-react-app/main.ts
+update_secrets.sh
 
 # Specific Source Files
 **/src/useBridge.jsx
