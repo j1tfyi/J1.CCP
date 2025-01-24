@@ -30,15 +30,10 @@ jobs:
           echo "${{ secrets.MANIFEST_BASE64 }}" | base64 -d > site.webmanifest
 
       # Step 4: Decode and Verify Files
-      - name: Decode and Verify Files
+      - name: Verify Files Exist
         run: |
-          echo "Decoding and verifying files:"
-          echo "Main.ts:"
-          cat main.ts
-          echo "Service Worker:"
-          cat service-worker.js
-          echo "Manifest:"
-          cat site.webmanifest
+          echo "Verifying files exist:"
+          ls -l main.ts service-worker.js site.webmanifest
 
       # Step 5: Build React App
       - name: Build React app
