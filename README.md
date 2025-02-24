@@ -41,7 +41,7 @@ deBridge enables:
 - **Backend**: Deno
 - **Frontend**: React 18
 - **Core Protocol**: J1.CCP built on the deBridge DLN smart contracts
-- **19 Supported Chains**: 
+- **21 Supported Chains**: 
   - **EVM Chains**:
     - Ethereum (ETH)
     - Binance Smart Chain (BSC)
@@ -61,6 +61,8 @@ deBridge enables:
     - Abstract
     - Hyperliquid
     - Berachain
+    - CrossFi
+    - Story
   - **Non-EVM**:
     - Solana
 
@@ -105,6 +107,9 @@ deBridge enables:
 ## 🌐 Additional Resources
 - **Official deBridge Website**: [deBridge Finance](https://debridge.finance/)
 - **Project Portal**: [J1TFYI Website](https://j1t.fyi/)
+- **Third-party Security Audits**
+    - deBridge protocol, smart contracts and periphery modules passed more than 25+ security audits. 
+    - A comprehensive list of audit reports of the can be found in the deBridge GitHub repository for [deBridge Security Audits](https://github.com/debridge-finance/debridge-security)
 
 ## 🤝 Contact & Community
 
