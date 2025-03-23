@@ -12,12 +12,35 @@ export default defineConfig({
   build: {
     outDir: "dist",
     rollupOptions: {
-      input: "./index.html",
+      input: {
+        main: resolve(__dirname, 'index.html'),
+      },
+      output: {
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
+      },
+      external: [
+        '@solana/wallet-adapter-react',
+        '@solana/wallet-adapter-react-ui',
+        '@solana/wallet-adapter-base',
+        '@solana/web3.js'
+      ]
     }
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src')
+    }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom'],
+    exclude: ['@solana/wallet-adapter-react', '@solana/wallet-adapter-react-ui', '@solana/web3.js']
   },
   css: {
     postcss: {
       plugins: [autoprefixer()],
     },
   },
+  base: '/',
 });
