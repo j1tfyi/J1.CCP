@@ -19,23 +19,18 @@ export default defineConfig({
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]'
-      }
+      },
+      external: ['@solana/wallet-adapter-react', '@solana/wallet-adapter-react-ui', '@solana/wallet-adapter-base', '@solana/web3.js']
     }
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@solana/wallet-adapter-react': resolve(__dirname, 'node_modules/@solana/wallet-adapter-react/lib/esm/index.js'),
-      '@solana/wallet-adapter-react-ui': resolve(__dirname, 'node_modules/@solana/wallet-adapter-react-ui/lib/esm/index.js'),
-      '@solana/wallet-adapter-base': resolve(__dirname, 'node_modules/@solana/wallet-adapter-base/lib/esm/index.js'),
-      '@solana/web3.js': resolve(__dirname, 'node_modules/@solana/web3.js/lib/index.browser.esm.js')
+      '@': resolve(__dirname, 'src')
     }
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
-    esbuildOptions: {
-      resolveExtensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
-    }
+    exclude: ['@solana/wallet-adapter-react', '@solana/wallet-adapter-react-ui', '@solana/wallet-adapter-base', '@solana/web3.js']
   },
   css: {
     postcss: {
