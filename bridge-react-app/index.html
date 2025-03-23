@@ -4,7 +4,7 @@
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="J1.Cross-Chain Portal: 1 token, 1 portal, infinite possibilities. Experience seamless cross-chain interactions.">
+    <meta name="description" content="J1.Cross-Chain Portal: 1 token, 1 portal, infinite possibilities. Experience seamless cross-chain interactions and advertise your tokens.">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#000000">
@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="J1.Portal">
 
-    <title>J1.Cross-Chain Portal</title>
+    <title>J1.CROSSCHAIN PORTAL</title>
     
     <!-- Favicon and App Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -74,22 +74,24 @@
 
     <!-- Web App Manifest -->
     <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Import Map for Solana Modules -->
+    <script type="importmap">
+    {
+      "imports": {
+        "@solana/wallet-adapter-react": "https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-react/lib/index.browser.esm.js",
+        "@solana/wallet-adapter-react-ui": "https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-react-ui/lib/index.browser.esm.js",
+        "@solana/wallet-adapter-base": "https://cdn.jsdelivr.net/npm/@solana/wallet-adapter-base/lib/index.browser.esm.js",
+        "@solana/web3.js": "https://cdn.jsdelivr.net/npm/@solana/web3.js/lib/index.browser.esm.js"
+      }
+    }
+    </script>
+
+    <!-- Wallet Adapter UI CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@solana/wallet-adapter-react-ui/styles.css">
   </head>
   <body id="index">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-              console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch(error => {
-              console.error('Service Worker registration failed:', error);
-            });
-        });
-      }
-    </script>
   </body>
 </html>
