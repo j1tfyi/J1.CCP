@@ -41,7 +41,7 @@ deBridge enables:
 - **Backend**: Deno
 - **Frontend**: React 18
 - **Core Protocol**: J1.CCP built on the deBridge DLN smart contracts
-- **22 Supported Chains**: 
+- **26 Supported Chains**: 
   - **EVM Chains**:
     - Ethereum (ETH)
     - Binance Smart Chain (BSC)
@@ -64,6 +64,10 @@ deBridge enables:
     - Story
     - HyperEVM
     - Zircuit
+    - Zilliqa
+    - BOB
+    - Mantle
+    - Flow
   - **Non-EVM**:
     - Solana
 
