@@ -12,8 +12,8 @@ const ASSETS_TO_CACHE = [
   '/screenshot-mobile.png',
   '/screenshot-desktop.png',
   // keep your current hashed bundle names here
-  '/assets/index-CP0plr9E.js',
-  '/assets/index-vUsCpqLf.css'
+  '/assets/main-Bd--inSA.js',
+  '/assets/main-vUsCpqLf.css'
 ];
 
 self.addEventListener('install', (event) => {
