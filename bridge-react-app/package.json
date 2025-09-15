@@ -1,13 +1,15 @@
 {
-  "name": "project",
+  "name": "bridge-react-app",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && mkdir -p dist/public && cp public/*.png public/*.ico dist/public/",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "browserslist:update": "npx update-browserslist-db@latest --yes",
+    "audit:fix": "npm audit fix || true"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -22,6 +24,9 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "vite": "^5.2.0"
+    "vite": "^7.1.5"
+  },
+  "engines": {
+    "node": ">=20.18.0"
   }
 }
