@@ -97,7 +97,7 @@ jobs:
         working-directory: bridge-react-app
         run: |
           npm install
-          npx update-browserslist-db@latest --yes
+          npx update-browserslist-db@latest --yes || true
           npm run build
 
       # 8) Inspect build output
@@ -105,6 +105,27 @@ jobs:
         run: |
           echo "Build output:"
           find bridge-react-app/dist -maxdepth 2 -type f -printf "%P\n" | sort | head -n 200
+
+      # 8.5) Auto-sync build output into service-worker.js
+      - name: Sync SW hashed asset names
+        shell: bash
+        run: |
+          set -euo pipefail
+          js_path=$(ls -1t bridge-react-app/dist/assets/main-*.js  | head -n1 || true)
+          css_path=$(ls -1t bridge-react-app/dist/assets/main-*.css | head -n1 || true)
+          if [ -z "${js_path}" ] || [ -z "${css_path}" ]; then
+            echo "❌ Could not find built main-*.js or main-*.css in dist/assets"
+            ls -al bridge-react-app/dist/assets || true
+            exit 1
+          fi
+          JS_FILE="/assets/$(basename "${js_path}")"
+          CSS_FILE="/assets/$(basename "${css_path}")"
+          echo "Detected JS:  ${JS_FILE}"
+          echo "Detected CSS: ${CSS_FILE}"
+          sed -i -E "s#'/assets/[^']+\\.js'#'${JS_FILE}'#g" service-worker.js
+          sed -i -E "s#'/assets/[^']+\\.css'#'${CSS_FILE}'#g" service-worker.js
+          echo "Updated service-worker.js lines:"
+          grep -nE "'/assets/.*\\.(js|css)'" service-worker.js
 
       # 9) Deploy to Deno Deploy
       - name: Upload to Deno Deploy
