@@ -41,35 +41,34 @@ deBridge enables:
 - **Backend**: Deno
 - **Frontend**: React 18
 - **Core Protocol**: J1.CCP built on the deBridge DLN smart contracts
-- **26 Supported Chains**: 
-  - **EVM Chains**:
-    - Ethereum (ETH)
-    - Binance Smart Chain (BSC)
-    - Polygon (MATIC)
-    - Arbitrum
-    - Optimism
-    - Avalanche (C-Chain)
-    - Base
-    - Fantom
-    - Linea
-    - Neon
-    - Gnosis
-    - Metis
-    - Bitrock
-    - Sonic
-    - Cronos zkEVM
-    - Abstract
-    - Berachain
-    - CrossFi
-    - Story
-    - HyperEVM
-    - Zircuit
-    - Zilliqa
-    - BOB
-    - Mantle
-    - Flow
-  - **Non-EVM**:
-    - Solana
+- **25 Total Networks** 
+    - **EVM Chains (23 chains)**:
+        - Abstract
+        - Arbitrum
+        - Avalanche (C-Chain)
+        - Base
+        - Berachain
+        - Binance Smart Chain (BSC)
+        - Bitrock
+        - BOB
+        - Ethereum (ETH)
+        - Fantom
+        - Flow
+        - Gnosis
+        - HyperEVM / Hyperliquid
+        - Linea
+        - Metis
+        - Mantle
+        - Neon
+        - Optimism
+        - Polygon (MATIC)
+        - Sei
+        - Sonic
+        - Story
+        - Zilliqa
+    - **Non-EVM Chains (2 chains)**:
+        - Solana
+        - Tron
 
 ## 📦 Development Setup
 
@@ -113,7 +112,7 @@ deBridge enables:
 - **Official deBridge Website**: [deBridge Finance](https://debridge.finance/)
 - **Project Portal**: [J1TFYI Website](https://j1t.fyi/)
 - **Third-party Security Audits**
-    - deBridge protocol, smart contracts and periphery modules passed more than 25+ security audits 
+    - deBridge protocol, smart contracts and periphery modules passed more than 25+ security audits. 
     - A comprehensive list of audit reports of the can be found in the deBridge GitHub repository for [deBridge Security Audits](https://github.com/debridge-finance/debridge-security)
 
 ## 🤝 Contact & Community
