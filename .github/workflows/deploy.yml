@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 2) Use Node 20.18+ (required by @solana/* v2 & commander@14)
+      # 2) Node 20.18+ (fixes Solana engine guards)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,40 +32,67 @@ jobs:
             bridge-react-app/package-lock.json
             package-lock.json
 
-      # 3) Ensure dirs exist for secret-sourced files
+      # 3) Ensure dirs exist
       - name: Ensure directories
         run: |
           mkdir -p bridge-react-app/src
           mkdir -p bridge-react-app/public
 
-      # 4) Create sensitive files from repo secrets
-      - name: Create sensitive files
+      # 4) Create only the secret-sourced files that actually use secrets.
+      #    If SW/MANIFEST secrets are ever added later, we allow them to override repo files.
+      - name: Create sensitive files (conditional)
         shell: bash
         run: |
-          echo "${{ secrets.MAIN_TS_BASE64 }}"        | base64 -d > main.ts
-          echo "${{ secrets.BRIDGE_JSX_BASE64 }}"     | base64 -d > bridge-react-app/src/useBridge.jsx
-          echo "${{ secrets.APP_JSX_BASE64 }}"        | base64 -d > bridge-react-app/src/App.jsx
-          echo "${{ secrets.SERVICE_WORKER_BASE64 }}" | base64 -d > service-worker.js
-          echo "${{ secrets.MANIFEST_BASE64 }}"       | base64 -d > site.webmanifest
+          set -euo pipefail
 
-      # 5) Fail fast if any decoded file is empty/missing
-      - name: Verify sensitive files
+          # Pull secrets (may be empty)
+          MAIN_TS_BASE64="${{ secrets.MAIN_TS_BASE64 }}"
+          BRIDGE_JSX_BASE64="${{ secrets.BRIDGE_JSX_BASE64 }}"
+          APP_JSX_BASE64="${{ secrets.APP_JSX_BASE64 }}"
+          SERVICE_WORKER_BASE64="${{ secrets.SERVICE_WORKER_BASE64 }}"
+          MANIFEST_BASE64="${{ secrets.MANIFEST_BASE64 }}"
+
+          # Required ones (these you were already using)
+          if [ -z "${MAIN_TS_BASE64:-}" ]; then echo "❌ Missing MAIN_TS_BASE64"; exit 1; fi
+          if [ -z "${BRIDGE_JSX_BASE64:-}" ]; then echo "❌ Missing BRIDGE_JSX_BASE64"; exit 1; fi
+          if [ -z "${APP_JSX_BASE64:-}" ]; then echo "❌ Missing APP_JSX_BASE64"; exit 1; fi
+
+          # Decode required files
+          printf '%s' "$MAIN_TS_BASE64"    | base64 -d > main.ts
+          printf '%s' "$BRIDGE_JSX_BASE64" | base64 -d > bridge-react-app/src/useBridge.jsx
+          printf '%s' "$APP_JSX_BASE64"    | base64 -d > bridge-react-app/src/App.jsx
+
+          # For SW/manifest: prefer secrets if provided, otherwise keep repo files
+          if [ -n "${SERVICE_WORKER_BASE64:-}" ]; then
+            printf '%s' "$SERVICE_WORKER_BASE64" | base64 -d > service-worker.js
+          else
+            echo "ℹ️ SERVICE_WORKER_BASE64 not set; using repo service-worker.js"
+          fi
+
+          if [ -n "${MANIFEST_BASE64:-}" ]; then
+            printf '%s' "$MANIFEST_BASE64" | base64 -d > site.webmanifest
+          else
+            echo "ℹ️ MANIFEST_BASE64 not set; using repo site.webmanifest"
+          fi
+
+      # 5) Verify all files (repo copies must exist and be non-empty)
+      - name: Verify files exist and are non-empty
         run: |
           echo "Verifying files exist and are non-empty:"
-          ls -l main.ts service-worker.js site.webmanifest
           test -s main.ts
-          test -s service-worker.js
-          test -s site.webmanifest
           test -s bridge-react-app/src/useBridge.jsx
           test -s bridge-react-app/src/App.jsx
+          test -s service-worker.js
+          test -s site.webmanifest
+          ls -l main.ts service-worker.js site.webmanifest
 
-      # 6) Install Solana web deps in the React app
+      # 6) Install Solana deps (frontend)
       - name: Install Solana packages
         working-directory: bridge-react-app
         run: |
           npm install @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-base @solana/web3.js
 
-      # 7) Install app deps, refresh browserslist DB, build
+      # 7) Build frontend
       - name: Build React app
         working-directory: bridge-react-app
         run: |
@@ -73,7 +100,7 @@ jobs:
           npx update-browserslist-db@latest --yes
           npm run build
 
-      # 8) Show build output (useful for debugging)
+      # 8) Inspect build output
       - name: Verify Build Output
         run: |
           echo "Build output:"
@@ -96,12 +123,11 @@ jobs:
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
 
-      # 10) Cleanup local secrets
+      # 10) Cleanup
       - name: Cleanup
         if: always()
         run: |
           rm -f main.ts
           rm -f bridge-react-app/src/useBridge.jsx
           rm -f bridge-react-app/src/App.jsx
-          rm -f service-worker.js
-          rm -f site.webmanifest
+          # keep repo copies of SW & manifest; they are part of the codebase
