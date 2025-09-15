@@ -1,5 +1,13 @@
 name: Deploy
-on: [push]
+
+on:
+  push:
+    branches: [ main ]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: Deploy
@@ -7,45 +15,71 @@ jobs:
     permissions:
       id-token: write
       contents: read
+
     steps:
-      # Step 1: Clone Repository
-      - name: Clone repository
-        uses: actions/checkout@v3
-      # Step 2: Install Node.js
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      # 1) Checkout
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2) Use Node 20.18+ (required by @solana/* v2 & commander@14)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-      # Step 3: Create Sensitive Files
+          node-version: '20.18.x'
+          check-latest: true
+          cache: 'npm'
+          cache-dependency-path: |
+            bridge-react-app/package-lock.json
+            package-lock.json
+
+      # 3) Ensure dirs exist for secret-sourced files
+      - name: Ensure directories
+        run: |
+          mkdir -p bridge-react-app/src
+          mkdir -p bridge-react-app/public
+
+      # 4) Create sensitive files from repo secrets
       - name: Create sensitive files
+        shell: bash
         run: |
-          echo "${{ secrets.MAIN_TS_BASE64 }}" | base64 -d > main.ts
-          echo "${{ secrets.BRIDGE_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/useBridge.jsx
-          echo "${{ secrets.APP_JSX_BASE64 }}" | base64 -d > bridge-react-app/src/App.jsx
+          echo "${{ secrets.MAIN_TS_BASE64 }}"        | base64 -d > main.ts
+          echo "${{ secrets.BRIDGE_JSX_BASE64 }}"     | base64 -d > bridge-react-app/src/useBridge.jsx
+          echo "${{ secrets.APP_JSX_BASE64 }}"        | base64 -d > bridge-react-app/src/App.jsx
           echo "${{ secrets.SERVICE_WORKER_BASE64 }}" | base64 -d > service-worker.js
-          echo "${{ secrets.MANIFEST_BASE64 }}" | base64 -d > site.webmanifest
-      # Step 4: Decode and Verify Files
-      - name: Verify Files Exist
+          echo "${{ secrets.MANIFEST_BASE64 }}"       | base64 -d > site.webmanifest
+
+      # 5) Fail fast if any decoded file is empty/missing
+      - name: Verify sensitive files
         run: |
-          echo "Verifying files exist:"
+          echo "Verifying files exist and are non-empty:"
           ls -l main.ts service-worker.js site.webmanifest
-      # Step 5: Install Solana packages
+          test -s main.ts
+          test -s service-worker.js
+          test -s site.webmanifest
+          test -s bridge-react-app/src/useBridge.jsx
+          test -s bridge-react-app/src/App.jsx
+
+      # 6) Install Solana web deps in the React app
       - name: Install Solana packages
         working-directory: bridge-react-app
         run: |
-          npm install @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-base @solana/web3.js --legacy-peer-deps
-      # Step 6: Build React App
+          npm install @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-base @solana/web3.js
+
+      # 7) Install app deps, refresh browserslist DB, build
       - name: Build React app
         working-directory: bridge-react-app
         run: |
           npm install
+          npx update-browserslist-db@latest --yes
           npm run build
-      # Step 7: Verify Build Output
+
+      # 8) Show build output (useful for debugging)
       - name: Verify Build Output
         run: |
           echo "Build output:"
-          ls -R bridge-react-app/dist
-      # Step 8: Upload to Deno Deploy
+          find bridge-react-app/dist -maxdepth 2 -type f -printf "%P\n" | sort | head -n 200
+
+      # 9) Deploy to Deno Deploy
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
@@ -61,7 +95,8 @@ jobs:
             site.webmanifest
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
-      # Step 9: Cleanup
+
+      # 10) Cleanup local secrets
       - name: Cleanup
         if: always()
         run: |
