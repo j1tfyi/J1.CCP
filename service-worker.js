@@ -1,4 +1,4 @@
-const CACHE_NAME = 'j1-cross-chain-portal-v1';
+const CACHE_NAME = 'j1-cross-chain-portal-v2'; // bump when assets change
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -11,6 +11,7 @@ const ASSETS_TO_CACHE = [
   '/apple-touch-icon.png',
   '/screenshot-mobile.png',
   '/screenshot-desktop.png',
+  // keep your current hashed bundle names here
   '/assets/index-CP0plr9E.js',
   '/assets/index-vUsCpqLf.css'
 ];
@@ -22,8 +23,8 @@ self.addEventListener('install', (event) => {
       .then((cache) => {
         console.log('[Service Worker] Caching assets');
         return Promise.all(
-          ASSETS_TO_CACHE.map(url => 
-            cache.add(url).catch(error => 
+          ASSETS_TO_CACHE.map((url) =>
+            cache.add(url).catch((error) =>
               console.error(`[Service Worker] Failed to cache: ${url}`, error)
             )
           )
@@ -34,59 +35,116 @@ self.addEventListener('install', (event) => {
         console.error('[Service Worker] Caching failed:', error);
       })
   );
-  self.skipWaiting(); // Activate worker immediately
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   console.log('[Service Worker] Activating');
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
         cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
+            console.log('[Service Worker] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
-      );
-    })
+      )
+    )
   );
-  self.clients.claim(); // Take control of uncontrolled clients
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
+  const req = event.request;
+
+  // Only handle GET requests
+  if (req.method !== 'GET') return;
+
+  // Offline SPA fallback for navigations
+  const isNavigation =
+    req.mode === 'navigate' ||
+    (req.headers.get('accept') || '').includes('text/html');
+
+  if (isNavigation) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          // Cache a fresh copy of index.html if successful navigation to root
+          if (res.ok && new URL(req.url).pathname === '/') {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put('/', copy));
+          }
+          return res;
+        })
+        .catch(async () => {
+          // Network failed: serve cached shell if present
+          const cache = await caches.open(CACHE_NAME);
+          const cachedShell = await cache.match('/index.html');
+          return cachedShell || new Response('Offline', { status: 503 });
+        })
+    );
+    return;
+  }
+
+  // Don’t intercept the SW file itself
+  const path = new URL(req.url).pathname;
+  if (path === '/service-worker.js') return;
+
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached response if found
-        if (response) {
-          return response;
-        }
-        
-        // Otherwise, fetch from network
-        return fetch(event.request)
-          .then((networkResponse) => {
-            // Try to cache dynamic responses
-            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-              const responseToCache = networkResponse.clone();
-              caches.open(CACHE_NAME)
-                .then((cache) => {
-                  cache.put(event.request, responseToCache);
-                });
-            }
-            return networkResponse;
-          });
-      })
+    caches.match(req).then((cached) => {
+      if (cached) {
+        // Background refresh (best-effort)
+        fetch(req).then((networkResponse) => {
+          if (
+            networkResponse &&
+            networkResponse.ok &&
+            new URL(req.url).origin === self.location.origin &&
+            (networkResponse.type === 'basic' || networkResponse.type === 'default')
+          ) {
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(req, networkResponse.clone());
+            });
+          }
+        }).catch(() => {}); // ignore refresh errors offline
+        return cached;
+      }
+
+      // Otherwise fetch from network and cache same-origin, OK responses
+      return fetch(req)
+        .then((networkResponse) => {
+          if (
+            networkResponse &&
+            networkResponse.ok &&
+            new URL(req.url).origin === self.location.origin &&
+            (networkResponse.type === 'basic' || networkResponse.type === 'default')
+          ) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(req, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => {
+          // As a minimal fallback for asset requests, try the shell (optional)
+          if (path.startsWith('/assets/')) {
+            return caches.match('/index.html');
+          }
+          return new Response('Offline', { status: 503 });
+        });
+    })
   );
 });
 
-// Optional: Push notification handler
+// Optional: Push notification handler (kept same behavior, with safety)
 self.addEventListener('push', (event) => {
+  const body = event?.data?.text?.() || 'New update available';
   const title = 'J1 Cross-Chain Portal';
   const options = {
-    body: event.data.text(),
+    body,
     icon: '/android-chrome-192x192.png',
     badge: '/android-chrome-192x192.png'
   };
-  
   event.waitUntil(self.registration.showNotification(title, options));
 });
