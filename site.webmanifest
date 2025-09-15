@@ -4,9 +4,14 @@
   "description": "1.token, 1.portal, ∞.possibilities",
   "id": "https://ccp.j1t.fyi/",
   "start_url": "https://ccp.j1t.fyi/",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "background_color": "#000000",
   "theme_color": "#000000",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["finance", "productivity", "utilities"],
   "icons": [
     {
       "src": "/android-chrome-144x144.png",
@@ -55,6 +60,29 @@
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Bridge Tokens",
+      "short_name": "Bridge",
+      "description": "Start a new cross-chain bridge transaction",
+      "url": "/?action=bridge",
+      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View Wallet",
+      "short_name": "Wallet",
+      "description": "Open your connected wallet",
+      "url": "/?action=wallet",
+      "icons": [{ "src": "/apple-touch-icon.png", "sizes": "180x180" }]
+    },
+    {
+      "name": "Recent Activity",
+      "short_name": "Activity",
+      "description": "See your latest cross-chain transactions",
+      "url": "/?action=activity",
+      "icons": [{ "src": "/manifest-icon-192.maskable.png", "sizes": "192x192" }]
     }
   ],
   "orientation": "portrait",
