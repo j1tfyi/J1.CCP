@@ -1,8 +1,8 @@
-# J1.CROSS-CHAIN PORTAL (J1.CCP): One Portal. Infinite Possibilities. Zero Risk.
+# J1.CROSS-CHAIN PORTAL: One Portal. Infinite Possibilities. Zero Risk.
 
 ## 🌐 J1.CCP Project Overview
 
-J1.CCP is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
+J1.CROSS-CHAIN PORTAL [J1.CCP] is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
 
 ## 🚀 Core Value Proposition
 
@@ -85,7 +85,7 @@ deBridge enables:
 
 2. Clone the Repository
    ```bash
-   git clone https://github.com/WhiskeySic/j1tfyi-portal.git
+   git clone https://github.com/j1tfyi/ccp.git
    cd j1tfyi-portal
    ```
 

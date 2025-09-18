@@ -25,6 +25,7 @@ update_secrets.sh
 **/src/App.jsx
 src/pages/PortalPage.tsx
 src/components/DeBridgePortal.tsx
+src/components/ChartEmbed.tsx
 bridge-react-app/src/App.css
 
 # Logs and Test Files
