@@ -198,9 +198,15 @@ export default function HomePage() {
         {/* Features Section */}
         <section
           id="features"
-          className="py-24 px-4 bg-background/80 backdrop-blur-md"
+          className="py-24 px-4 bg-background/80 backdrop-blur-md relative overflow-hidden"
         >
-          <div className="container mx-auto">
+          <VideoBackground
+            src="/374800567564894209.mp4"
+            className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30"
+            preload="metadata"
+            lazyLoad={true}
+          />
+          <div className="container mx-auto relative z-10">
             <h2 className="text-4xl font-bold text-center mb-12">
               How <span className="gradient-text">J1.CCP</span> Works in 1 Click
             </h2>

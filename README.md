@@ -1,6 +1,6 @@
 # J1.CROSS-CHAIN PORTAL (J1.CCP): One Portal. Infinite Possibilities. Zero Risk.
 
-## 🌐 Project Overview
+## 🌐 J1.CCP Project Overview
 
 J1.CCP is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
 

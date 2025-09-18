@@ -34,22 +34,68 @@ export const VideoBackground: React.FC<VideoBackgroundProps> = ({
     return () => observer.disconnect();
   }, [lazyLoad]);
 
+  // Safari-specific video playback fix
+  useEffect(() => {
+    if (!videoRef.current || !shouldLoad) return;
+
+    const video = videoRef.current;
+
+    // Force Safari to start playing
+    const playVideo = async () => {
+      try {
+        // Set volume to 0 for Safari autoplay policy
+        video.muted = true;
+        video.volume = 0;
+
+        // Try to play the video
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+          await playPromise;
+        }
+      } catch (err) {
+        console.log('Video autoplay failed:', err);
+        // Try again after user interaction
+        const handleInteraction = () => {
+          video.play().catch(() => {});
+          document.removeEventListener('click', handleInteraction);
+          document.removeEventListener('touchstart', handleInteraction);
+        };
+        document.addEventListener('click', handleInteraction);
+        document.addEventListener('touchstart', handleInteraction);
+      }
+    };
+
+    // Safari needs the video to be loaded before playing
+    if (video.readyState >= 3) {
+      playVideo();
+    } else {
+      video.addEventListener('loadeddata', playVideo);
+      return () => video.removeEventListener('loadeddata', playVideo);
+    }
+  }, [shouldLoad]);
+
   return error ? (
     <div className={className} style={{ backgroundColor: '#000' }} />
   ) : (
     <video
       ref={videoRef}
-      autoPlay={shouldLoad}
+      autoPlay
       muted
       loop
       playsInline
-      webkit-playsinline="true"
       preload={shouldLoad ? preload : 'none'}
       className={className}
       onError={() => setError(true)}
+      // Safari-specific attributes
+      {...{
+        'webkit-playsinline': 'true',
+        'x-webkit-airplay': 'allow',
+      } as any}
     >
       {shouldLoad && (
         <>
+          <source src={src} type="video/mp4; codecs=avc1.42E01E,mp4a.40.2" />
           <source src={src} type="video/mp4" />
           {fallbackSrc && <source src={fallbackSrc} type="video/mp4" />}
         </>
