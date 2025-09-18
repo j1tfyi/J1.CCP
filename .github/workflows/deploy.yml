@@ -29,105 +29,121 @@ jobs:
           check-latest: true
           cache: 'npm'
           cache-dependency-path: |
-            bridge-react-app/package-lock.json
             package-lock.json
+            bridge-react-app/package-lock.json
 
       # 3) Ensure dirs exist
       - name: Ensure directories
         run: |
           mkdir -p bridge-react-app/src
           mkdir -p bridge-react-app/public
+          mkdir -p src/pages
+          mkdir -p src/components
 
-      # 4) Create only the secret-sourced files that actually use secrets.
-      #    If SW/MANIFEST secrets are ever added later, we allow them to override repo files.
-      - name: Create sensitive files (conditional)
+      # 4) Create required secret-sourced files
+      - name: Create sensitive files (required only)
         shell: bash
         run: |
           set -euo pipefail
 
-          # Pull secrets (may be empty)
           MAIN_TS_BASE64="${{ secrets.MAIN_TS_BASE64 }}"
           BRIDGE_JSX_BASE64="${{ secrets.BRIDGE_JSX_BASE64 }}"
           APP_JSX_BASE64="${{ secrets.APP_JSX_BASE64 }}"
-          SERVICE_WORKER_BASE64="${{ secrets.SERVICE_WORKER_BASE64 }}"
-          MANIFEST_BASE64="${{ secrets.MANIFEST_BASE64 }}"
+          PORTAL_PAGE_BASE64="${{ secrets.PORTAL_PAGE_BASE64 }}"
+          DEBRIDGE_PORTAL_BASE64="${{ secrets.DEBRIDGE_PORTAL_BASE64 }}"
+          APP_CSS_BASE64="${{ secrets.APP_CSS_BASE64 }}"
 
-          # Required ones (these you were already using)
           if [ -z "${MAIN_TS_BASE64:-}" ]; then echo "❌ Missing MAIN_TS_BASE64"; exit 1; fi
           if [ -z "${BRIDGE_JSX_BASE64:-}" ]; then echo "❌ Missing BRIDGE_JSX_BASE64"; exit 1; fi
           if [ -z "${APP_JSX_BASE64:-}" ]; then echo "❌ Missing APP_JSX_BASE64"; exit 1; fi
+          if [ -z "${PORTAL_PAGE_BASE64:-}" ]; then echo "❌ Missing PORTAL_PAGE_BASE64"; exit 1; fi
+          if [ -z "${DEBRIDGE_PORTAL_BASE64:-}" ]; then echo "❌ Missing DEBRIDGE_PORTAL_BASE64"; exit 1; fi
+          if [ -z "${APP_CSS_BASE64:-}" ]; then echo "❌ Missing APP_CSS_BASE64"; exit 1; fi
 
-          # Decode required files
           printf '%s' "$MAIN_TS_BASE64"    | base64 -d > main.ts
           printf '%s' "$BRIDGE_JSX_BASE64" | base64 -d > bridge-react-app/src/useBridge.jsx
           printf '%s' "$APP_JSX_BASE64"    | base64 -d > bridge-react-app/src/App.jsx
+          printf '%s' "$PORTAL_PAGE_BASE64" | base64 -d > src/pages/PortalPage.tsx
+          printf '%s' "$DEBRIDGE_PORTAL_BASE64" | base64 -d > src/components/DeBridgePortal.tsx
+          printf '%s' "$APP_CSS_BASE64" | base64 -d > bridge-react-app/src/App.css
 
-          # For SW/manifest: prefer secrets if provided, otherwise keep repo files
-          if [ -n "${SERVICE_WORKER_BASE64:-}" ]; then
-            printf '%s' "$SERVICE_WORKER_BASE64" | base64 -d > service-worker.js
-          else
-            echo "ℹ️ SERVICE_WORKER_BASE64 not set; using repo service-worker.js"
-          fi
+          # Minimal fallbacks if repo doesn't include these
+          test -f service-worker.js  || echo "// noop sw" > service-worker.js
+          test -f site.webmanifest   || echo '{"name":"J1.CCP","short_name":"J1.CCP","start_url":"/","display":"standalone","background_color":"#000","theme_color":"#000","icons":[]}' > site.webmanifest
 
-          if [ -n "${MANIFEST_BASE64:-}" ]; then
-            printf '%s' "$MANIFEST_BASE64" | base64 -d > site.webmanifest
-          else
-            echo "ℹ️ MANIFEST_BASE64 not set; using repo site.webmanifest"
-          fi
-
-      # 5) Verify all files (repo copies must exist and be non-empty)
+      # 5) Verify required files exist and are non-empty
       - name: Verify files exist and are non-empty
         run: |
-          echo "Verifying files exist and are non-empty:"
-          test -s main.ts
-          test -s bridge-react-app/src/useBridge.jsx
-          test -s bridge-react-app/src/App.jsx
-          test -s service-worker.js
-          test -s site.webmanifest
-          ls -l main.ts service-worker.js site.webmanifest
+          set -euo pipefail
+          for f in main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx src/pages/PortalPage.tsx src/components/DeBridgePortal.tsx bridge-react-app/src/App.css; do
+            test -s "$f" || (echo "❌ Missing or empty $f" && exit 1)
+          done
+          ls -l service-worker.js || true
+          ls -l site.webmanifest  || true
 
-      # 6) Install Solana deps (frontend)
-      - name: Install Solana packages
-        working-directory: bridge-react-app
+      # 6) Install & Build ROOT portal (wormhole lives here)
+      - name: Install packages (root portal)
         run: |
-          npm install @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-base @solana/web3.js
+          npm install
+          # Ensure three is present (won't reinstall if already in package.json)
+          npm install three --save || true
 
-      # 7) Build frontend
-      - name: Build React app
+      - name: Build root portal
+        run: |
+          # Prefer your script if defined; fallback to vite if present
+          if npm run | grep -qE '^  build'; then
+            npm run build
+          else
+            npx vite build
+          fi
+
+      # 7) Install & Build BRIDGE app
+      - name: Install packages (bridge app)
         working-directory: bridge-react-app
         run: |
           npm install
-          npx update-browserslist-db@latest --yes || true
-          npm run build
+          # Explicitly ensure deps you use at runtime
+          npm install three @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-base @solana/web3.js --save
 
-      # 8) Inspect build output
-      - name: Verify Build Output
+      - name: Build bridge app
+        working-directory: bridge-react-app
         run: |
-          echo "Build output:"
-          find bridge-react-app/dist -maxdepth 2 -type f -printf "%P\n" | sort | head -n 200
+          npx update-browserslist-db@latest --yes || true
+          if npm run | grep -qE '^  build'; then
+            npm run build
+          else
+            npx vite build
+          fi
 
-      # 8.5) Auto-sync build output into service-worker.js
-      - name: Sync SW hashed asset names
+      # 8) Inspect build outputs
+      - name: Verify Build Output (root & bridge)
+        run: |
+          echo "Root portal dist/:"
+          (find dist -maxdepth 2 -type f -printf "%P\n" | sort | head -n 200) 2>/dev/null || echo "no root dist/"
+          echo
+          echo "Bridge dist/:"
+          (find bridge-react-app/dist -maxdepth 2 -type f -printf "%P\n" | sort | head -n 200) 2>/dev/null || echo "no bridge dist/"
+
+      # 9) (Tolerant) Auto-sync hashed assets into service-worker.js if pattern matches
+      - name: Sync SW hashed asset names (tolerant)
         shell: bash
         run: |
           set -euo pipefail
-          js_path=$(ls -1t bridge-react-app/dist/assets/main-*.js  | head -n1 || true)
-          css_path=$(ls -1t bridge-react-app/dist/assets/main-*.css | head -n1 || true)
+          js_path=$(ls -1t bridge-react-app/dist/assets/main-*.js 2>/dev/null | head -n1 || true)
+          css_path=$(ls -1t bridge-react-app/dist/assets/main-*.css 2>/dev/null | head -n1 || true)
           if [ -z "${js_path}" ] || [ -z "${css_path}" ]; then
-            echo "❌ Could not find built main-*.js or main-*.css in dist/assets"
-            ls -al bridge-react-app/dist/assets || true
-            exit 1
+            echo "⚠️ Could not find main-*.{js,css}; skipping SW rewrite"
+            exit 0
           fi
           JS_FILE="/assets/$(basename "${js_path}")"
           CSS_FILE="/assets/$(basename "${css_path}")"
           echo "Detected JS:  ${JS_FILE}"
           echo "Detected CSS: ${CSS_FILE}"
-          sed -i -E "s#'/assets/[^']+\\.js'#'${JS_FILE}'#g" service-worker.js
-          sed -i -E "s#'/assets/[^']+\\.css'#'${CSS_FILE}'#g" service-worker.js
-          echo "Updated service-worker.js lines:"
-          grep -nE "'/assets/.*\\.(js|css)'" service-worker.js
+          sed -i -E "s#'/assets/[^']+\\.js'#'${JS_FILE}'#g" service-worker.js || true
+          sed -i -E "s#'/assets/[^']+\\.css'#'${CSS_FILE}'#g" service-worker.js || true
+          grep -nE "'/assets/.*\\.(js|css)'" service-worker.js || true
 
-      # 9) Deploy to Deno Deploy
+      # 10) Deploy to Deno Deploy (serve BOTH bundles)
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
@@ -138,17 +154,20 @@ jobs:
             deno.json
             deps.client.ts
             deps.server.ts
+            dist/**/*
             bridge-react-app/dist/**/*
             service-worker.js
             site.webmanifest
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
 
-      # 10) Cleanup
+      # 11) Cleanup
       - name: Cleanup
         if: always()
         run: |
           rm -f main.ts
           rm -f bridge-react-app/src/useBridge.jsx
           rm -f bridge-react-app/src/App.jsx
-          # keep repo copies of SW & manifest; they are part of the codebase
+          rm -f src/pages/PortalPage.tsx
+          rm -f src/components/DeBridgePortal.tsx
+          rm -f bridge-react-app/src/App.css

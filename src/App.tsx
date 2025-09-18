@@ -1,13 +1,18 @@
-import { React } from "../deps.client.ts";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import PortalPage from "./pages/PortalPage";
+import TermsOfService from "./pages/TermsOfService";
+import "./index.css";
 
 export default function App() {
-  const [count, setCount] = React.useState(0);
-
   return (
-    <div style={{ fontFamily: "sans-serif" }}>
-      <h1>Hello from Deno + React 18!</h1>
-      <p>Count is {count}</p>
-      <button onClick={() => setCount((c) => c + 1)}>Increment</button>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/portal" element={<PortalPage />} />
+        <Route path="/terms" element={<TermsOfService />} />
+      </Routes>
+    </Router>
   );
 }

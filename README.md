@@ -1,8 +1,8 @@
-# J1.CrossChain Portal (J1.CCP): 1.token, 1.portal, ∞.possibilities
+# J1.CROSS-CHAIN PORTAL (J1.CCP): One Portal. Infinite Possibilities. Zero Risk.
 
 ## 🌐 Project Overview
 
-J1.CrossChain Portal is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
+J1.CCP is a cross-chain networking solution built on the cutting-edge deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
 
 ## 🚀 Core Value Proposition
 
@@ -99,6 +99,12 @@ deBridge enables:
    ```bash
    deno run --allow-net --allow-read server.ts
    ```
+Or
+```bash
+    cd bridge-react-app && npm run build && cd ..
+    npm run build
+    deno run --allow-net --allow-read main.ts
+```
 
 ## 🔒 Licensing
 
@@ -110,7 +116,7 @@ deBridge enables:
 
 ## 🌐 Additional Resources
 - **Official deBridge Website**: [deBridge Finance](https://debridge.finance/)
-- **Project Portal**: [J1TFYI Website](https://j1t.fyi/)
+- **Project Portal**: [J1.CCP Website](https://ccp.j1t.fyi/)
 - **Third-party Security Audits**
     - deBridge protocol, smart contracts and periphery modules passed more than 25+ security audits. 
     - A comprehensive list of audit reports of the can be found in the deBridge GitHub repository for [deBridge Security Audits](https://github.com/debridge-finance/debridge-security)
@@ -120,9 +126,6 @@ deBridge enables:
 ### Social Channels
 - **Telegram**: [J1TFYI Telegram](https://t.me/j1tfyi)
 - **Twitter**: [J1TFYI Twitter](https://x.com/j1tfyi)
-
-### Token Information
-- **$J1TFYI Contract Address**: `HAqD46mR4LgY3aJiMZSabfefZoysG3Uuj6wn2ZKYE14v`
 
 For inquiries, technical discussions, or potential collaborations, please reach out through our social channels or contact the project maintainers on github.
 

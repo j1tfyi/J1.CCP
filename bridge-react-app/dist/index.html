@@ -4,7 +4,7 @@
     <!-- Basic Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="J1.Cross-Chain Portal: 1 token, 1 portal, infinite possibilities. Experience seamless cross-chain interactions.">
+    <meta name="description" content="J1.Cross-Chain Portal: 1 token, 1 portal, infinite possibilities. Experience seamless cross-chain interactions and advertise your tokens.">
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#000000">
@@ -12,13 +12,13 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="J1.Portal">
 
-    <title>J1.Cross-Chain Portal</title>
+    <title>J1.CROSSCHAIN PORTAL</title>
     
     <!-- Favicon and App Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/x-icon" href="/bridge/favicon.ico">
+    <link rel="apple-touch-icon" href="/bridge/apple-touch-icon.png">
     
     <!-- Apple Splash Screens - iPhone 15 Pro Max, iPhone 15 Pro -->
     <link rel="apple-touch-startup-image" href="/apple-splash-2796-1290.jpg" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)">
@@ -73,24 +73,14 @@
     <link rel="apple-touch-startup-image" href="/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
 
     <!-- Web App Manifest -->
-    <link rel="manifest" href="/site.webmanifest">
-    <script type="module" crossorigin src="/assets/index-D-M9UE8X.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-vUsCpqLf.css">
+    <link rel="manifest" href="/bridge/site.webmanifest">
+
+    <!-- Wallet Adapter UI CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/@solana/wallet-adapter-react-ui/styles.css">
+    <script type="module" crossorigin src="/bridge/assets/main-B6yaASde.js"></script>
+    <link rel="stylesheet" crossorigin href="/bridge/assets/main-pzQtHgJi.css">
   </head>
   <body id="index">
     <div id="root"></div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(registration => {
-              console.log('Service Worker registered with scope:', registration.scope);
-            })
-            .catch(error => {
-              console.error('Service Worker registration failed:', error);
-            });
-        });
-      }
-    </script>
   </body>
 </html>

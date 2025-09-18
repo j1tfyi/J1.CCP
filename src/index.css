@@ -1,0 +1,415 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sticky Header Fix */
+@layer components {
+  header.sticky-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+  }
+}
+
+/* Firefox-specific padding adjustment */
+@-moz-document url-prefix() {
+  #portal-widget {
+    margin-top: 2rem !important;
+  }
+}
+
+/* Local Audiowide Font */
+@font-face {
+  font-family: 'Audiowide';
+  src: url('/Audiowide-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 15%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 4.8% 15%;
+    --muted-foreground: 240 3.8% 60%;
+    --accent: 40 100% 50%;
+    --accent-foreground: 0 0% 3.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 20%;
+    --input: 240 3.7% 15.9%;
+    --ring: 25 95% 53%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Audiowide', 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: 0.02em;
+  }
+
+  /* Headers with conditional black outline */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Audiowide', sans-serif !important;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  /* Only apply shadows to main hero headers */
+  section:not(#features):not(#bridge):not(#chart):not(#supported-networks) h1,
+  section:not(#features):not(#bridge):not(#chart):not(#supported-networks) h2,
+  section:not(#features):not(#bridge):not(#chart):not(#supported-networks) h3 {
+    text-shadow:
+      -2px -2px 0 #000,
+      2px -2px 0 #000,
+      -2px 2px 0 #000,
+      2px 2px 0 #000,
+      0 0 10px rgba(0, 0, 0, 0.6),
+      0 0 20px rgba(0, 0, 0, 0.4),
+      0 0 30px rgba(0, 0, 0, 0.2);
+    -webkit-text-stroke: 1.5px black;
+  }
+
+  /* Remove text shadows for cleaner look */
+  p, span, div, a, button, label {
+    text-shadow: none;
+    -webkit-text-stroke: none;
+  }
+
+  /* Ensure buttons and links are always clickable */
+  button, a, [role="button"] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Ensure header links are always clickable */
+  header {
+    z-index: 9999 !important;
+    position: relative !important;
+  }
+
+  header button,
+  header a {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 10000 !important;
+    position: relative !important;
+  }
+
+  /* Ensure features, bridge portal, chart, and how it works sections have no shadows */
+  #features p,
+  #features span,
+  #features div,
+  #features h2,
+  #features h3,
+  #bridge p,
+  #bridge span,
+  #bridge div,
+  #bridge h2,
+  #bridge h3,
+  #chart p,
+  #chart span,
+  #chart div,
+  #chart h2,
+  #chart h3,
+  #supported-networks p,
+  #supported-networks span,
+  #supported-networks div,
+  #supported-networks h2,
+  #supported-networks h3,
+  .card p,
+  .card span,
+  .card div,
+  .card h3,
+  .bg-card-gradient p,
+  .bg-card-gradient span,
+  .bg-card-gradient div,
+  .bg-card-gradient h3 {
+    text-shadow: none !important;
+    -webkit-text-stroke: none !important;
+  }
+
+  .gradient-text {
+    font-family: 'Audiowide', sans-serif !important;
+    font-weight: 400;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    color: #ff6600 !important;
+    font-family: 'Audiowide', sans-serif !important;
+    font-weight: 900;
+  }
+
+  /* Bold black outline for neon text elements */
+  .neon-text {
+    text-shadow:
+      -2px -2px 0 #000,
+      2px -2px 0 #000,
+      -2px 2px 0 #000,
+      2px 2px 0 #000,
+      0 0 8px rgba(0, 0, 0, 0.6),
+      0 0 15px rgba(0, 0, 0, 0.4),
+      0 0 25px rgba(0, 0, 0, 0.2);
+    -webkit-text-stroke: 1.5px black;
+  }
+
+  /* Audiowide utility class */
+  .audiowide-regular {
+    font-family: "Audiowide", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  .card-gradient {
+    @apply bg-gradient-to-br from-card/90 to-card/50;
+  }
+
+  .bg-card-gradient {
+    background: linear-gradient(135deg, hsl(var(--card)) 0%, hsl(var(--card) / 0.8) 100%);
+  }
+}
+
+@keyframes pump {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.animate-pump {
+  animation: pump 2s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+/* Global container fixes for all browsers */
+.container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Firefox specific aggressive fixes */
+@-moz-document url-prefix() {
+  body {
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    margin: 0 !important;
+  }
+
+  main {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Safari specific fixes */
+@supports (-webkit-backdrop-filter: none) {
+  .container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* Widget container - full size with scroll fix */
+#debridgeWidget {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 850px !important;
+  overflow: visible !important;
+  transform: none !important;
+  display: block !important;
+  pointer-events: none !important;
+}
+
+/* Allow interaction with actual widget elements */
+#debridgeWidget > * {
+  pointer-events: auto !important;
+}
+
+/* Scroll fix for widget container */
+.widget-scroll-fix {
+  position: relative;
+  z-index: 1;
+}
+
+/* DEX-style illuminated effects for widget - stronger glow */
+#debridgeWidget > div,
+#debridgeWidget > div > div,
+#debridgeWidget .debridge-widget,
+#debridgeWidget [class*="swap"],
+#debridgeWidget [class*="form"],
+#debridgeWidget [class*="container"],
+#debridgeWidget [class*="input"],
+#debridgeWidget [class*="token"] {
+  box-shadow:
+    0 0 30px rgba(255, 255, 255, 0.4),
+    0 0 60px rgba(255, 255, 255, 0.25),
+    inset 0 0 30px rgba(255, 255, 255, 0.15) !important;
+  border: 2px solid rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+  border-radius: 15px !important;
+}
+
+/* White glow for form elements - enhanced */
+#debridgeWidget input,
+#debridgeWidget select,
+#debridgeWidget textarea,
+#debridgeWidget button {
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
+  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  transition: all 0.3s ease;
+  background: rgba(71, 75, 84, 0.9) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+#debridgeWidget input:hover,
+#debridgeWidget select:hover {
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.35),
+    0 0 40px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+#debridgeWidget input:focus,
+#debridgeWidget select:focus {
+  box-shadow:
+    0 0 30px rgba(255, 255, 255, 0.45),
+    0 0 60px rgba(255, 255, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  outline: none;
+}
+
+/* Animated glow pulse for buttons */
+@keyframes dex-glow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+  }
+  50% {
+    filter: brightness(1.05) drop-shadow(0 0 30px rgba(255, 255, 255, 0.4));
+  }
+}
+
+#debridgeWidget .swap-button,
+#debridgeWidget button[type="submit"] {
+  animation: dex-glow 3s ease-in-out infinite;
+}
+
+/* Change deBridge widget connect wallet button to orange */
+#debridgeWidget button,
+#debridgeWidget [role="button"],
+[data-debridge-widget] button,
+[data-debridge-widget] [role="button"] {
+  transition: all 0.3s ease;
+}
+
+/* Target ALL buttons in the widget to override red color - AGGRESSIVE OVERRIDE */
+#debridgeWidget button,
+#debridgeWidget [role="button"],
+#debridgeWidget .button,
+#debridgeWidget [type="button"],
+[data-debridge-widget] button,
+[data-debridge-widget] [role="button"],
+[data-debridge-widget] .button,
+#debridgeWidget button[style*="800304"],
+#debridgeWidget button[style*="background"] {
+  background: linear-gradient(90deg, #ff6600, #ffae00) !important;
+  background-color: #ff6600 !important;
+  background-image: linear-gradient(90deg, #ff6600, #ffae00) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* Override any inline styles */
+#debridgeWidget button[style],
+[data-debridge-widget] button[style] {
+  background: linear-gradient(90deg, #ff6600, #ffae00) !important;
+  background-color: #ff6600 !important;
+  background-image: linear-gradient(90deg, #ff6600, #ffae00) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+/* IMPORTANT: Override hover state to prevent black background */
+#debridgeWidget button:hover,
+#debridgeWidget [role="button"]:hover,
+[data-debridge-widget] button:hover,
+#debridgeWidget button[style]:hover {
+  background: linear-gradient(90deg, #ff7700, #ffbb00) !important;
+  background-color: #ff7700 !important;
+  background-image: linear-gradient(90deg, #ff7700, #ffbb00) !important;
+  color: #ffffff !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(255,102,0,0.3) !important;
+}
+
+/* Force override for active and focus states */
+#debridgeWidget button:active,
+#debridgeWidget button:focus,
+#debridgeWidget button:focus-visible {
+  background: linear-gradient(90deg, #ff6600, #ffae00) !important;
+  background-image: linear-gradient(90deg, #ff6600, #ffae00) !important;
+  color: #ffffff !important;
+  outline: 2px solid #ff6600 !important;
+  outline-offset: 2px;
+}

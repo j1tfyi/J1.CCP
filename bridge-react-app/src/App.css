@@ -1,3 +1,13 @@
+/* Custom Font */
+/* Local Audiowide Font */
+@font-face {
+  font-family: 'Audiowide';
+  src: url('/assets/Audiowide-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Reset default styles */
 * {
   margin: 0;
@@ -5,114 +15,248 @@
   box-sizing: border-box;
 }
 
-/* Root styles */
 :root {
-  font-family: Inter, system-ui, Audiowide, sans-serif;
+  font-family: 'Audiowide', Inter, system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light dark;
-  color: rgba(205, 1, 1, 1);
-  background-color: #000000;
-  font-synthesis: none;
+  color-scheme: dark;
+  color: #ffffff;
+  background-color: transparent;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.05em;
 }
 
-/* Root container */
-#root {
+/* Full-screen wormhole background */
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  gap: 0;
-  max-width: none;
-  padding: 0;
+  background: transparent;
+  overflow-x: hidden;
 }
 
-/* Header and widget container */
-#customHeader,
-#debridgeWidget {
-  width: 100%;
-  max-width: 600px; /* Allow responsiveness */
-  box-sizing: border-box;
-  margin: 0 auto;
+/* Starfield effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background: transparent url("/assets/stardust.png") repeat;
+  animation: drift 200s linear infinite;
+  opacity: 0.6;
+  z-index: -2;
+}
+
+@keyframes drift {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-500px, -500px);
+  }
+}
+
+/* Wormhole glowing ring */
+#wormhole {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.4) 20%, transparent 70%);
+  box-shadow: 0 0 80px 40px rgba(255, 120, 0, 0.3),
+              0 0 160px 60px rgba(255, 180, 0, 0.2);
+  animation: pulse 6s infinite ease-in-out, rotate 40s linear infinite;
+  z-index: -1;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Header text with dampened glow and black outline */
+#customHeader {
   text-align: center;
-  overflow: hidden; /* Prevent overflow */
-  text-overflow: ellipsis;
-  white-space: nowrap; /* Ensure single-line text */
+  color: #fff;
+  font-family: 'Audiowide', sans-serif;
+  font-size: 2rem;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    0 0 10px rgba(255, 174, 0, 0.5),
+    0 0 20px rgba(255, 102, 0, 0.3);
+  -webkit-text-stroke: 0.5px black;
+  margin-bottom: 20px;
 }
 
-/* Home button specific styles */
+/* Buttons */
+button,
 #homeButton {
   width: 100%;
   max-width: 600px;
   height: 48px;
-  padding: 0 16px;
-  border-radius: 8px;
+  margin: 1rem 0;
   font-size: 16px;
-  font-family: Audiowide, sans-serif;
   font-weight: 500;
-  background-color: #800304;
-  color: #FFFFFF;
+  background: linear-gradient(90deg, #ff6600, #ffae00);
+  color: white;
   border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin: 12px 0;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255, 150, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+button:hover,
 #homeButton:hover {
-  background-color: #9b0404;
-  transform: scale(1.02);
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(255, 180, 0, 0.9);
+}
+/* Force widget to be full size with scroll fix */
+#debridgeWidget {
+  background: transparent !important;
+  transform: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 850px !important;
+  overflow: visible !important;
+  box-sizing: border-box;
+  pointer-events: none !important;
 }
 
-/* Reset general button styles */
-button {
-  border: none;
-  font-family: inherit;
-  cursor: pointer;
+/* Allow interaction with widget elements */
+#debridgeWidget > * {
+  transform: none !important;
+  pointer-events: auto !important;
 }
 
-/* Global body styles */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #000000;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-}
-
-/* Media query for tablets */
-@media screen and (max-width: 768px) {
-  #customHeader,
-  #debridgeWidget {
-    width: 100%;
-    padding: 0 16px;
+/* Firefox-specific fixes */
+@-moz-document url-prefix() {
+  body {
+    overflow-x: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
-  #homeButton {
-    width: calc(100% - 32px);
-    height: 40px;
-    font-size: 14px;
+  .container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 }
 
-/* Media query for mobile devices */
-@media screen and (max-width: 480px) {
-  #customHeader,
-  #debridgeWidget {
-    width: 100%;
-    padding: 0 8px;
-  }
+#debridgeWidget > * {
+  background: transparent !important;
+}
 
-  #homeButton {
-    width: calc(100% - 16px);
-    height: 36px;
-    font-size: 12px;
+/* Override deBridge widget internal backgrounds */
+.debridge-widget,
+.debridge-widget-container,
+[data-debridge-widget],
+[data-debridge-widget] > div:first-child {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Keep form elements semi-transparent with glow effect */
+.debridge-widget input,
+.debridge-widget select,
+.debridge-widget .form-control,
+[data-debridge-widget] input,
+[data-debridge-widget] select {
+  background: rgba(71, 75, 84, 0.8) !important;
+}
+
+/* DEX-style illuminated glow effects - aggressive selectors */
+#debridgeWidget > div,
+#debridgeWidget > div > div,
+#debridgeWidget div[class*="form"],
+#debridgeWidget div[class*="swap"],
+#debridgeWidget div[class*="token"],
+#debridgeWidget div[class*="input"],
+[data-debridge-widget] > div,
+[data-debridge-widget] .form-group,
+[data-debridge-widget] .swap-form,
+[data-debridge-widget] .token-selector,
+[data-debridge-widget] .input-container {
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Input fields with white glow */
+[data-debridge-widget] input,
+[data-debridge-widget] select,
+[data-debridge-widget] button {
+  box-shadow:
+    0 0 15px rgba(255, 255, 255, 0.2),
+    0 0 30px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Hover effects for interactive elements */
+[data-debridge-widget] input:hover,
+[data-debridge-widget] select:hover,
+[data-debridge-widget] button:hover {
+  box-shadow:
+    0 0 25px rgba(255, 255, 255, 0.4),
+    0 0 50px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Focus state with stronger glow */
+[data-debridge-widget] input:focus,
+[data-debridge-widget] select:focus {
+  box-shadow:
+    0 0 30px rgba(255, 255, 255, 0.5),
+    0 0 60px rgba(255, 255, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  outline: none !important;
+}
+
+/* Pulsing animation for main containers */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 20px rgba(255, 255, 255, 0.15),
+      0 0 40px rgba(255, 255, 255, 0.1),
+      inset 0 0 20px rgba(255, 255, 255, 0.05);
   }
+  50% {
+    box-shadow:
+      0 0 30px rgba(255, 255, 255, 0.25),
+      0 0 60px rgba(255, 255, 255, 0.15),
+      inset 0 0 30px rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Apply subtle pulsing to main swap containers */
+[data-debridge-widget] .swap-container,
+[data-debridge-widget] .main-form {
+  animation: pulse-glow 4s ease-in-out infinite !important;
 }

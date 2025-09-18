@@ -11,17 +11,21 @@ node_modules/
 *.env
 *.lock
 *.base64
+deno.lock
 
-# Specific Project Files
+# Specific Project Files (stored as GitHub secrets)
 main.ts
 main.template.ts
 main.ts.backup
 widget-react-app/main.ts
 update_secrets.sh
 
-# Specific Source Files
+# Specific Source Files (stored as GitHub secrets)
 **/src/useBridge.jsx
 **/src/App.jsx
+src/pages/PortalPage.tsx
+src/components/DeBridgePortal.tsx
+bridge-react-app/src/App.css
 
 # Logs and Test Files
 rate_limit_test.log
@@ -31,3 +35,11 @@ allfiles.txt
 # Wildcard Base64 Ignore
 */*.base64
 **/*.base64
+
+# Data directory
+data/
+
+# Claude-specific files
+CLAUDE.md
+.claude/
+update_secrets.sh

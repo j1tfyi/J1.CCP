@@ -1,150 +1,96 @@
-const CACHE_NAME = 'j1-cross-chain-portal-v2'; // bump when assets change
-const ASSETS_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/site.webmanifest',
-  '/android-chrome-144x144.png',
-  '/android-chrome-192x192.png',
-  '/android-chrome-512x512.png',
-  '/manifest-icon-192.maskable.png',
-  '/manifest-icon-512.maskable.png',
-  '/apple-touch-icon.png',
-  '/screenshot-mobile.png',
-  '/screenshot-desktop.png',
-  // keep your current hashed bundle names here
-  '/assets/main-Bd--inSA.js',
-  '/assets/main-vUsCpqLf.css'
-];
+/* service-worker.js — hash-agnostic, works for / and /bridge/ */
 
-self.addEventListener('install', (event) => {
-  console.log('[Service Worker] Installing');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('[Service Worker] Caching assets');
-        return Promise.all(
-          ASSETS_TO_CACHE.map((url) =>
-            cache.add(url).catch((error) =>
-              console.error(`[Service Worker] Failed to cache: ${url}`, error)
-            )
-          )
-        );
-      })
-      .then(() => console.log('[Service Worker] All assets cached successfully'))
-      .catch((error) => {
-        console.error('[Service Worker] Caching failed:', error);
-      })
-  );
+// Bump version each deploy (auto via timestamp)
+const SW_VERSION = (self.registration?.scope || "") + ":" + Date.now();
+const IMMUTABLE_CACHE = `immutable:${SW_VERSION}`;
+const HTML_CACHE = `html:${SW_VERSION}`;
+const RUNTIME_CACHE = `runtime:${SW_VERSION}`;
+
+// -------- helpers
+function isImmutableAsset(url) {
+  // cache-first for hashed static assets from both apps
+  return /\/(assets|bridge\/assets)\/.+\.(js|css|woff2?|svg|png|jpg|jpeg|webp|ico)$/.test(url.pathname);
+}
+
+function isHtml(url) {
+  // app shells
+  return url.pathname === "/" || url.pathname === "/bridge/" || url.pathname.endsWith(".html");
+}
+
+// -------- lifecycle
+self.addEventListener("install", (event) => {
+  // no precache list needed; rely on runtime caching
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
-  console.log('[Service Worker] Activating');
-  event.waitUntil(
-    caches.keys().then((cacheNames) =>
-      Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('[Service Worker] Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      )
-    )
-  );
-  self.clients.claim();
+self.addEventListener("activate", (event) => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(
+      keys.filter(k => !k.endsWith(SW_VERSION)).map(k => caches.delete(k))
+    );
+    await self.clients.claim();
+  })());
 });
 
-self.addEventListener('fetch', (event) => {
+// -------- fetch
+self.addEventListener("fetch", (event) => {
   const req = event.request;
+  if (req.method !== "GET") return;
 
-  // Only handle GET requests
-  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
 
-  // Offline SPA fallback for navigations
-  const isNavigation =
-    req.mode === 'navigate' ||
-    (req.headers.get('accept') || '').includes('text/html');
+  // Do not intercept the SW itself
+  if (url.pathname === "/service-worker.js") return;
 
-  if (isNavigation) {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          // Cache a fresh copy of index.html if successful navigation to root
-          if (res.ok && new URL(req.url).pathname === '/') {
-            const copy = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put('/', copy));
-          }
-          return res;
-        })
-        .catch(async () => {
-          // Network failed: serve cached shell if present
-          const cache = await caches.open(CACHE_NAME);
-          const cachedShell = await cache.match('/index.html');
-          return cachedShell || new Response('Offline', { status: 503 });
-        })
-    );
+  // Cache-first for immutable assets
+  if (isImmutableAsset(url)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(IMMUTABLE_CACHE);
+      const hit = await cache.match(req);
+      if (hit) return hit;
+      const res = await fetch(req);
+      if (res.ok) cache.put(req, res.clone());
+      return res;
+    })());
     return;
   }
 
-  // Don’t intercept the SW file itself
-  const path = new URL(req.url).pathname;
-  if (path === '/service-worker.js') return;
+  // Stale-while-revalidate for HTML shells
+  if (isHtml(url)) {
+    event.respondWith((async () => {
+      const cache = await caches.open(HTML_CACHE);
+      const cached = await cache.match(req);
+      const network = fetch(req).then((res) => {
+        if (res.ok) cache.put(req, res.clone());
+        return res;
+      }).catch(() => cached || new Response("Offline", { status: 503 }));
+      return cached ? Promise.race([network, Promise.resolve(cached)]) : network;
+    })());
+    return;
+  }
 
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) {
-        // Background refresh (best-effort)
-        fetch(req).then((networkResponse) => {
-          if (
-            networkResponse &&
-            networkResponse.ok &&
-            new URL(req.url).origin === self.location.origin &&
-            (networkResponse.type === 'basic' || networkResponse.type === 'default')
-          ) {
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(req, networkResponse.clone());
-            });
-          }
-        }).catch(() => {}); // ignore refresh errors offline
-        return cached;
-      }
-
-      // Otherwise fetch from network and cache same-origin, OK responses
-      return fetch(req)
-        .then((networkResponse) => {
-          if (
-            networkResponse &&
-            networkResponse.ok &&
-            new URL(req.url).origin === self.location.origin &&
-            (networkResponse.type === 'basic' || networkResponse.type === 'default')
-          ) {
-            const responseToCache = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(req, responseToCache);
-            });
-          }
-          return networkResponse;
-        })
-        .catch(() => {
-          // As a minimal fallback for asset requests, try the shell (optional)
-          if (path.startsWith('/assets/')) {
-            return caches.match('/index.html');
-          }
-          return new Response('Offline', { status: 503 });
-        });
-    })
-  );
+  // Network-first fallback for everything else
+  event.respondWith((async () => {
+    try {
+      const res = await fetch(req);
+      return res;
+    } catch {
+      const cache = await caches.open(RUNTIME_CACHE);
+      const cached = await cache.match(req);
+      return cached || new Response("Offline", { status: 503 });
+    }
+  })());
 });
 
-// Optional: Push notification handler (kept same behavior, with safety)
-self.addEventListener('push', (event) => {
-  const body = event?.data?.text?.() || 'New update available';
-  const title = 'J1 Cross-Chain Portal';
-  const options = {
-    body,
-    icon: '/android-chrome-192x192.png',
-    badge: '/android-chrome-192x192.png'
-  };
-  event.waitUntil(self.registration.showNotification(title, options));
+// Optional: simple push handler
+self.addEventListener("push", (event) => {
+  const body = event?.data?.text?.() || "New update available";
+  event.waitUntil(
+    self.registration.showNotification("J1 Cross-Chain Portal", {
+      body,
+      icon: "/android-chrome-192x192.png",
+      badge: "/android-chrome-192x192.png",
+    })
+  );
 });
