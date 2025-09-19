@@ -172,43 +172,42 @@ export default function HomePage() {
 
       <main className="relative z-10 pt-16">
       {/* Hero Section */}
-        <section className="pt-0 pb-12 px-2 relative">
+        <section className="pt-8 md:pt-0 pb-12 px-2 relative">
           <div className="container mx-auto text-center relative">
             <div className="relative z-10">
-              <div className="w-full -mt-48">
+              <div className="w-full mt-0 md:-mt-48">
                 <img
                   src="/titlepage.png"
                   alt="J1.CrossChain Portal"
                   className="w-full h-auto max-w-none"
                 />
               </div>
-              <div className="-mt-56">
-                <p className="text-2xl md:text-4xl text-foreground/80 mb-4 max-w-5xl mx-auto">
+              <div className="-mt-16 md:-mt-56">
+                <p className="text-xl sm:text-2xl md:text-4xl text-foreground/80 mb-4 max-w-5xl mx-auto">
                   One Portal. Infinite Possibilities. Zero Risk.
                 </p>
-                <p className="text-xl md:text-3xl text-foreground/70 mb-5 max-w-3xl mx-auto">
+                <p className="text-lg sm:text-xl md:text-3xl text-foreground/70 mb-5 max-w-3xl mx-auto">
                   Instant. Secure. Borderless.
                 </p>
-                <p className="text-lg md:text-2xl text-foreground/70 mb-6 max-w-2xl mx-auto">
+                <p className="text-base sm:text-lg md:text-2xl text-foreground/70 mb-6 max-w-2xl mx-auto">
                   Cross-Chain Swap in Seconds
                 </p>
               </div>
             </div>
 
             <div
-              className="flex gap-4 justify-center mb-12 mt-4"
-              style={{ position: "relative", zIndex: 100 }}
+              className="flex gap-4 justify-center mb-12 mt-4 relative z-20"
             >
               <Button
                 variant="pump"
                 size="xl"
-                className="gap-2 border-2 border-black text-black"
+                className="gap-2 border-2 border-black text-black relative"
                 style={{ textShadow: "none", WebkitTextStroke: "none", pointerEvents: 'auto' }}
                 asChild
               >
                 <Link to="/portal" className="text-black" style={{ pointerEvents: 'auto' }}>
                   <Rocket className="w-5 h-5 text-black" />
-                  Launch J1.CCP (Portal)
+                  <span className="inline-block">Launch J1.CCP (Portal)</span>
                 </Link>
               </Button>
             </div>

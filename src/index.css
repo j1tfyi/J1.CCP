@@ -261,6 +261,34 @@
   }
 }
 
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  /* Ensure hero content is visible on mobile */
+  main {
+    padding-top: 80px !important;
+  }
+
+  /* Adjust hero section spacing */
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* Ensure buttons are properly sized on mobile */
+  button {
+    min-height: 44px; /* iOS tap target size */
+  }
+
+  /* Fix z-index stacking on mobile */
+  .relative.z-10 {
+    z-index: 10 !important;
+  }
+
+  .relative.z-20 {
+    z-index: 20 !important;
+  }
+}
+
 /* DEX-style illuminated effects for widget - stronger glow */
 #debridgeWidget > div,
 #debridgeWidget > div > div,
