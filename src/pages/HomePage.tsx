@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { DeBridgePortal } from "../components/DeBridgePortal";
 import { VideoBackground } from "../components/VideoBackground";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
-import { Rocket, TrendingUp, Shield, Zap, Sparkles, Github, Globe, Coins, ShieldCheck, Lock, Network } from "lucide-react";
+import { Rocket, TrendingUp, Shield, Zap, Sparkles, Github, Globe, Coins, ShieldCheck, Lock, Network, ArrowRightLeft } from "lucide-react";
 
 // Import network logos
 import abstractLogo from '../assets/networks/abstract.png';
@@ -32,14 +31,52 @@ import storyLogo from '../assets/networks/story.png';
 import tronLogo from '../assets/networks/tron.png';
 import zilliqqaLogo from '../assets/networks/zilliqa.png';
 
+// Extend window for deBridge SDK
+declare global {
+  interface Window {
+    deBridge?: any;
+  }
+}
+
 export default function HomePage() {
   const navigate = useNavigate();
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     navigate('/');
   };
+
+  // Load deBridge widget - exactly like PortalPage
+  useEffect(() => {
+    const loadWidget = async () => {
+      try {
+        const response = await fetch('/widget-config');
+        const config = await response.json();
+        if (window.deBridge && widgetContainerRef.current) {
+          window.deBridge.widget(config);
+        }
+      } catch (err) {
+        console.error('Failed to load widget config:', err);
+      }
+    };
+
+    // Load deBridge SDK
+    if (!window.deBridge) {
+      const script = document.createElement('script');
+      script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
+      script.async = true;
+      script.onload = loadWidget;
+      document.body.appendChild(script);
+    } else {
+      loadWidget();
+    }
+
+    return () => {
+      // Cleanup if needed
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -317,8 +354,97 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* DeBridge Portal Section */}
-        <DeBridgePortal />
+        {/* DeBridge Portal Section - Direct Widget Implementation */}
+        <section id="bridge" className="py-24 bg-background relative scroll-mt-20">
+          {/* Space Background Video */}
+          <VideoBackground
+            src="/spaceHD.mp4"
+            fallbackSrc="/space.mp4"
+            className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
+            preload="metadata"
+          />
+
+          <div className="w-full px-8 relative z-10">
+              <div className="text-center mb-16">
+                <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                  J1.CROSS-CHAIN <span className="gradient-text">PORTAL</span>
+                </h2>
+                <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
+                  One Portal. Infinite Possibilities. Zero Risk
+                  Seamlessly bridge assets across 24+ blockchain networks
+                </p>
+              </div>
+
+              {/* Features */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+                <Card className="p-6 bg-card-gradient border-border">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Zap className="w-8 h-8 text-primary" />
+                    <h3 className="text-lg font-semibold">Instant Transfers</h3>
+                  </div>
+                  <p className="text-foreground/70 text-sm">
+                    Lightning-fast cross-chain transactions with zero slippage and minimal fees
+                  </p>
+                </Card>
+
+                <Card className="p-6 bg-card-gradient border-border">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Globe className="w-8 h-8 text-accent" />
+                    <h3 className="text-lg font-semibold">24+ Networks</h3>
+                  </div>
+                  <p className="text-foreground/70 text-sm">
+                    Connect across EVM and non-EVM chains including Solana, Ethereum, and more
+                  </p>
+                </Card>
+
+                <Card className="p-6 bg-card-gradient border-border">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Shield className="w-8 h-8 text-primary" />
+                    <h3 className="text-lg font-semibold">Secure & Trusted</h3>
+                  </div>
+                  <p className="text-foreground/70 text-sm">
+                    Built on deBridge infrastructure with 25+ security audits
+                  </p>
+                </Card>
+              </div>
+
+            {/* Widget Container - Same as Portal Page */}
+            <div id="portal-widget" className="scroll-mt-20">
+              <div className="w-full bg-background/50 p-1 rounded-lg border border-border/40 relative min-h-[600px]">
+                <div id="debridgeWidget" ref={widgetContainerRef}></div>
+
+                <div className="mt-6 text-center">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 mb-4">
+                    <ArrowRightLeft className="w-5 h-5 text-primary" />
+                    <span className="text-sm font-medium text-primary">Built on the deBridge Liquidity Network Protocol</span>
+                  </div>
+                  <p className="text-sm text-foreground/60">
+                    Experience seamless cross-chain bridging with guaranteed rates and native asset preservation
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Info */}
+            <div className="mt-12 text-center">
+              <p className="text-foreground/60 mb-4">
+                Need help? Check our documentation or join our community
+              </p>
+              <div className="flex gap-4 justify-center">
+                <Button variant="outline" size="sm" asChild>
+                  <a href="https://j1tfyi.gitbook.io/docs/utilities-and-future-plan/j1.crosschain-portal" target="_blank" rel="noopener noreferrer">
+                    GitBook
+                  </a>
+                </Button>
+                <Button variant="outline" size="sm" asChild>
+                  <a href="https://t.me/j1tfyi" target="_blank" rel="noopener noreferrer">
+                    Join Telegram
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Supported Networks Section */}

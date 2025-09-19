@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        video {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            display: block;
+            margin: 20px 0;
+            border: 2px solid white;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: #333;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Playback Test</h1>
+
+    <div class="status" id="status">Testing video playback...</div>
+
+    <h2>Test 1: Direct MP4</h2>
+    <video id="video1" controls autoplay muted loop playsinline>
+        <source src="/stringtitle.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h2>Test 2: Another MP4</h2>
+    <video id="video2" controls autoplay muted loop playsinline>
+        <source src="/374800567564894209.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h2>Test 3: Manual Play Button</h2>
+    <video id="video3" controls muted loop playsinline>
+        <source src="/stringtitle.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <button onclick="document.getElementById('video3').play()">Play Video 3</button>
+
+    <script>
+        const status = document.getElementById('status');
+        const videos = document.querySelectorAll('video');
+        let statusText = '';
+
+        videos.forEach((video, index) => {
+            video.addEventListener('loadstart', () => {
+                statusText += `Video ${index + 1}: Loading started<br>`;
+                status.innerHTML = statusText;
+            });
+
+            video.addEventListener('loadeddata', () => {
+                statusText += `Video ${index + 1}: Data loaded<br>`;
+                status.innerHTML = statusText;
+            });
+
+            video.addEventListener('canplay', () => {
+                statusText += `Video ${index + 1}: Can play<br>`;
+                status.innerHTML = statusText;
+            });
+
+            video.addEventListener('playing', () => {
+                statusText += `Video ${index + 1}: Playing<br>`;
+                status.innerHTML = statusText;
+            });
+
+            video.addEventListener('error', (e) => {
+                statusText += `Video ${index + 1}: ERROR - ${e.message || 'Unknown error'}<br>`;
+                status.innerHTML = statusText;
+                console.error('Video error:', e, video.src);
+            });
+        });
+
+        // Try to play videos after page load
+        window.addEventListener('load', () => {
+            videos.forEach((video, index) => {
+                if (video.autoplay) {
+                    video.play().then(() => {
+                        statusText += `Video ${index + 1}: Autoplay successful<br>`;
+                        status.innerHTML = statusText;
+                    }).catch((err) => {
+                        statusText += `Video ${index + 1}: Autoplay failed - ${err.message}<br>`;
+                        status.innerHTML = statusText;
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

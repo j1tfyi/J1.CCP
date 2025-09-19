@@ -223,30 +223,15 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
-/* Global container fixes for all browsers */
-.container {
-  width: 100% !important;
-  max-width: 100% !important;
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
+/* Remove container overrides - let Tailwind handle it */
+/* .container class now uses Tailwind's default responsive max-widths */
 
-/* Firefox specific aggressive fixes */
+/* Firefox specific fixes */
 @-moz-document url-prefix() {
   body {
     overflow-x: hidden !important;
     margin: 0 !important;
     padding: 0 !important;
-  }
-
-  .container {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-    margin: 0 !important;
   }
 
   main {
@@ -256,34 +241,23 @@
   }
 }
 
-/* Safari specific fixes */
-@supports (-webkit-backdrop-filter: none) {
-  .container {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-}
+/* Safari specific fixes - removed container overrides */
 
-/* Widget container - full size with scroll fix */
+/* Widget container - simple and clean like portal page */
 #debridgeWidget {
   width: 100% !important;
-  height: 100% !important;
-  min-height: 850px !important;
-  overflow: visible !important;
-  transform: none !important;
+  min-height: 600px !important;
   display: block !important;
-  pointer-events: none !important;
 }
 
-/* Allow interaction with actual widget elements */
-#debridgeWidget > * {
-  pointer-events: auto !important;
-}
 
-/* Scroll fix for widget container */
-.widget-scroll-fix {
-  position: relative;
-  z-index: 1;
+/* Safari-specific video fixes only */
+@supports (-webkit-touch-callout: none) {
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 /* DEX-style illuminated effects for widget - stronger glow */
@@ -303,6 +277,11 @@
   backdrop-filter: blur(15px) !important;
   -webkit-backdrop-filter: blur(15px) !important;
   border-radius: 15px !important;
+  /* Safari-specific backdrop filter fix */
+  @supports (-webkit-touch-callout: none) {
+    -webkit-backdrop-filter: blur(15px) saturate(180%) !important;
+    backdrop-filter: blur(15px) saturate(180%) !important;
+  }
 }
 
 /* White glow for form elements - enhanced */
