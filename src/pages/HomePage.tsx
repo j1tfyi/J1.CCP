@@ -48,75 +48,33 @@ export default function HomePage() {
     navigate('/');
   };
 
-  // Load deBridge widget with optimizations for Safari
+  // Load deBridge widget
   useEffect(() => {
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
     const loadWidget = async () => {
       try {
-        // Add delay for Safari to ensure DOM is fully ready
-        if (isSafari) {
-          await new Promise(resolve => setTimeout(resolve, 100));
-        }
-
         const response = await fetch('/widget-config');
         const config = await response.json();
-
         if (window.deBridge && widgetContainerRef.current) {
-          // Safari needs more time for iframe initialization
-          if (isSafari) {
-            requestAnimationFrame(() => {
-              window.deBridge.widget(config);
-            });
-          } else {
-            window.deBridge.widget(config);
-          }
+          window.deBridge.widget(config);
         }
       } catch (err) {
         console.error('Failed to load widget config:', err);
       }
     };
 
-    // Defer script loading to improve initial page load
-    const loadScript = () => {
-      if (!window.deBridge) {
-        const script = document.createElement('script');
-        script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
-        script.async = true;
-        script.defer = true;
-        script.onload = loadWidget;
-        document.body.appendChild(script);
-      } else {
-        loadWidget();
-      }
-    };
-
-    // Use IntersectionObserver to load widget only when it's about to be visible
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadScript();
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '500px' } // Start loading 500px before widget is visible
-    );
-
-    // Start observing when widget container is available
-    const checkAndObserve = () => {
-      if (widgetContainerRef.current) {
-        observer.observe(widgetContainerRef.current);
-      } else {
-        // If not found, try again after a short delay
-        setTimeout(checkAndObserve, 100);
-      }
-    };
-
-    checkAndObserve();
-
-    return () => {
-      observer.disconnect();
-    };
+    // Load deBridge SDK
+    if (!window.deBridge) {
+      const script = document.createElement('script');
+      script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
+      script.async = true;
+      script.onload = () => {
+        // Small delay to ensure script is fully initialized
+        setTimeout(loadWidget, 100);
+      };
+      document.body.appendChild(script);
+    } else {
+      loadWidget();
+    }
   }, []);
 
   return (
@@ -125,7 +83,7 @@ export default function HomePage() {
       <VideoBackground
         src="/stringtitle.mp4"
         className="fixed top-0 left-0 w-full h-full object-cover z-0 opacity-70"
-        preload="metadata"
+        preload="auto"
       />
 
       {/* Header */}
@@ -281,7 +239,7 @@ export default function HomePage() {
           <VideoBackground
             src="/374800567564894209.mp4"
             className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30"
-            preload="metadata"
+            preload="auto"
             lazyLoad={true}
           />
           <div className="container mx-auto relative z-10">
@@ -402,7 +360,7 @@ export default function HomePage() {
             src="/spaceHD.mp4"
             fallbackSrc="/space.mp4"
             className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
-            preload="metadata"
+            preload="auto"
           />
 
           <div className="w-full px-8 relative z-10">
@@ -496,7 +454,7 @@ export default function HomePage() {
         <VideoBackground
           src="/374800567564894209.mov"
           className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30"
-          preload="metadata"
+          preload="auto"
           lazyLoad={true}
         />
         <div className="container mx-auto relative z-10">
@@ -635,7 +593,7 @@ export default function HomePage() {
         <VideoBackground
           src="/374800567564894209.mp4"
           className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
-          preload="metadata"
+          preload="auto"
           lazyLoad={true}
         />
         <div className="container mx-auto text-center relative z-10">

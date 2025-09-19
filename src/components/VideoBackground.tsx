@@ -23,49 +23,21 @@ export const VideoBackground: React.FC<VideoBackgroundProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
-    // Safari requires explicit play() call after DOM load
-    const playVideo = async () => {
-      try {
-        video.muted = true; // Ensure muted for autoplay
-        await video.play();
-      } catch (err) {
-        // Fallback: try again after interaction or visibility change
-        console.log('Video autoplay requires user interaction');
-      }
-    };
-
-    // Check if Safari
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-    if (isSafari) {
-      // Safari-specific handling
-      video.setAttribute('webkit-playsinline', 'true');
-      video.setAttribute('x-webkit-airplay', 'allow');
-
-      // Wait for metadata to load before playing
-      if (video.readyState >= 2) {
-        playVideo();
-      } else {
-        video.addEventListener('loadedmetadata', playVideo, { once: true });
-      }
-    } else {
-      // Other browsers
+    // Simple play attempt for all browsers
+    const playVideo = () => {
       if (video.paused) {
-        playVideo();
+        video.play().catch(() => {
+          // Silent fail - video will show first frame at least
+        });
       }
+    };
+
+    // Try to play when ready
+    if (video.readyState >= 3) {
+      playVideo();
+    } else {
+      video.addEventListener('canplay', playVideo, { once: true });
     }
-
-    // Play when visible (for Safari background tabs)
-    const handleVisibilityChange = () => {
-      if (!document.hidden && video.paused) {
-        playVideo();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
   }, [src]);
 
   return (
@@ -77,8 +49,6 @@ export const VideoBackground: React.FC<VideoBackgroundProps> = ({
       loop
       playsInline
       preload={preload}
-      webkit-playsinline="true"
-      x-webkit-airplay="allow"
     >
       <source src={src} type="video/mp4" />
       {fallbackSrc && <source src={fallbackSrc} type="video/mp4" />}
