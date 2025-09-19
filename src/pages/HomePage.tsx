@@ -48,33 +48,74 @@ export default function HomePage() {
     navigate('/');
   };
 
-  // Load deBridge widget - exactly like PortalPage
+  // Load deBridge widget with optimizations for Safari
   useEffect(() => {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     const loadWidget = async () => {
       try {
+        // Add delay for Safari to ensure DOM is fully ready
+        if (isSafari) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
         const response = await fetch('/widget-config');
         const config = await response.json();
+
         if (window.deBridge && widgetContainerRef.current) {
-          window.deBridge.widget(config);
+          // Safari needs more time for iframe initialization
+          if (isSafari) {
+            requestAnimationFrame(() => {
+              window.deBridge.widget(config);
+            });
+          } else {
+            window.deBridge.widget(config);
+          }
         }
       } catch (err) {
         console.error('Failed to load widget config:', err);
       }
     };
 
-    // Load deBridge SDK
-    if (!window.deBridge) {
-      const script = document.createElement('script');
-      script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
-      script.async = true;
-      script.onload = loadWidget;
-      document.body.appendChild(script);
-    } else {
-      loadWidget();
-    }
+    // Defer script loading to improve initial page load
+    const loadScript = () => {
+      if (!window.deBridge) {
+        const script = document.createElement('script');
+        script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
+        script.async = true;
+        script.defer = true;
+        script.onload = loadWidget;
+        document.body.appendChild(script);
+      } else {
+        loadWidget();
+      }
+    };
+
+    // Use IntersectionObserver to load widget only when it's about to be visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadScript();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '500px' } // Start loading 500px before widget is visible
+    );
+
+    // Start observing when widget container is available
+    const checkAndObserve = () => {
+      if (widgetContainerRef.current) {
+        observer.observe(widgetContainerRef.current);
+      } else {
+        // If not found, try again after a short delay
+        setTimeout(checkAndObserve, 100);
+      }
+    };
+
+    checkAndObserve();
 
     return () => {
-      // Cleanup if needed
+      observer.disconnect();
     };
   }, []);
 

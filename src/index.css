@@ -251,12 +251,36 @@
 }
 
 
-/* Safari-specific video fixes only */
+/* Safari-specific optimizations */
 @supports (-webkit-touch-callout: none) {
+  /* Video performance */
   video {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Widget iframe performance */
+  #debridgeWidget iframe {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Reduce complex effects on Safari for better performance */
+  #debridgeWidget > div,
+  #debridgeWidget > div > div {
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
+  }
+
+  /* Hardware acceleration for animations */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
