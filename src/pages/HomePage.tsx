@@ -125,7 +125,6 @@ export default function HomePage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden md:inline-flex"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
