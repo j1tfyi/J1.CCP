@@ -597,16 +597,16 @@ export default function HomePage() {
         />
         <div className="container mx-auto text-center relative z-10">
           <h2 className="text-4xl font-bold mb-6">
-            Ready to Enter the{" "}
-            <span className="gradient-text">J1.CROSS-CHAIN PORTAL</span>?
+            Experience the{" "}
+            <span className="gradient-text">J1.CROSS-CHAIN PORTAL</span>
           </h2>
           <p className="text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
-            Join thousands of users already leveraging J1.CCP to swap assets seamlessly across 24+ blockchains. Experience instant, secure, and risk-free cross-chain transfers — without wrapped tokens or custodial risks.
+            Join thousands of users already leveraging J1.CCP to swap assets seamlessly across 24+ blockchains with instant, secure, and risk-free cross-chain transfers.
           </p>
           <div className="flex gap-4 justify-center">
             <Button variant="pump" size="xl" asChild>
               <a href="https://j1t.fyi" target="_blank" rel="noopener noreferrer">
-                Visit J1T.FYI
+                Official Sponsor J1T.FYI
               </a>
             </Button>
             <Button variant="hero" size="xl" asChild>
