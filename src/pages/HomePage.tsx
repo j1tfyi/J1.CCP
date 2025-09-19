@@ -88,21 +88,22 @@ export default function HomePage() {
 
       {/* Header */}
       <header className="sticky-header fixed top-0 left-0 right-0 z-50 border-b border-border/40 backdrop-blur-md bg-background/60">
-        <div className="container mx-auto px-4">
+        <div className="w-full px-2 sm:px-4 md:container md:mx-auto">
           <nav
             className="flex items-center justify-between h-16"
           >
-            <a href="/" onClick={handleLogoClick} className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-              <Rocket className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold gradient-text">J1.CCP</span>
+            <a href="/" onClick={handleLogoClick} className="flex items-center gap-1 sm:gap-2 hover:opacity-80 transition-opacity cursor-pointer">
+              <Rocket className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+              <span className="text-lg sm:text-2xl font-bold gradient-text">J1.CCP</span>
             </a>
 
             <div
-              className="flex items-center gap-4"
+              className="flex items-center gap-1 sm:gap-2 md:gap-4"
             >
               <Button
                 variant="ghost"
                 size="sm"
+                className="hidden sm:inline-flex"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
@@ -113,6 +114,7 @@ export default function HomePage() {
               <Button
                 variant="ghost"
                 size="sm"
+                className="hidden sm:inline-flex"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
@@ -123,6 +125,7 @@ export default function HomePage() {
               <Button
                 variant="ghost"
                 size="sm"
+                className="hidden md:inline-flex"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
@@ -153,6 +156,7 @@ export default function HomePage() {
               <Button
                 variant="pump"
                 size="sm"
+                className="px-2 sm:px-4 text-xs sm:text-sm"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
@@ -162,7 +166,8 @@ export default function HomePage() {
                   rel="noopener noreferrer"
                   style={{ pointerEvents: "auto" }}
                 >
-                  Join Community
+                  <span className="hidden sm:inline">Join Community</span>
+                  <span className="sm:hidden">Join</span>
                 </a>
               </Button>
             </div>
@@ -595,21 +600,22 @@ export default function HomePage() {
           preload="auto"
           lazyLoad={true}
         />
-        <div className="container mx-auto text-center relative z-10">
-          <h2 className="text-4xl font-bold mb-6">
+        <div className="w-full px-4 sm:px-6 md:container md:mx-auto text-center relative z-10">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
             Experience the{" "}
-            <span className="gradient-text">J1.CROSS-CHAIN PORTAL</span>
+            <span className="gradient-text block sm:inline">J1.CROSS-CHAIN PORTAL</span>
           </h2>
-          <p className="text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-foreground/80 mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
             Join thousands of users already leveraging J1.CCP to swap assets seamlessly across 24+ blockchains with instant, secure, and risk-free cross-chain transfers.
           </p>
-          <div className="flex gap-4 justify-center">
-            <Button variant="pump" size="xl" asChild>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
+            <Button variant="pump" size="lg" className="w-full sm:w-auto" asChild>
               <a href="https://j1t.fyi" target="_blank" rel="noopener noreferrer">
-                Official Sponsor J1T.FYI
+                <span className="hidden sm:inline">Official Sponsor J1T.FYI</span>
+                <span className="sm:hidden">J1T.FYI</span>
               </a>
             </Button>
-            <Button variant="hero" size="xl" asChild>
+            <Button variant="hero" size="lg" className="w-full sm:w-auto" asChild>
               <a href="https://x.com/j1tfyi" target="_blank" rel="noopener noreferrer">
                 Follow on X
               </a>
@@ -619,19 +625,19 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-border/40 backdrop-blur-md bg-background/60 py-8">
-        <div className="container mx-auto px-4">
+      <footer className="relative z-10 border-t border-border/40 backdrop-blur-md bg-background/60 py-6 sm:py-8">
+        <div className="w-full px-4 sm:px-6 md:container md:mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <Rocket className="w-6 h-6 text-primary" />
-              <span className="text-lg font-semibold">J1.CCP</span>
+              <Rocket className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+              <span className="text-base sm:text-lg font-semibold">J1.CCP</span>
             </div>
 
-            <p className="text-sm text-foreground/60">
+            <p className="text-xs sm:text-sm text-foreground/60 text-center">
               © 2024 J1.CCP - All Rights Reserved.
             </p>
 
-            <div className="flex gap-4">
+            <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
               <a
                 href="https://j1tfyi.gitbook.io/docs"
                 target="_blank"

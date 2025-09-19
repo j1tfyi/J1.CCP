@@ -263,20 +263,30 @@
 
 /* Mobile-specific adjustments */
 @media (max-width: 768px) {
+  /* Prevent horizontal overflow */
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
   /* Ensure hero content is visible on mobile */
   main {
     padding-top: 80px !important;
+    overflow-x: hidden !important;
   }
 
-  /* Adjust hero section spacing */
+  /* Adjust container spacing - prevent overflow */
   .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    width: 100% !important;
   }
 
   /* Ensure buttons are properly sized on mobile */
   button {
     min-height: 44px; /* iOS tap target size */
+    max-width: 100%;
   }
 
   /* Fix z-index stacking on mobile */
@@ -286,6 +296,12 @@
 
   .relative.z-20 {
     z-index: 20 !important;
+  }
+
+  /* Prevent text overflow */
+  h1, h2, h3, h4, h5, h6, p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }
 
