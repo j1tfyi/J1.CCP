@@ -160,6 +160,7 @@ jobs:
             deps.server.ts
             dist/**/*
             bridge-react-app/dist/**/*
+            public/**/*
             service-worker.js
             site.webmanifest
         env:
