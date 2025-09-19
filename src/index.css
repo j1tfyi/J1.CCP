@@ -315,6 +315,15 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
+
+  /* Mobile video specific fixes */
+  video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
 }
 
 /* DEX-style illuminated effects for widget - stronger glow */

@@ -48,13 +48,39 @@ export default function HomePage() {
     navigate('/');
   };
 
-  // Load deBridge widget
+  // Lazy load deBridge widget when scrolled into view
   useEffect(() => {
+    let hasLoaded = false;
+
     const loadWidget = async () => {
+      if (hasLoaded) return;
+      hasLoaded = true;
+
       try {
+        // Preconnect to deBridge for faster loading
+        const link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = 'https://app.debridge.finance';
+        document.head.appendChild(link);
+
         const response = await fetch('/widget-config');
         const config = await response.json();
-        if (window.deBridge && widgetContainerRef.current) {
+
+        // Load the script
+        if (!window.deBridge) {
+          const script = document.createElement('script');
+          script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
+          script.async = true;
+          script.defer = true;
+          script.onload = () => {
+            setTimeout(() => {
+              if (window.deBridge && widgetContainerRef.current) {
+                window.deBridge.widget(config);
+              }
+            }, 100);
+          };
+          document.body.appendChild(script);
+        } else if (widgetContainerRef.current) {
           window.deBridge.widget(config);
         }
       } catch (err) {
@@ -62,28 +88,41 @@ export default function HomePage() {
       }
     };
 
-    // Load deBridge SDK
-    if (!window.deBridge) {
-      const script = document.createElement('script');
-      script.src = 'https://app.debridge.finance/assets/scripts/widget.js';
-      script.async = true;
-      script.onload = () => {
-        // Small delay to ensure script is fully initialized
-        setTimeout(loadWidget, 100);
-      };
-      document.body.appendChild(script);
-    } else {
-      loadWidget();
-    }
+    // Use Intersection Observer to load widget only when near viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadWidget();
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' } // Start loading 200px before visible
+    );
+
+    // Observe the widget container
+    const checkAndObserve = () => {
+      if (widgetContainerRef.current) {
+        observer.observe(widgetContainerRef.current);
+      } else {
+        setTimeout(checkAndObserve, 100);
+      }
+    };
+
+    checkAndObserve();
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Background Video */}
+      {/* Background Video - Priority Load */}
       <VideoBackground
-        src="/stringtitle.mp4"
+        src="/stringtitle"
         className="fixed top-0 left-0 w-full h-full object-cover z-0 opacity-70"
         preload="auto"
+        priority={true}
       />
 
       {/* Header */}
@@ -240,9 +279,9 @@ export default function HomePage() {
           className="py-24 px-4 bg-background/80 backdrop-blur-md relative overflow-hidden"
         >
           <VideoBackground
-            src="/374800567564894209.mp4"
+            src="/374800567564894209"
             className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30"
-            preload="auto"
+            preload="metadata"
             lazyLoad={true}
           />
           <div className="container mx-auto relative z-10">
@@ -360,10 +399,10 @@ export default function HomePage() {
         <section id="bridge" className="py-24 bg-background relative scroll-mt-20">
           {/* Space Background Video */}
           <VideoBackground
-            src="/spaceHD.mp4"
-            fallbackSrc="/space.mp4"
+            src="/spaceHD"
+            fallbackSrc="/space"
             className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
-            preload="auto"
+            preload="metadata"
           />
 
           <div className="w-full px-8 relative z-10">
@@ -455,9 +494,9 @@ export default function HomePage() {
         className="py-24 px-4 bg-background/80 backdrop-blur-md relative overflow-hidden"
       >
         <VideoBackground
-          src="/374800567564894209.mov"
+          src="/374800567564894209"
           className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-30"
-          preload="auto"
+          preload="metadata"
           lazyLoad={true}
         />
         <div className="container mx-auto relative z-10">
@@ -594,9 +633,9 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-24 px-4 bg-gradient-to-b from-background to-primary/10 relative overflow-hidden">
         <VideoBackground
-          src="/374800567564894209.mp4"
+          src="/374800567564894209"
           className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
-          preload="auto"
+          preload="metadata"
           lazyLoad={true}
         />
         <div className="w-full px-4 sm:px-6 md:container md:mx-auto text-center relative z-10">
