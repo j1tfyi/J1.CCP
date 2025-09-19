@@ -17,11 +17,17 @@ jobs:
       contents: read
 
     steps:
-      # 1) Checkout
+      # 1) Checkout with LFS
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
-      # 2) Node 20.18+ (fixes Solana engine guards)
+      # 2) Pull LFS files
+      - name: Pull LFS files
+        run: git lfs pull
+
+      # 3) Node 20.18+ (fixes Solana engine guards)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -32,7 +38,7 @@ jobs:
             package-lock.json
             bridge-react-app/package-lock.json
 
-      # 3) Ensure dirs exist
+      # 4) Ensure dirs exist
       - name: Ensure directories
         run: |
           mkdir -p bridge-react-app/src
@@ -40,7 +46,7 @@ jobs:
           mkdir -p src/pages
           mkdir -p src/components
 
-      # 4) Create required secret-sourced files
+      # 5) Create required secret-sourced files
       - name: Create sensitive files (required only)
         shell: bash
         run: |
@@ -71,7 +77,7 @@ jobs:
           test -f service-worker.js  || echo "// noop sw" > service-worker.js
           test -f site.webmanifest   || echo '{"name":"J1.CCP","short_name":"J1.CCP","start_url":"/","display":"standalone","background_color":"#000","theme_color":"#000","icons":[]}' > site.webmanifest
 
-      # 5) Verify required files exist and are non-empty
+      # 6) Verify required files exist and are non-empty
       - name: Verify files exist and are non-empty
         run: |
           set -euo pipefail
@@ -81,7 +87,7 @@ jobs:
           ls -l service-worker.js || true
           ls -l site.webmanifest  || true
 
-      # 6) Install & Build ROOT portal (wormhole lives here)
+      # 7) Install & Build ROOT portal (wormhole lives here)
       - name: Install packages (root portal)
         run: |
           npm install
@@ -101,7 +107,7 @@ jobs:
           cp public/*.mov dist/ 2>/dev/null || true
           cp public/*.webm dist/ 2>/dev/null || true
 
-      # 7) Install & Build BRIDGE app
+      # 8) Install & Build BRIDGE app
       - name: Install packages (bridge app)
         working-directory: bridge-react-app
         run: |
@@ -119,7 +125,7 @@ jobs:
             npx vite build
           fi
 
-      # 8) Inspect build outputs
+      # 9) Inspect build outputs
       - name: Verify Build Output (root & bridge)
         run: |
           echo "Root portal dist/:"
@@ -128,7 +134,7 @@ jobs:
           echo "Bridge dist/:"
           (find bridge-react-app/dist -maxdepth 2 -type f -printf "%P\n" | sort | head -n 200) 2>/dev/null || echo "no bridge dist/"
 
-      # 9) (Tolerant) Auto-sync hashed assets into service-worker.js if pattern matches
+      # 10) (Tolerant) Auto-sync hashed assets into service-worker.js if pattern matches
       - name: Sync SW hashed asset names (tolerant)
         shell: bash
         run: |
@@ -147,7 +153,7 @@ jobs:
           sed -i -E "s#'/assets/[^']+\\.css'#'${CSS_FILE}'#g" service-worker.js || true
           grep -nE "'/assets/.*\\.(js|css)'" service-worker.js || true
 
-      # 10) Deploy to Deno Deploy (serve BOTH bundles)
+      # 11) Deploy to Deno Deploy (serve BOTH bundles)
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
@@ -166,7 +172,7 @@ jobs:
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
 
-      # 11) Cleanup
+      # 12) Cleanup
       - name: Cleanup
         if: always()
         run: |
