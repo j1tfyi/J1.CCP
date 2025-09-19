@@ -96,6 +96,10 @@ jobs:
           else
             npx vite build
           fi
+          # Copy video files to dist
+          cp public/*.mp4 dist/ 2>/dev/null || true
+          cp public/*.mov dist/ 2>/dev/null || true
+          cp public/*.webm dist/ 2>/dev/null || true
 
       # 7) Install & Build BRIDGE app
       - name: Install packages (bridge app)

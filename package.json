@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && mkdir -p dist/public && cp public/*.png public/*.ico dist/public/ 2>/dev/null || true",
+    "build": "vite build && mkdir -p dist/public && cp public/*.png public/*.ico dist/public/ 2>/dev/null || true && cp public/*.mp4 public/*.mov public/*.webm dist/ 2>/dev/null || true",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx,ts,tsx --max-warnings 0"
   },
