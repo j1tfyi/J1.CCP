@@ -1,0 +1,130 @@
+name: Check Affiliate Fees
+
+on:
+  workflow_dispatch:  # Manual trigger only
+
+jobs:
+  check-fees:
+    name: Check Available Fees
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Check available fees
+        run: |
+          mkdir -p scripts
+
+          # Create a minimal check script
+          cat > scripts/check-fees.js << 'EOF'
+          const https = require('https');
+
+          // Configuration from main.ts
+          const CONFIG = {
+            DEBRIDGE_REFERRAL_CODE: "32422",
+            JUPITER_REFERRAL_ACCOUNT: "EKtLGKfhtaJoUnoPodBesHzfaT8aJozCayv1zw8AKH3h",
+            SOLANA_BENEFICIARY: "D6vq5F6RUg6n2by5KHXyR1hpQ3uPG3dvNHJVXXaMyTnc",
+            EVM_BENEFICIARY: "0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E"
+          };
+
+          console.log("=== Affiliate Fee Status Check ===\n");
+          console.log("Configuration:");
+          console.log("- deBridge Referral Code:", CONFIG.DEBRIDGE_REFERRAL_CODE);
+          console.log("- Jupiter Referral Account:", CONFIG.JUPITER_REFERRAL_ACCOUNT);
+          console.log("- Solana Beneficiary:", CONFIG.SOLANA_BENEFICIARY);
+          console.log("- EVM Beneficiary:", CONFIG.EVM_BENEFICIARY);
+          console.log("\n");
+
+          // Check deBridge orders
+          async function checkDeBridgeOrders() {
+            return new Promise((resolve) => {
+              const postData = JSON.stringify({
+                giveChainIds: [7565164], // Solana
+                takeChainIds: [],
+                orderStates: ["ClaimedUnlock"],
+                filter: CONFIG.SOLANA_BENEFICIARY,
+                referralCode: CONFIG.DEBRIDGE_REFERRAL_CODE,
+                skip: 0,
+                take: 10
+              });
+
+              const options = {
+                hostname: 'stats-api.dln.trade',
+                path: '/api/Orders/filteredList',
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Content-Length': postData.length
+                }
+              };
+
+              const req = https.request(options, (res) => {
+                let data = '';
+                res.on('data', (chunk) => data += chunk);
+                res.on('end', () => {
+                  try {
+                    const result = JSON.parse(data);
+                    const orders = result.orders || [];
+                    console.log(`📦 deBridge unclaimed orders: ${orders.length}`);
+                    if (orders.length > 0) {
+                      console.log("   First few order IDs:");
+                      orders.slice(0, 3).forEach(order => {
+                        console.log(`   - ${order.orderId?.stringValue || 'Unknown'}`);
+                      });
+                    }
+                  } catch (e) {
+                    console.log("❌ Could not fetch deBridge orders");
+                  }
+                  resolve();
+                });
+              });
+
+              req.on('error', (e) => {
+                console.log("❌ deBridge API error:", e.message);
+                resolve();
+              });
+
+              req.write(postData);
+              req.end();
+            });
+          }
+
+          async function main() {
+            console.log("🔍 Checking for available affiliate fees...\n");
+
+            // Check deBridge
+            await checkDeBridgeOrders();
+
+            console.log("\n💡 Jupiter Fees:");
+            console.log("   Check dashboard: https://referral.jup.ag/dashboard");
+            console.log("   Connect wallet to see unclaimed fees");
+
+            console.log("\n📊 For detailed information:");
+            console.log("   - Run the full withdrawal workflow");
+            console.log("   - Check Solscan for transaction history");
+
+            console.log("\n✅ Status check complete");
+          }
+
+          main().catch(console.error);
+          EOF
+
+          node scripts/check-fees.js
+
+      - name: Display instructions
+        run: |
+          echo ""
+          echo "=== How to Withdraw Fees ==="
+          echo ""
+          echo "1. Manually trigger the 'Withdraw Affiliate Fees' workflow"
+          echo "2. It will automatically run every Monday at 2 AM UTC"
+          echo "3. Ensure these secrets are configured:"
+          echo "   - SOLANA_PRIVATE_KEY (base58 encoded)"
+          echo "   - SCRIPTS_WITHDRAW_FEES_BASE64"
+          echo "   - SCRIPTS_JUPITER_SETUP_BASE64"
+          echo "   - SCRIPTS_PACKAGE_JSON_BASE64"
+          echo ""
+          echo "⚠️  Never share or expose your private keys!"

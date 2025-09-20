@@ -1,0 +1,167 @@
+name: Withdraw Affiliate Fees
+
+on:
+  schedule:
+    # Run every Monday at 2 AM UTC
+    - cron: '0 2 * * 1'
+
+  workflow_dispatch:  # Allow manual trigger
+    inputs:
+      dry_run:
+        description: 'Dry run (no actual withdrawal)'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  withdraw-fees:
+    name: Withdraw Solana Affiliate Fees
+    runs-on: ubuntu-latest
+
+    # Only run on main branch and if secrets are configured
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Create scripts directory
+        run: mkdir -p scripts
+
+      - name: Restore script files from secrets
+        run: |
+          # Decode all script files from secrets
+          echo "${{ secrets.SCRIPTS_WITHDRAW_FEES_BASE64 }}" | base64 -d > scripts/withdraw-solana-fees.ts
+          echo "${{ secrets.SCRIPTS_JUPITER_SETUP_BASE64 }}" | base64 -d > scripts/jupiter-referral-setup.ts
+          echo "${{ secrets.SCRIPTS_PACKAGE_JSON_BASE64 }}" | base64 -d > scripts/package.json
+          echo "${{ secrets.SCRIPTS_README_BASE64 }}" | base64 -d > scripts/README.md
+
+          # Verify files were created
+          ls -la scripts/
+
+      - name: Install dependencies
+        working-directory: scripts
+        run: |
+          npm install
+          npm list --depth=0
+
+      - name: Check wallet balance
+        working-directory: scripts
+        env:
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+        run: |
+          # Create a simple balance check script
+          cat > check-balance.js << 'EOF'
+          const { Connection, Keypair, PublicKey } = require("@solana/web3.js");
+          const bs58 = require("bs58");
+
+          async function checkBalance() {
+            const connection = new Connection(process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com");
+
+            try {
+              const wallet = Keypair.fromSecretKey(bs58.decode(process.env.SOLANA_PRIVATE_KEY));
+              const balance = await connection.getBalance(wallet.publicKey);
+
+              console.log(`Wallet: ${wallet.publicKey.toString()}`);
+              console.log(`Balance: ${balance / 1e9} SOL`);
+
+              if (balance < 0.01 * 1e9) {
+                console.log("⚠️ Warning: Low balance for transaction fees");
+                process.exit(1);
+              }
+            } catch (error) {
+              console.error("Error checking balance:", error.message);
+              process.exit(1);
+            }
+          }
+
+          checkBalance();
+          EOF
+
+          node check-balance.js
+
+      - name: Withdraw fees (Dry Run)
+        if: github.event.inputs.dry_run == 'true'
+        working-directory: scripts
+        env:
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+        run: |
+          echo "🔍 DRY RUN MODE - Not executing actual withdrawals"
+
+          # Run in dry-run mode (would need to modify the script to support this)
+          # For now, just check what would be withdrawn
+          npx ts-node jupiter-referral-setup.ts status || true
+
+      - name: Withdraw deBridge and Jupiter fees
+        if: github.event.inputs.dry_run != 'true'
+        working-directory: scripts
+        env:
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+        run: |
+          echo "💰 Starting fee withdrawal process..."
+
+          # Run the withdrawal script
+          npx ts-node withdraw-solana-fees.ts
+
+          echo "✅ Fee withdrawal complete"
+
+      - name: Generate withdrawal report
+        if: always()
+        working-directory: scripts
+        env:
+          SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+        run: |
+          # Check final balance
+          cat > report.js << 'EOF'
+          const { Connection, Keypair } = require("@solana/web3.js");
+          const bs58 = require("bs58");
+
+          async function generateReport() {
+            const connection = new Connection(process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com");
+
+            try {
+              const wallet = Keypair.fromSecretKey(bs58.decode(process.env.SOLANA_PRIVATE_KEY));
+              const balance = await connection.getBalance(wallet.publicKey);
+
+              console.log("\n📊 WITHDRAWAL REPORT");
+              console.log("=".repeat(50));
+              console.log(`Date: ${new Date().toISOString()}`);
+              console.log(`Wallet: ${wallet.publicKey.toString()}`);
+              console.log(`Final Balance: ${balance / 1e9} SOL`);
+              console.log("=".repeat(50));
+
+              // You could also check Jupiter dashboard for detailed stats
+              console.log("\nCheck detailed stats at:");
+              console.log("- Jupiter: https://referral.jup.ag/dashboard");
+              console.log("- Solscan: https://solscan.io/account/" + wallet.publicKey.toString());
+            } catch (error) {
+              console.error("Error generating report:", error.message);
+            }
+          }
+
+          generateReport();
+          EOF
+
+          node report.js
+
+      - name: Cleanup sensitive files
+        if: always()
+        run: |
+          # Remove all sensitive files after execution
+          rm -rf scripts/
+          echo "🧹 Cleaned up sensitive files"
+
+      - name: Send notification (optional)
+        if: failure()
+        run: |
+          echo "❌ Fee withdrawal failed. Check the workflow logs for details."
+          # You could add email/Discord/Telegram notification here
