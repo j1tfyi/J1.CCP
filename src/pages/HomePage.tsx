@@ -250,7 +250,7 @@ export default function HomePage() {
               >
                 <Link to="/portal" className="text-black" style={{ pointerEvents: 'auto' }}>
                   <Rocket className="w-5 h-5 text-black" />
-                  <span className="inline-block">Launch J1.CCP (Portal)</span>
+                  <span className="inline-block">Launch J1.CCP</span>
                 </Link>
               </Button>
             </div>
@@ -411,7 +411,7 @@ export default function HomePage() {
                   J1.CROSS-CHAIN <span className="gradient-text">PORTAL</span>
                 </h2>
                 <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
-                  One Portal. Infinite Possibilities. Zero Risk
+                  One Portal. Infinite Possibilities. Zero Risk.
                 </p>
               </div>
 
