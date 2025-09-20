@@ -412,7 +412,6 @@ export default function HomePage() {
                 </h2>
                 <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
                   One Portal. Infinite Possibilities. Zero Risk
-                  Seamlessly bridge assets across 24+ blockchain networks
                 </p>
               </div>
 
