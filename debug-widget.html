@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug deBridge Widget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        #log {
+            background: #000;
+            padding: 20px;
+            border: 1px solid #333;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #666;
+        }
+        .success { border-left-color: #4CAF50; }
+        .error { border-left-color: #f44336; }
+        .info { border-left-color: #2196F3; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        #widget-container {
+            min-height: 600px;
+            border: 2px dashed #666;
+            margin-top: 20px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>deBridge Widget Debug Tool</h1>
+
+    <div>
+        <button onclick="checkScript()">1. Check Script Status</button>
+        <button onclick="loadScript()">2. Load Script</button>
+        <button onclick="checkDeBridge()">3. Check deBridge Object</button>
+        <button onclick="loadWidget()">4. Load Widget</button>
+        <button onclick="clearAndReload()">5. Clear & Reload</button>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div id="log"></div>
+
+    <div id="widget-container">
+        <div id="debridgeWidget"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function checkScript() {
+            const scripts = document.querySelectorAll('script');
+            let found = false;
+            scripts.forEach(script => {
+                if (script.src && script.src.includes('debridge')) {
+                    log(`Found script: ${script.src}`, 'success');
+                    found = true;
+                }
+            });
+            if (!found) {
+                log('No deBridge script found in document', 'error');
+            }
+        }
+
+        function loadScript() {
+            log('Loading deBridge script...', 'info');
+
+            // Check if script already exists
+            const existingScript = document.querySelector('script[src*="debridge.finance/widget.js"]');
+            if (existingScript) {
+                log('Script already exists, removing old one...', 'info');
+                existingScript.remove();
+            }
+
+            const script = document.createElement('script');
+            script.src = 'https://app.debridge.finance/widget.js';
+            script.async = true;
+            script.defer = true;
+
+            script.onload = () => {
+                log('Script loaded successfully!', 'success');
+                setTimeout(() => {
+                    checkDeBridge();
+                }, 500);
+            };
+
+            script.onerror = (error) => {
+                log(`Script failed to load: ${error}`, 'error');
+            };
+
+            document.body.appendChild(script);
+            log('Script element added to document', 'info');
+        }
+
+        function checkDeBridge() {
+            if (window.deBridge) {
+                log('✅ window.deBridge is available', 'success');
+                log(`deBridge object type: ${typeof window.deBridge}`, 'info');
+
+                if (window.deBridge.widget) {
+                    log('✅ window.deBridge.widget function is available', 'success');
+                } else {
+                    log('❌ window.deBridge.widget function NOT available', 'error');
+                }
+
+                // Log available properties
+                const props = Object.keys(window.deBridge);
+                log(`Available deBridge properties: ${props.join(', ')}`, 'info');
+            } else {
+                log('❌ window.deBridge is NOT available', 'error');
+            }
+        }
+
+        async function loadWidget() {
+            log('Attempting to load widget...', 'info');
+
+            if (!window.deBridge) {
+                log('deBridge not available, loading script first...', 'error');
+                await loadScript();
+                setTimeout(loadWidget, 2000);
+                return;
+            }
+
+            if (!window.deBridge.widget) {
+                log('deBridge.widget not available', 'error');
+                return;
+            }
+
+            try {
+                log('Fetching widget config...', 'info');
+                const response = await fetch('/widget-config');
+                const config = await response.json();
+                log('Config fetched successfully', 'success');
+
+                // Clear container
+                const container = document.getElementById('debridgeWidget');
+                container.innerHTML = '';
+
+                log('Initializing widget...', 'info');
+                window.deBridge.widget(config);
+                log('Widget initialized!', 'success');
+
+            } catch (error) {
+                log(`Error loading widget: ${error}`, 'error');
+            }
+        }
+
+        function clearAndReload() {
+            log('Clearing and reloading...', 'info');
+
+            // Clear widget container
+            document.getElementById('debridgeWidget').innerHTML = '';
+
+            // Remove script
+            const scripts = document.querySelectorAll('script[src*="debridge"]');
+            scripts.forEach(s => s.remove());
+
+            // Clear deBridge from window
+            delete window.deBridge;
+
+            log('Cleared. Now reloading...', 'info');
+
+            setTimeout(() => {
+                loadScript();
+                setTimeout(loadWidget, 3000);
+            }, 1000);
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        // Auto-check on load
+        window.addEventListener('load', () => {
+            log('Page loaded. Running initial checks...', 'info');
+            checkScript();
+            checkDeBridge();
+        });
+    </script>
+</body>
+</html>
