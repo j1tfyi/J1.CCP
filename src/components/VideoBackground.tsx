@@ -140,10 +140,12 @@ export const VideoBackground: React.FC<VideoBackgroundProps> = ({
       defaultMuted
       loop
       playsInline
+      disablePictureInPicture
       webkit-playsinline="true"
       x5-playsinline="true"
       preload={isInView ? preload : 'none'}
       poster={poster}
+      controlsList="nodownload noplaybackrate nopictureinpicture"
     >
       {isInView && (
         <>
