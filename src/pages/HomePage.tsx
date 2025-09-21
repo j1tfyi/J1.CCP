@@ -728,7 +728,9 @@ export default function HomePage() {
         <div className="w-full px-4 sm:px-6 md:container md:mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div>
-              <J1ComboLogo className="h-12 sm:h-14" />
+              <a href="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity cursor-pointer">
+                <J1ComboLogo className="h-12 sm:h-14" />
+              </a>
             </div>
 
             <p className="text-xs sm:text-sm text-foreground/60 text-center">
