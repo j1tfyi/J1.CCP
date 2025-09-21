@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { VideoBackground } from "../components/VideoBackground";
+import { trackVisitor } from "../utils/visitorTracker";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { TrendingUp, Shield, Zap, Sparkles, Github, Globe, Coins, ShieldCheck, Lock, Network, ArrowRightLeft } from "lucide-react";
@@ -49,6 +50,11 @@ export default function HomePage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     navigate('/');
   };
+
+  // Track visitor on homepage load
+  useEffect(() => {
+    trackVisitor();
+  }, []);
 
   // Lazy load deBridge widget when scrolled into view
   useEffect(() => {
