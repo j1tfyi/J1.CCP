@@ -245,13 +245,13 @@ export default function HomePage() {
                 <J1Logo className="h-24 sm:h-32 mx-auto block" style={{ position: 'relative', zIndex: 20, marginBottom: '-145px' }} />
               </div>
               <div className="block md:hidden">
-                <J1Logo className="h-20 mx-auto block" style={{ position: 'relative', zIndex: 30, marginBottom: '-70px' }} />
+                <J1Logo className="h-20 mx-auto block" style={{ position: 'relative', zIndex: 30, marginBottom: '-80px', top: '-60px' }} />
               </div>
               <img
                 src="/titlepage.png"
                 alt="J1.CrossChain Portal"
                 className="w-full h-auto max-w-none md:relative"
-                style={{ position: 'relative', top: '-70px', marginBottom: '-200px' }}
+                style={{ position: 'relative', top: '-40px', marginBottom: '-100px' }}
               />
               <style jsx>{`
                 @media (min-width: 768px) {
@@ -261,7 +261,7 @@ export default function HomePage() {
                   }
                 }
               `}</style>
-              <div className="-mt-8 sm:-mt-12 md:-mt-56">
+              <div className="mt-0 md:-mt-56">
                 <p className="text-xl sm:text-2xl md:text-4xl text-foreground/80 mb-4 max-w-5xl mx-auto">
                   One Portal. Infinite Possibilities. Zero Risk.
                 </p>
