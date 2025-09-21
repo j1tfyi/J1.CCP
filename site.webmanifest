@@ -1,6 +1,6 @@
 {
-  "name": "J1.CrossChain Portal",
-  "short_name": "J1.Portal",
+  "name": "J1.CROSS-CHAIN PORTAL",
+  "short_name": "J1.CCP",
   "description": "1.token, 1.portal, ∞.possibilities",
   "id": "https://ccp.j1t.fyi/",
   "start_url": "https://ccp.j1t.fyi/",
@@ -14,39 +14,22 @@
   "categories": ["finance", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/android-chrome-144x144.png",
-      "sizes": "144x144",
+      "src": "/favicon-96x96.png",
+      "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "/android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/manifest-icon-192.maskable.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/manifest-icon-512.maskable.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     },
     {
       "src": "/apple-touch-icon.png",
       "sizes": "180x180",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "screenshots": [
@@ -68,7 +51,7 @@
       "short_name": "Bridge",
       "description": "Start a new cross-chain bridge transaction",
       "url": "/?action=bridge",
-      "icons": [{ "src": "/android-chrome-192x192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/apple-touch-icon.png", "sizes": "180x180" }]
     },
     {
       "name": "View Wallet",
@@ -82,7 +65,7 @@
       "short_name": "Activity",
       "description": "See your latest cross-chain transactions",
       "url": "/?action=activity",
-      "icons": [{ "src": "/manifest-icon-192.maskable.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/favicon-96x96.png", "sizes": "96x96" }]
     }
   ],
   "orientation": "portrait",
