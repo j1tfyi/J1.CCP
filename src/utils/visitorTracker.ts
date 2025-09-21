@@ -3,10 +3,10 @@
 
 // Your CounterAPI V2 configuration
 const COUNTER_CONFIG = {
-  workspace: 'j1ccp',  // Your workspace slug from counterapi.dev
-  counterName: 'j1ccp',  // Your counter slug (as configured in counterapi.dev)
+  workspace: import.meta.env.VITE_COUNTERAPI_WORKSPACE || 'j1ccp',
+  counterName: import.meta.env.VITE_COUNTERAPI_COUNTER || 'j1ccp',
   // Using authentication to create/access private counter
-  accessToken: 'ut_ryi4WjbAZ7XgPBSwWpLaMmImyObecnTLAI1YPC4U'
+  accessToken: import.meta.env.VITE_COUNTERAPI_ACCESS_TOKEN || ''
 };
 
 export const trackVisitor = async () => {
