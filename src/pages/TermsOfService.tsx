@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import { Rocket, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { J1ComboLogo } from "../components/J1ComboLogo";
 
 export default function TermsOfService() {
   return (
@@ -9,10 +10,9 @@ export default function TermsOfService() {
       {/* Header */}
       <header className="sticky-header fixed top-0 left-0 right-0 z-50 border-b border-border/40 backdrop-blur-md bg-background/60">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <Rocket className="w-8 h-8 text-primary" />
-              <span className="text-xl font-bold">J1.CCP</span>
+          <div className="flex items-center justify-between h-20">
+            <Link to="/" className="hover:opacity-80 transition-opacity">
+              <J1ComboLogo className="h-14 sm:h-16" />
             </Link>
             <nav className="hidden md:flex items-center gap-8">
               <Link to="/" className="text-sm hover:text-primary transition-colors">

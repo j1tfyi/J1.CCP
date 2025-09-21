@@ -11,6 +11,9 @@
     right: 0 !important;
     width: 100% !important;
     z-index: 9999 !important;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85)) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
   }
 }
 

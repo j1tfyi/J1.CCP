@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { VideoBackground } from "../components/VideoBackground";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
-import { Rocket, TrendingUp, Shield, Zap, Sparkles, Github, Globe, Coins, ShieldCheck, Lock, Network, ArrowRightLeft } from "lucide-react";
+import { TrendingUp, Shield, Zap, Sparkles, Github, Globe, Coins, ShieldCheck, Lock, Network, ArrowRightLeft } from "lucide-react";
+import { J1Logo } from "../components/J1Logo";
+import { J1ComboLogo } from "../components/J1ComboLogo";
 
 // Import network logos
 import abstractLogo from '../assets/networks/abstract.png';
@@ -63,8 +65,30 @@ export default function HomePage() {
         link.href = 'https://app.debridge.finance';
         document.head.appendChild(link);
 
-        const response = await fetch('/widget-config');
-        const config = await response.json();
+        let config;
+        try {
+          const response = await fetch('/widget-config');
+          if (response.ok) {
+            config = await response.json();
+          } else {
+            throw new Error('Widget config endpoint not available');
+          }
+        } catch (error) {
+          console.log('[deBridge] Using fallback config for development');
+          // Fallback configuration for development
+          config = {
+            element: 'debridgeWidget',
+            inputChain: 1,  // Ethereum
+            outputChain: 7565164,  // Solana
+            inputCurrency: '0x0000000000000000000000000000000000000000',
+            outputCurrency: '11111111111111111111111111111111',
+            mode: 'deswap',
+            affiliateFeePercent: 0.5,
+            affiliateFeeRecipient: '0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E',
+            r: '32422',
+            styles: 'button{background:linear-gradient(135deg,#ff6600,#ffae00)!important;color:#fff!important;border:none!important}button:hover{background:linear-gradient(135deg,#ff8800,#ffcc00)!important}*{font-family:"Inter","Roboto",sans-serif!important}'
+          };
+        }
 
         // Load the script
         if (!window.deBridge) {
@@ -129,11 +153,10 @@ export default function HomePage() {
       <header className="sticky-header fixed top-0 left-0 right-0 z-50 border-b border-border/40 backdrop-blur-md bg-background/60">
         <div className="w-full px-2 sm:px-4 md:container md:mx-auto">
           <nav
-            className="flex items-center justify-between h-16"
+            className="flex items-center justify-between h-20"
           >
-            <a href="/" onClick={handleLogoClick} className="flex items-center gap-1 sm:gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-              <Rocket className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
-              <span className="text-lg sm:text-2xl font-bold gradient-text">J1.CCP</span>
+            <a href="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity cursor-pointer">
+              <J1ComboLogo className="h-14 sm:h-16" />
             </a>
 
             <div
@@ -225,7 +248,10 @@ export default function HomePage() {
                   className="w-full h-auto max-w-none"
                 />
               </div>
-              <div className="-mt-16 md:-mt-56">
+              <div className="-mt-28 md:-mt-72">
+                <div className="flex justify-center mb-4">
+                  <J1Logo className="h-24 sm:h-32" />
+                </div>
                 <p className="text-xl sm:text-2xl md:text-4xl text-foreground/80 mb-4 max-w-5xl mx-auto">
                   One Portal. Infinite Possibilities. Zero Risk.
                 </p>
@@ -249,7 +275,7 @@ export default function HomePage() {
                 asChild
               >
                 <Link to="/portal" className="text-black" style={{ pointerEvents: 'auto' }}>
-                  <Rocket className="w-5 h-5 text-black" />
+                  <J1Logo className="w-16 h-16" style={{ filter: 'brightness(0) saturate(100%)' }} />
                   <span className="inline-block">Launch J1.CCP</span>
                 </Link>
               </Button>
@@ -276,7 +302,7 @@ export default function HomePage() {
         {/* Features Section */}
         <section
           id="features"
-          className="py-24 px-4 bg-background/80 backdrop-blur-md relative overflow-hidden"
+          className="pt-12 pb-24 px-4 bg-background/80 backdrop-blur-md relative overflow-hidden"
         >
           <VideoBackground
             src="/374800567564894209"
@@ -285,6 +311,9 @@ export default function HomePage() {
             lazyLoad={true}
           />
           <div className="container mx-auto relative z-10">
+            <div className="flex justify-center mb-2">
+              <J1Logo className="h-24 sm:h-28" />
+            </div>
             <h2 className="text-4xl font-bold text-center mb-12">
               How <span className="gradient-text">J1.CCP</span> Works in 1 Click
             </h2>
@@ -407,6 +436,9 @@ export default function HomePage() {
 
           <div className="w-full px-8 relative z-10">
               <div className="text-center mb-16">
+                <div className="flex justify-center mb-2">
+                  <J1Logo className="h-28 sm:h-36" />
+                </div>
                 <h2 className="text-4xl md:text-5xl font-bold mb-4">
                   J1.CROSS-CHAIN <span className="gradient-text">PORTAL</span>
                 </h2>
@@ -499,7 +531,10 @@ export default function HomePage() {
           lazyLoad={true}
         />
         <div className="container mx-auto relative z-10">
-          <h2 className="text-4xl font-bold text-center mb-12">
+          <div className="flex justify-center mb-1">
+            <J1ComboLogo className="h-28 sm:h-36" />
+          </div>
+          <h2 className="text-4xl font-bold text-center mb-8">
             Supported <span className="gradient-text">Networks</span>
           </h2>
 
@@ -638,21 +673,32 @@ export default function HomePage() {
           lazyLoad={true}
         />
         <div className="w-full px-4 sm:px-6 md:container md:mx-auto text-center relative z-10">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
-            Experience the{" "}
-            <span className="gradient-text block sm:inline">J1.CROSS-CHAIN PORTAL</span>
+          <h2 className="text-4xl font-bold text-center mb-6" style={{ textShadow: 'none !important', WebkitTextStroke: 'none !important', filter: 'none' }}>
+            <span style={{ textShadow: 'none !important', WebkitTextStroke: 'none !important' }}>Experience the </span>
+            <span className="gradient-text" style={{ textShadow: 'none !important', WebkitTextStroke: 'none !important' }}>J1.CROSS-CHAIN PORTAL</span>
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-foreground/80 mb-6 sm:mb-8 max-w-2xl mx-auto px-2">
-            Join thousands of users already leveraging J1.CCP to swap assets seamlessly across 24+ blockchains with instant, secure, and risk-free cross-chain transfers.
-          </p>
+          <div className="flex justify-center mb-6">
+            <J1ComboLogo className="h-28 sm:h-36" />
+          </div>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
             <Button variant="pump" size="lg" className="w-full sm:w-auto" asChild>
               <a href="https://j1t.fyi" target="_blank" rel="noopener noreferrer">
-                <span className="hidden sm:inline">Official Sponsor J1T.FYI</span>
-                <span className="sm:hidden">J1T.FYI</span>
+                Visit J1T.FYI
               </a>
             </Button>
-            <Button variant="hero" size="lg" className="w-full sm:w-auto" asChild>
+            <Button
+              variant="pump"
+              size="lg"
+              className="gap-2 border-2 border-black text-black w-full sm:w-auto"
+              style={{ textShadow: "none", WebkitTextStroke: "none" }}
+              asChild
+            >
+              <Link to="/portal" className="text-black">
+                <J1Logo className="w-8 h-8" style={{ filter: 'brightness(0) saturate(100%)' }} />
+                <span className="inline-block">Launch J1.CCP</span>
+              </Link>
+            </Button>
+            <Button variant="pump" size="lg" className="w-full sm:w-auto" asChild>
               <a href="https://x.com/j1tfyi" target="_blank" rel="noopener noreferrer">
                 Follow on X
               </a>
@@ -665,9 +711,8 @@ export default function HomePage() {
       <footer className="relative z-10 border-t border-border/40 backdrop-blur-md bg-background/60 py-6 sm:py-8">
         <div className="w-full px-4 sm:px-6 md:container md:mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <Rocket className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-              <span className="text-base sm:text-lg font-semibold">J1.CCP</span>
+            <div>
+              <J1ComboLogo className="h-12 sm:h-14" />
             </div>
 
             <p className="text-xs sm:text-sm text-foreground/60 text-center">

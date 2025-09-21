@@ -1,0 +1,20 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(100,100)">
+    <!-- Orbital rings -->
+    <ellipse cx="0" cy="0" rx="80" ry="30" fill="none" stroke="currentColor" stroke-width="8" transform="rotate(-20)"/>
+    <ellipse cx="0" cy="0" rx="80" ry="30" fill="none" stroke="currentColor" stroke-width="8" transform="rotate(160)"/>
+
+    <!-- Rocket body -->
+    <g transform="translate(-20,-35) rotate(45)">
+      <path d="M 0,0 L 15,-25 L 30,0 Z" fill="currentColor"/>
+      <circle cx="15" cy="-10" r="4" fill="white"/>
+    </g>
+
+    <!-- Rocket flames -->
+    <g transform="translate(-30,10) rotate(45)">
+      <path d="M 0,0 L 5,15 L 10,0" fill="currentColor" opacity="0.8"/>
+      <path d="M 3,0 L 8,12 L 13,0" fill="currentColor" opacity="0.6"/>
+      <path d="M 6,0 L 11,10 L 16,0" fill="currentColor" opacity="0.4"/>
+    </g>
+  </g>
+</svg>
