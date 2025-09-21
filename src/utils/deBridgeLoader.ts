@@ -1,5 +1,3 @@
-// Centralized deBridge widget loader to ensure consistent loading across all components
-
 declare global {
   interface Window {
     deBridge?: any;
