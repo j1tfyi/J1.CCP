@@ -238,17 +238,30 @@ export default function HomePage() {
 
       <main className="relative z-10 pt-16">
       {/* Hero Section */}
-        <section className="pt-28 md:pt-24 pb-12 px-2 relative">
+        <section className="pt-20 sm:pt-28 md:pt-24 pb-12 px-2 relative">
           <div className="container mx-auto text-center relative">
             <div className="relative z-10">
-              <J1Logo className="h-24 sm:h-32 mx-auto block" style={{ position: 'relative', zIndex: 20, marginBottom: '-145px' }} />
+              <div className="hidden md:block">
+                <J1Logo className="h-24 sm:h-32 mx-auto block" style={{ position: 'relative', zIndex: 20, marginBottom: '-145px' }} />
+              </div>
+              <div className="block md:hidden">
+                <J1Logo className="h-20 mx-auto block" style={{ position: 'relative', zIndex: 30, marginBottom: '-70px' }} />
+              </div>
               <img
                 src="/titlepage.png"
                 alt="J1.CrossChain Portal"
-                className="w-full h-auto max-w-none"
-                style={{ position: 'relative', top: '-145px', marginBottom: '-430px' }}
+                className="w-full h-auto max-w-none md:relative"
+                style={{ position: 'relative', top: '-70px', marginBottom: '-200px' }}
               />
-              <div className="-mt-16 md:-mt-56">
+              <style jsx>{`
+                @media (min-width: 768px) {
+                  img[alt="J1.CrossChain Portal"] {
+                    top: -145px !important;
+                    margin-bottom: -430px !important;
+                  }
+                }
+              `}</style>
+              <div className="-mt-8 sm:-mt-12 md:-mt-56">
                 <p className="text-xl sm:text-2xl md:text-4xl text-foreground/80 mb-4 max-w-5xl mx-auto">
                   One Portal. Infinite Possibilities. Zero Risk.
                 </p>
