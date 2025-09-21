@@ -18,9 +18,7 @@ Our platform leverages deBridge's Liquidity Network Protocol (DLN) smart contrac
 
 ### deBridge Core Infrastructure Capabilities
 - **Decentralized Validation**: Secure, independent validator network ensuring transaction integrity
-- **Advanced Security Mechanisms**: 
-  - Delegated staking
-  - Slashing protocols to prevent validator collusion
+- **Advanced Security Mechanisms**: Slashing protocols to prevent validator collusion
 - **Governance-Driven**: Community-controlled infrastructure
 
 ### Beyond Traditional Bridging
