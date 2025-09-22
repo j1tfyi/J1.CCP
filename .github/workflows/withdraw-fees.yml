@@ -92,6 +92,8 @@ jobs:
         env:
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
           SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+          JUPITER_REFERRAL_ACCOUNT: "9b2JyZnf3CJAx5JSiCNMSWQAiqJAJVUSxvq5W2trYho7"
+          JUPITER_ULTRA_ACCOUNT: "EDgCbN6bPKvFgY4fjmiFq44a4EY1hMnAqXzQ2rK9H7XT"
         run: |
           echo "🔍 DRY RUN MODE - Not executing actual withdrawals"
 
@@ -105,6 +107,8 @@ jobs:
         env:
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
           SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+          JUPITER_REFERRAL_ACCOUNT: "9b2JyZnf3CJAx5JSiCNMSWQAiqJAJVUSxvq5W2trYho7"
+          JUPITER_ULTRA_ACCOUNT: "EDgCbN6bPKvFgY4fjmiFq44a4EY1hMnAqXzQ2rK9H7XT"
         run: |
           echo "💰 Starting fee withdrawal process..."
 

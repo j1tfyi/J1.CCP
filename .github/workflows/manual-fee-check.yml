@@ -25,15 +25,19 @@ jobs:
           // Configuration from main.ts
           const CONFIG = {
             DEBRIDGE_REFERRAL_CODE: "32422",
-            JUPITER_REFERRAL_ACCOUNT: "EKtLGKfhtaJoUnoPodBesHzfaT8aJozCayv1zw8AKH3h",
-            SOLANA_BENEFICIARY: "D6vq5F6RUg6n2by5KHXyR1hpQ3uPG3dvNHJVXXaMyTnc",
+            JUPITER_ACCOUNTS: {
+              SWAP_TRIGGER: "9b2JyZnf3CJAx5JSiCNMSWQAiqJAJVUSxvq5W2trYho7",
+              ULTRA: "EDgCbN6bPKvFgY4fjmiFq44a4EY1hMnAqXzQ2rK9H7XT"
+            },
+            SOLANA_BENEFICIARY: "6j8QLb8D7wEfgAMSBy7HkuduBeysVJQimLHuwjBCW4gU",
             EVM_BENEFICIARY: "0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E"
           };
 
           console.log("=== Affiliate Fee Status Check ===\n");
           console.log("Configuration:");
           console.log("- deBridge Referral Code:", CONFIG.DEBRIDGE_REFERRAL_CODE);
-          console.log("- Jupiter Referral Account:", CONFIG.JUPITER_REFERRAL_ACCOUNT);
+          console.log("- Jupiter Swap+Trigger Account:", CONFIG.JUPITER_ACCOUNTS.SWAP_TRIGGER);
+          console.log("- Jupiter Ultra Account:", CONFIG.JUPITER_ACCOUNTS.ULTRA);
           console.log("- Solana Beneficiary:", CONFIG.SOLANA_BENEFICIARY);
           console.log("- EVM Beneficiary:", CONFIG.EVM_BENEFICIARY);
           console.log("\n");
