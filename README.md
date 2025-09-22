@@ -1,4 +1,5 @@
-# J1.CROSS-CHAIN PORTAL: One Portal. Infinite Possibilities. Zero Risk.
+# J1.CROSS-CHAIN PORTAL: 
+## One Portal. Infinite Possibilities. Zero Risk.
 
 ## 🌐 J1.CCP Project Overview
 
