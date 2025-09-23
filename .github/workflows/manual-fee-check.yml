@@ -15,6 +15,12 @@ jobs:
           node-version: '20.x'
 
       - name: Check available fees
+        env:
+          DEBRIDGE_REFERRAL_CODE: ${{ secrets.DEBRIDGE_REFERRAL_CODE || '32422' }}
+          JUPITER_SWAP_TRIGGER: ${{ secrets.JUPITER_SWAP_TRIGGER || '9b2JyZnf3CJAx5JSiCNMSWQAiqJAJVUSxvq5W2trYho7' }}
+          JUPITER_ULTRA: ${{ secrets.JUPITER_ULTRA || 'EDgCbN6bPKvFgY4fjmiFq44a4EY1hMnAqXzQ2rK9H7XT' }}
+          SOLANA_BENEFICIARY: ${{ secrets.SOLANA_BENEFICIARY || '6j8QLb8D7wEfgAMSBy7HkuduBeysVJQimLHuwjBCW4gU' }}
+          EVM_BENEFICIARY: ${{ secrets.EVM_BENEFICIARY || '0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E' }}
         run: |
           mkdir -p scripts
 
@@ -22,15 +28,15 @@ jobs:
           cat > scripts/check-fees.js << 'EOF'
           const https = require('https');
 
-          // Configuration from main.ts
+          // Configuration from environment variables
           const CONFIG = {
-            DEBRIDGE_REFERRAL_CODE: "32422",
+            DEBRIDGE_REFERRAL_CODE: process.env.DEBRIDGE_REFERRAL_CODE,
             JUPITER_ACCOUNTS: {
-              SWAP_TRIGGER: "9b2JyZnf3CJAx5JSiCNMSWQAiqJAJVUSxvq5W2trYho7",
-              ULTRA: "EDgCbN6bPKvFgY4fjmiFq44a4EY1hMnAqXzQ2rK9H7XT"
+              SWAP_TRIGGER: process.env.JUPITER_SWAP_TRIGGER,
+              ULTRA: process.env.JUPITER_ULTRA
             },
-            SOLANA_BENEFICIARY: "6j8QLb8D7wEfgAMSBy7HkuduBeysVJQimLHuwjBCW4gU",
-            EVM_BENEFICIARY: "0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E"
+            SOLANA_BENEFICIARY: process.env.SOLANA_BENEFICIARY,
+            EVM_BENEFICIARY: process.env.EVM_BENEFICIARY
           };
 
           console.log("=== Affiliate Fee Status Check ===\n");

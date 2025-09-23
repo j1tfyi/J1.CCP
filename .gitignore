@@ -43,7 +43,6 @@ data/
 # Scripts directory (sensitive referral/fee management)
 scripts/
 
-# Claude-specific files
-CLAUDE.md
-.claude/
+# Project documentation
+PROJECT.md
 update_secrets.sh
