@@ -1,7 +1,7 @@
 # J1.CROSS-CHAIN PORTAL
 ## One Portal. Infinite Possibilities. Zero Risk.
 
-![J1.CCP Logo](https://files.slack.com/files-tmb/T089HPLUZ5L-F08H6G7LCR4-d0e8c5177c/image_720.png)
+![J1.CCP Logo](./public/comboj1ccplogo.png)
 
 ## 🌐 J1.CCP Project Overview
 
