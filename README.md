@@ -1,6 +1,8 @@
 # J1.CROSS-CHAIN PORTAL
 ## One Portal. Infinite Possibilities. Zero Risk.
 
+![J1.CCP Logo](https://files.slack.com/files-tmb/T089HPLUZ5L-F08H6G7LCR4-d0e8c5177c/image_720.png)
+
 ## 🌐 J1.CCP Project Overview
 
 J1.CROSS-CHAIN PORTAL [J1.CCP] is a cross-chain networking solution built on the deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
@@ -41,8 +43,8 @@ deBridge enables:
 - **Frontend**: React 18
 - **Core Protocol**: J1.CCP built on the deBridge DLN smart contracts
 
-- **24 Total Networks** 
-    - **EVM Chains (21 chains)**:
+- **25+ Total Networks** 
+    - **EVM Chains (22 chains)**:
         - Abstract
         - Arbitrum
         - Avalanche (C-Chain)
@@ -59,6 +61,7 @@ deBridge enables:
         - Mantle
         - Neon
         - Optimism
+        - Plasma
         - Polygon (MATIC)
         - Sei
         - Sonic
