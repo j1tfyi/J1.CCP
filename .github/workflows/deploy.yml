@@ -77,6 +77,9 @@ jobs:
           test -f service-worker.js  || echo "// noop sw" > service-worker.js
           test -f site.webmanifest   || echo '{"name":"J1.CCP","short_name":"J1.CCP","start_url":"/","display":"standalone","background_color":"#000","theme_color":"#000","icons":[]}' > site.webmanifest
 
+          # Create stub sessionToken.ts for Deno Deploy (no subprocess support)
+          test -f sessionToken.stub.ts && cp sessionToken.stub.ts sessionToken.ts || echo "export async function handleSessionRequest(req: Request): Promise<Response> { return new Response(JSON.stringify({error: 'Not available'}), {status: 501}); }" > sessionToken.ts
+
       # 6) Verify required files exist and are non-empty
       - name: Verify files exist and are non-empty
         run: |
@@ -161,6 +164,7 @@ jobs:
           entrypoint: "./main.ts"
           include: |
             main.ts
+            sessionToken.ts
             deno.json
             deps.client.ts
             deps.server.ts
