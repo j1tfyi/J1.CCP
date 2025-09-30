@@ -34,7 +34,7 @@ async function generateSessionToken(): Promise<string | null> {
     // Use the Vercel API endpoint which will work both locally and in production
     const apiUrl = process.env.NODE_ENV === 'production'
       ? '/api/session'
-      : 'http://localhost:3000/api/session';
+      : 'http://localhost:3001/api/session';
 
     const response = await fetch(apiUrl, {
       method: 'POST',
