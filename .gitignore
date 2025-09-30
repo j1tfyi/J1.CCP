@@ -55,3 +55,4 @@ scripts/
 # Project documentation
 PROJECT.md
 update_secrets.sh
+.vercel
