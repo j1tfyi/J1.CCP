@@ -90,9 +90,9 @@ jobs:
       # 7) Install & Build ROOT portal (wormhole lives here)
       - name: Install packages (root portal)
         run: |
-          npm install
+          npm install --legacy-peer-deps
           # Ensure three is present (won't reinstall if already in package.json)
-          npm install three --save || true
+          npm install three --save --legacy-peer-deps || true
 
       - name: Build root portal
         run: |
@@ -111,9 +111,9 @@ jobs:
       - name: Install packages (bridge app)
         working-directory: bridge-react-app
         run: |
-          npm install
+          npm install --legacy-peer-deps
           # Explicitly ensure deps you use at runtime
-          npm install three @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-base @solana/web3.js --save
+          npm install three @solana/wallet-adapter-react @solana/wallet-adapter-react-ui @solana/wallet-adapter-base @solana/web3.js --save --legacy-peer-deps
 
       - name: Build bridge app
         working-directory: bridge-react-app
