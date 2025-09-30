@@ -10,11 +10,7 @@
     "lint": "eslint . --ext js,jsx,ts,tsx --max-warnings 0"
   },
   "dependencies": {
-    "@coinbase/cdp-core": "^0.0.36",
-    "@coinbase/cdp-hooks": "^0.0.36",
-    "@coinbase/cdp-react": "^0.0.36",
-    "@coinbase/cdp-sdk": "^1.38.2",
-    "@coinbase/onchainkit": "^1.0.2",
+    "@coinbase/onchainkit": "^0.38.19",
     "@radix-ui/react-slot": "^1.2.3",
     "@solana/wallet-adapter-base": "^0.9.24",
     "@solana/wallet-adapter-react": "^0.15.36",
