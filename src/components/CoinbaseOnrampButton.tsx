@@ -31,7 +31,12 @@ interface OfframpURLParams {
  */
 async function generateSessionToken(): Promise<string | null> {
   try {
-    const response = await fetch('/api/session', {
+    // Use the Vercel API endpoint which will work both locally and in production
+    const apiUrl = process.env.NODE_ENV === 'production'
+      ? '/api/session'
+      : 'http://localhost:3000/api/session';
+
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

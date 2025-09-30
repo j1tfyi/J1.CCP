@@ -6,10 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && mkdir -p dist/public && cp public/*.png public/*.ico dist/public/ 2>/dev/null || true && cp public/*.mp4 public/*.mov public/*.webm dist/ 2>/dev/null || true",
+    "build:bridge": "cd bridge-react-app && npm run build",
+    "vercel-build": "npm run build && npm run build:bridge",
     "preview": "vite preview",
-    "lint": "eslint . --ext js,jsx,ts,tsx --max-warnings 0"
+    "lint": "eslint . --ext js,jsx,ts,tsx --max-warnings 0",
+    "postinstall": "cd bridge-react-app && npm install --legacy-peer-deps"
   },
   "dependencies": {
+    "@coinbase/coinbase-sdk": "^0.10.0",
     "@coinbase/onchainkit": "^0.38.19",
     "@radix-ui/react-slot": "^1.2.3",
     "@solana/wallet-adapter-base": "^0.9.24",
@@ -49,6 +53,6 @@
     "vite": "^7.1.6"
   },
   "engines": {
-    "node": ">=20.18.0"
+    "node": ">=18.0.0"
   }
 }
