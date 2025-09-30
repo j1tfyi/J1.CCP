@@ -9,9 +9,18 @@ node_modules/
 
 # Sensitive and Generated Files
 *.env
+.env.local
 *.lock
 *.base64
 deno.lock
+
+# API Keys and Credentials (NEVER commit these)
+cdp_api_key.json
+**/cdp_api_key.json
+api/generateToken.js
+api/generateToken.mjs
+api/*.js
+api/*.mjs
 
 # Specific Project Files (stored as GitHub secrets)
 main.ts

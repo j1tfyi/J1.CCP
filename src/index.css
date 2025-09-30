@@ -10,11 +10,32 @@
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
-    z-index: 9999 !important;
+    z-index: 50 !important;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85)) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
   }
+}
+
+/* Portal Modal Body Lock */
+body.modal-open {
+  overflow: hidden !important;
+}
+
+/* Ensure modals render above everything */
+#modal-root,
+[data-modal-portal] {
+  position: relative;
+  z-index: 999999 !important;
+}
+
+/* Lower z-index for hero content to ensure modal appears above */
+.hero-section,
+#hero,
+.titlepage,
+img[src*="titlepage"] {
+  z-index: 1 !important;
+  position: relative !important;
 }
 
 /* Firefox-specific padding adjustment */

@@ -1,0 +1,17 @@
+<!--
+  This is a placeholder file.
+
+  For production deployment on Vercel:
+  1. Convert the favicon.svg to PNG format at 180x180 resolution
+  2. Replace this file with the generated PNG file
+  3. Ensure the image has good quality and is properly centered
+
+  Command to generate apple-icon.png from favicon.svg:
+
+  ```
+  # Using ImageMagick
+  convert -background none -density 1200 public/favicon.svg -resize 180x180 public/apple-icon.png
+  ```
+
+  The Apple touch icon is used when users add your website to their home screen on iOS devices.
+-->

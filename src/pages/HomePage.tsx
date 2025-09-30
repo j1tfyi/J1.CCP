@@ -7,6 +7,7 @@ import { Card } from "../components/ui/card";
 import { TrendingUp, Shield, Zap, Sparkles, Github, Globe, Coins, ShieldCheck, Lock, Network, ArrowRightLeft } from "lucide-react";
 import { J1Logo } from "../components/J1Logo";
 import { J1ComboLogo } from "../components/J1ComboLogo";
+import { CoinbaseOnrampButton } from "../components/CoinbaseOnrampButton";
 
 // Import network logos
 import abstractLogo from '../assets/networks/abstract.png';
@@ -44,6 +45,9 @@ declare global {
 export default function HomePage() {
   const navigate = useNavigate();
   const widgetContainerRef = useRef<HTMLDivElement>(null);
+  // Temporarily disabled CDP hooks
+  // const { isSignedIn } = useIsSignedIn();
+  // const { isInitialized } = useIsInitialized();
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -171,6 +175,21 @@ export default function HomePage() {
               <Button
                 variant="ghost"
                 size="sm"
+                style={{ pointerEvents: "auto" }}
+                asChild
+              >
+                <a
+                  href="https://t.me/j1tfyi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ pointerEvents: "auto" }}
+                >
+                  Community
+                </a>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
                 className="hidden sm:inline-flex"
                 style={{ pointerEvents: "auto" }}
                 asChild
@@ -220,23 +239,11 @@ export default function HomePage() {
                   <Github className="w-4 h-4" />
                 </a>
               </Button>
-              <Button
-                variant="pump"
-                size="sm"
-                className="px-2 sm:px-4 text-xs sm:text-sm"
-                style={{ pointerEvents: "auto" }}
-                asChild
-              >
-                <a
-                  href="https://t.me/j1tfyi"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ pointerEvents: "auto" }}
-                >
-                  <span className="hidden sm:inline">Join Community</span>
-                  <span className="sm:hidden">Join</span>
-                </a>
-              </Button>
+
+              {/* Coinbase Integration */}
+              <div className="border-l border-border/40 pl-2 ml-2 flex items-center gap-2">
+                <CoinbaseOnrampButton />
+              </div>
             </div>
           </nav>
         </div>
@@ -248,16 +255,16 @@ export default function HomePage() {
           <div className="container mx-auto text-center relative">
             <div className="relative z-10">
               <div className="hidden md:block">
-                <J1Logo className="h-24 sm:h-32 mx-auto block" style={{ position: 'relative', zIndex: 20, marginBottom: '-145px' }} />
+                <J1Logo className="h-24 sm:h-32 mx-auto block" style={{ position: 'relative', zIndex: 1, marginBottom: '-145px' }} />
               </div>
               <div className="block md:hidden">
-                <J1Logo className="h-20 mx-auto block" style={{ position: 'relative', zIndex: 30, marginBottom: '-80px', top: '-60px' }} />
+                <J1Logo className="h-20 mx-auto block" style={{ position: 'relative', zIndex: 1, marginBottom: '-80px', top: '-60px' }} />
               </div>
               <img
                 src="/titlepage.png"
                 alt="J1.CrossChain Portal"
                 className="w-full h-auto max-w-none md:relative"
-                style={{ position: 'relative', top: '-40px', marginBottom: '-100px' }}
+                style={{ position: 'relative', zIndex: 1, top: '-40px', marginBottom: '-100px' }}
               />
               <style jsx>{`
                 @media (min-width: 768px) {
@@ -437,6 +444,59 @@ export default function HomePage() {
               </Card>
 
              </div>
+          </div>
+        </section>
+
+        {/* Coinbase Onramp Section */}
+        <section id="onramp" className="py-24 px-4 bg-background/90 backdrop-blur-md relative overflow-hidden">
+          <VideoBackground
+            src="/374800567564894209"
+            className="absolute top-0 left-0 w-full h-full object-cover z-0 opacity-20"
+            preload="metadata"
+            lazyLoad={true}
+          />
+          <div className="container mx-auto relative z-10">
+            <div className="flex justify-center mb-2">
+              <J1Logo className="h-24 sm:h-28" />
+            </div>
+            <h2 className="text-4xl font-bold text-center mb-4">
+              Buy Crypto with <span className="gradient-text">Coinbase</span>
+            </h2>
+            <p className="text-xl text-foreground/80 max-w-2xl mx-auto text-center mb-12">
+              Purchase cryptocurrency directly with fiat using Coinbase's secure onramp
+            </p>
+
+            {/* Onramp Features */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+              <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40 hover:scale-105 transition-transform">
+                <Coins className="w-12 h-12 text-primary mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Multiple Assets</h3>
+                <p className="text-foreground/70 text-sm">
+                  Buy ETH, USDC, and other popular cryptocurrencies directly
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40 hover:scale-105 transition-transform">
+                <Shield className="w-12 h-12 text-primary mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Secure & Trusted</h3>
+                <p className="text-foreground/70 text-sm">
+                  Powered by Coinbase's industry-leading security and compliance
+                </p>
+              </Card>
+
+              <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40 hover:scale-105 transition-transform">
+                <TrendingUp className="w-12 h-12 text-primary mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Easy Payment</h3>
+                <p className="text-foreground/70 text-sm">
+                  Multiple payment methods including credit/debit cards and bank transfers
+                </p>
+              </Card>
+            </div>
+
+            {/* Centered Buy Button */}
+            <div className="flex justify-center">
+              <CoinbaseOnrampButton />
+            </div>
           </div>
         </section>
 
