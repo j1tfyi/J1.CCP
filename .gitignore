@@ -57,6 +57,7 @@ bridge-react-app/src/App.css
 rate_limit_test.log
 rate_limit_test.sh
 allfiles.txt
+visitor-log.txt
 
 # Wildcard Base64 Ignore
 */*.base64
