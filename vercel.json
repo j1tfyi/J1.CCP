@@ -1,6 +1,7 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "devCommand": "npx vite --port $PORT --host",
   "framework": "vite",
   "functions": {
     "api/session.js": {

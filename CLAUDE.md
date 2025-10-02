@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-J1.CROSS-CHAIN PORTAL (J1.CCP) is a multi-chain DeFi application built on deBridge Liquidity Network Protocol (DLN), enabling instant cross-chain asset transfers across 24 blockchain networks (21 EVM + Solana/xStocks/Tron). The system uses a multi-SPA architecture with a single Deno server orchestrating two React applications with sophisticated caching, security layers, and automated affiliate fee collection.
+J1.CROSS-CHAIN PORTAL (J1.CCP) is a multi-chain DeFi application built on deBridge Liquidity Network Protocol (DLN), enabling instant cross-chain asset transfers across 25+ blockchain networks (22 EVM + Solana/xStocks/Tron). The system uses a multi-SPA architecture with a single Deno server orchestrating two React applications with sophisticated caching, security layers, and automated affiliate fee collection.
 
 ## Architecture
 
@@ -103,7 +103,7 @@ deno lint main.ts                           # Lint server code
 ## Key Implementation Details
 
 ### Cross-Chain Configuration
-- **Supported Networks**: 24 chains (21 EVM + Solana, xStocks via Solana, Tron)
+- **Supported Networks**: 25 chains (22 EVM + Solana, xStocks via Solana, Tron)
 - **Referral System**:
   - deBridge Code: `32422`
   - Jupiter Account: `EKtLGKfhtaJoUnoPodBesHzfaT8aJozCayv1zw8AKH3h`
@@ -119,6 +119,13 @@ Dynamic configuration served by main.ts includes:
   - Solana → Jupiter account "EKtLGKfhtaJoUnoPodBesHzfaT8aJozCayv1zw8AKH3h"
 - Custom CSS with orange gradient theming (#ff6600 to #ffae00)
 - Container: "debridgeWidget" element ID
+
+### Coinbase Integration
+The CoinbaseOnrampButton component uses simple direct links:
+- **Buy Crypto**: Opens `https://www.coinbase.com/buy`
+- **Sell Crypto**: Opens `https://www.coinbase.com/sell`
+- No CDP session tokens or backend authentication required
+- Simple, reliable integration without complex API calls
 
 ### Service Worker Strategy
 - Caches bridge app assets for offline functionality
@@ -162,11 +169,6 @@ Dynamic configuration served by main.ts includes:
 ### Secret File Management
 ```bash
 # Generate base64 for GitHub Secrets (outputs to root with prefixes)
-
-cd bridge-react-app && npm run build && cd ..
-    npm run build
-    deno run --allow-net --allow-read main.ts
-    
 ./update_secrets.sh
 
 # Critical files stored as GitHub Secrets:
@@ -194,6 +196,7 @@ cd bridge-react-app && npm run build && cd ..
 - [ ] Service worker caches assets
 - [ ] Widget scrolling works on mobile
 - [ ] Visitor tracking records visits (check with `node scripts/check-visitors.js`)
+- [ ] Coinbase buy/sell buttons open correct URLs
 
 ### Performance Validation
 - Lighthouse score > 90 for performance
@@ -267,12 +270,23 @@ git commit -m "Add video file"
 │   └── check-visitors.js     # Visitor count checker
 ├── src/
 │   ├── pages/
-│   │   └── PortalPage.tsx   # Main portal page (gitignored)
+│   │   ├── HomePage.tsx      # Landing page with features
+│   │   ├── PortalPage.tsx    # Main portal page (gitignored)
+│   │   └── TermsOfService.tsx
 │   ├── components/
-│   │   └── DeBridgePortal.tsx # Widget component (gitignored)
+│   │   ├── DeBridgePortal.tsx # Widget component (gitignored)
+│   │   ├── VideoBackground.tsx
+│   │   ├── CoinbaseOnrampButton.tsx
+│   │   └── J1Logo.tsx
 │   └── utils/
 │       └── visitorTracker.ts  # CounterAPI V2 implementation
-└── .github/workflows/deploy.yml # CI/CD pipeline
+├── api/                       # Vercel serverless functions
+│   ├── session.js            # CDP session token generation
+│   ├── health.js             # Health check endpoint
+│   └── widget-config.js      # Widget configuration
+└── .github/workflows/
+    ├── deploy.yml            # Deno Deploy CI/CD
+    └── withdraw-fees.yml     # Automated fee collection
 ```
 
 ## External Dependencies
@@ -292,3 +306,4 @@ git commit -m "Add video file"
 - **Vite**: Build tool and dev server
 - **@solana/wallet-adapter**: Wallet integration
 - **@jup-ag/referral-sdk**: Jupiter fee collection
+- **Coinbase SDK**: Optional onramp integration (simplified to direct URLs)

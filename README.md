@@ -3,6 +3,11 @@
 
 ![J1.CCP Logo](./public/comboj1ccplogo.png)
 
+[![Documentation](https://img.shields.io/badge/GitBook-Documentation-7B36ED?style=for-the-badge&logo=gitbook&logoColor=white)](https://j1tfyi.gitbook.io/docs/utilities-and-future-plan/j1.cross-chain-portal)
+[![Website](https://img.shields.io/badge/Website-J1.CCP-FF6B6B?style=for-the-badge&logo=firefox&logoColor=white)](https://ccp.j1t.fyi/)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/j1tfyi)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/j1tfyi)
+
 ## 🌐 J1.CCP Project Overview
 
 J1.CROSS-CHAIN PORTAL [J1.CCP] is a cross-chain networking solution built on the deBridge infrastructure, designed to break down barriers between blockchain ecosystems and unlock unprecedented financial mobility.
@@ -116,12 +121,21 @@ Or
 - Unauthorized reproduction or distribution prohibited
 - No license granted without explicit permission
 
-## 🌐 Additional Resources
+## 📚 Documentation & Resources
+
+### Official Documentation
+- **📖 Complete Documentation**: [J1.CCP GitBook](https://j1tfyi.gitbook.io/docs/utilities-and-future-plan/j1.cross-chain-portal)
+  - Cross-Chain Portal Architecture
+  - Integration Guides
+  - API Reference
+  - Utilities & Future Roadmap
+
+### Additional Resources
 - **Official deBridge Website**: [deBridge Finance](https://debridge.finance/)
 - **Project Portal**: [J1.CCP Website](https://ccp.j1t.fyi/)
 - **Third-party Security Audits**
     - deBridge protocol, smart contracts and periphery modules passed more than 25+ security audits. 
-    - A comprehensive list of audit reports of the can be found in the deBridge GitHub repository for [deBridge Security Audits](https://github.com/debridge-finance/debridge-security)
+    - A comprehensive list of audit reports can be found in the deBridge GitHub repository for [deBridge Security Audits](https://github.com/debridge-finance/debridge-security)
 
 ## 🤝 Contact & Community
 

@@ -4,13 +4,20 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && mkdir -p dist/public && cp public/*.png public/*.ico dist/public/ 2>/dev/null || true && cp public/*.mp4 public/*.mov public/*.webm dist/ 2>/dev/null || true",
+    "dev": "npx vite",
+    "build": "npx vite build && mkdir -p dist/public && cp public/*.png public/*.ico dist/public/ 2>/dev/null || true && cp public/*.mp4 public/*.mov public/*.webm dist/ 2>/dev/null || true",
     "build:bridge": "cd bridge-react-app && npm run build",
     "vercel-build": "npm run build && npm run build:bridge",
-    "preview": "vite preview",
+    "preview": "npx vite preview",
     "lint": "eslint . --ext js,jsx,ts,tsx --max-warnings 0",
-    "postinstall": "cd bridge-react-app && npm install --legacy-peer-deps"
+    "postinstall": "cd bridge-react-app && npm install --legacy-peer-deps",
+    "cdp-server": "node cdp-session-server-fixed.mjs",
+    "cdp-server:old": "node cdp-session-server.mjs",
+    "test-cdp": "node test-cdp-session.mjs",
+    "setup-cdp": "node setup-cdp-fixed.mjs",
+    "dev:full": "npm run cdp-server & npm run dev",
+    "cdp:test": "node api/generateToken-fixed.mjs '{\"addresses\":[{\"address\":\"0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E\",\"blockchains\":[\"ethereum\",\"base\"],\"assets\":[\"ETH\",\"USDC\"]}]}'",
+    "cdp:validate": "node -e \"import('./api/cdp-auth-fixed.mjs').then(m => m.validateCredentials(JSON.parse(process.env.CDP_CREDS || '{}')))\""
   },
   "dependencies": {
     "@coinbase/coinbase-sdk": "^0.10.0",
@@ -26,10 +33,14 @@
     "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "elliptic": "^6.6.1",
     "ethers": "^6.15.0",
+    "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.462.0",
+    "node-fetch": "^3.3.2",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",
@@ -43,14 +54,14 @@
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.21",
-    "dotenv": "^17.2.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.6.2",
-    "vite": "^7.1.6"
+    "vite": "^7.1.7",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "engines": {
     "node": ">=18.0.0"
