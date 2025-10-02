@@ -10,9 +10,14 @@ node_modules/
 # Sensitive and Generated Files
 *.env
 .env.local
+.env.example
+.env.production
 *.lock
 *.base64
 deno.lock
+sessionToken.ts
+sessionToken.stub.ts
+deploy.sh
 
 # API Keys and Credentials (NEVER commit these)
 cdp_api_key.json
@@ -52,7 +57,15 @@ data/
 # Scripts directory (sensitive referral/fee management)
 scripts/
 
-# Project documentation
+# Project documentation and temporary files
 PROJECT.md
 update_secrets.sh
 .vercel
+SECURITY_AUDIT.md
+SECURITY_UPDATE_SUMMARY.md
+VERCEL_SETUP.md
+CDP_FIX_SUMMARY.md
+CDP_SESSION_FIXED.md
+CDP_SESSION_TOKEN.md
+COINBASE_INTEGRATION.md
+CLAUDE.md
