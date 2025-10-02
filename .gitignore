@@ -22,10 +22,21 @@ deploy.sh
 # API Keys and Credentials (NEVER commit these)
 cdp_api_key.json
 **/cdp_api_key.json
+cdp_api_key.json.backup
+cdp_api_key.json.original
+cdp_api_key_fixed.json
+cdp_private_key.pem
+*.pem
 api/generateToken.js
 api/generateToken.mjs
 api/*.js
 api/*.mjs
+api-server.mjs
+cdp-session-server.mjs
+cdp-session-server-fixed.mjs
+setup-cdp-fixed.mjs
+setup-cdp.sh
+check-env.sh
 
 # Specific Project Files (stored as GitHub secrets)
 main.ts
