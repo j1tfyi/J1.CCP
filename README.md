@@ -44,11 +44,37 @@ deBridge enables:
 ## 🌍 Technical Architecture
 
 ### Infrastructure Components
-- **Backend**: Deno
-- **Frontend**: React 18
-- **Core Protocol**: J1.CCP built on the deBridge DLN smart contracts
 
-- **25+ Total Networks** 
+#### Backend
+- **Runtime**: Deno Deploy (edge runtime serving static assets)
+- **Server Features**:
+  - IP-based rate limiting (50 req/30s sliding window)
+  - Asset routing with immutable caching
+  - Dynamic portal configuration endpoint
+  - gzip compression for text assets
+  - CSP security headers
+- **Deployment**: GitHub Actions → Deno Deploy
+- **CDN**: Deno Deploy global edge network
+
+#### Frontend
+- **Framework**: Dual React 18 SPAs
+  - **Main Portal**: 3D wormhole visualization with Three.js
+  - **Bridge Portal**: deBridge DLN integration widget
+- **Key Libraries**:
+  - **3D Graphics**: Three.js for WebGL rendering
+  - **Blockchain**: ethers.js, @solana/web3.js, wagmi, viem
+  - **Wallet Integration**: @solana/wallet-adapter, @coinbase/onchainkit
+  - **UI Components**: Radix UI, Tailwind CSS, Lucide React icons
+  - **Routing**: React Router v7
+  - **State Management**: TanStack Query
+- **Build Tool**: Vite 7 with TypeScript support
+
+#### Core Protocol
+- **J1.CCP** built on the deBridge DLN smart contracts
+
+### Supported Networks
+
+**25+ Total Networks** 
     - **EVM Chains (22 chains)**:
         - Abstract
         - Arbitrum
