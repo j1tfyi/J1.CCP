@@ -26,6 +26,7 @@ import lineaLogo from '../assets/networks/linea.png';
 import mantleLogo from '../assets/networks/mantle.png';
 import neonLogo from '../assets/networks/neon.png';
 import optimismLogo from '../assets/networks/optimism.png';
+import plasmaLogo from '../assets/networks/plasma.png';
 import polygonLogo from '../assets/networks/polygon.png';
 import seiLogo from '../assets/networks/sei.png';
 import solanaLogo from '../assets/networks/solana.png';
@@ -700,6 +701,11 @@ export default function HomePage() {
             <Card className="p-6 flex flex-col items-center bg-black/80 backdrop-blur-sm border border-white/10 hover:scale-105 transition-transform hover:bg-black/90">
               <img src={polygonLogo} alt="Polygon logo" className="w-12 h-12 mb-4" />
               <h3 className="text-xl font-semibold text-white">Polygon</h3>
+            </Card>
+            {/* Plasma */}
+            <Card className="p-6 flex flex-col items-center bg-black/80 backdrop-blur-sm border border-white/10 hover:scale-105 transition-transform hover:bg-black/90">
+              <img src={plasmaLogo} alt="Plasma logo" className="w-12 h-12 mb-4" />
+              <h3 className="text-xl font-semibold text-white">Plasma</h3>
             </Card>
             {/* Sei */}
             <Card className="p-6 flex flex-col items-center bg-black/80 backdrop-blur-sm border border-white/10 hover:scale-105 transition-transform hover:bg-black/90">
