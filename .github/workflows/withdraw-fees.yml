@@ -54,7 +54,7 @@ jobs:
         working-directory: scripts
         env:
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
-          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
         run: |
           # Create a simple balance check script
           cat > check-balance.js << 'EOF'
@@ -91,9 +91,9 @@ jobs:
         working-directory: scripts
         env:
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
-          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
-          JUPITER_REFERRAL_ACCOUNT: "9b2JyZnf3CJAx5JSiCNMSWQAiqJAJVUSxvq5W2trYho7"
-          JUPITER_ULTRA_ACCOUNT: "EDgCbN6bPKvFgY4fjmiFq44a4EY1hMnAqXzQ2rK9H7XT"
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+          JUPITER_REFERRAL_ACCOUNT: ${{ secrets.JUPITER_REFERRAL_ACCOUNT }}
+          JUPITER_ULTRA_ACCOUNT: ${{ secrets.JUPITER_ULTRA_ACCOUNT }}
         run: |
           echo "🔍 DRY RUN MODE - Not executing actual withdrawals"
 
@@ -106,9 +106,9 @@ jobs:
         working-directory: scripts
         env:
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
-          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
-          JUPITER_REFERRAL_ACCOUNT: "9b2JyZnf3CJAx5JSiCNMSWQAiqJAJVUSxvq5W2trYho7"
-          JUPITER_ULTRA_ACCOUNT: "EDgCbN6bPKvFgY4fjmiFq44a4EY1hMnAqXzQ2rK9H7XT"
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
+          JUPITER_REFERRAL_ACCOUNT: ${{ secrets.JUPITER_REFERRAL_ACCOUNT }}
+          JUPITER_ULTRA_ACCOUNT: ${{ secrets.JUPITER_ULTRA_ACCOUNT }}
         run: |
           echo "💰 Starting fee withdrawal process..."
 
@@ -122,7 +122,7 @@ jobs:
         working-directory: scripts
         env:
           SOLANA_PRIVATE_KEY: ${{ secrets.SOLANA_PRIVATE_KEY }}
-          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL || 'https://mainnet.helius-rpc.com/?api-key=c1b2f3e2-c831-40ae-bd03-0065b060cf0b' }}
+          SOLANA_RPC_URL: ${{ secrets.SOLANA_RPC_URL }}
         run: |
           # Check final balance
           cat > report.js << 'EOF'

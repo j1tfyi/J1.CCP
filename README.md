@@ -59,7 +59,7 @@ deBridge enables:
 #### Frontend
 - **Framework**: Dual React 18 SPAs
   - **Main Portal**: 3D wormhole visualization with Three.js
-  - **Bridge Portal**: deBridge DLN integration widget
+  - **Bridge Portal**: deBridge DLN integration portal
 - **Key Libraries**:
   - **3D Graphics**: Three.js for WebGL rendering
   - **Blockchain**: ethers.js, @solana/web3.js, wagmi, viem
@@ -74,34 +74,36 @@ deBridge enables:
 
 ### Supported Networks
 
-**25+ Total Networks** 
-    - **EVM Chains (22 chains)**:
-        - Abstract
-        - Arbitrum
-        - Avalanche (C-Chain)
-        - Base
-        - Berachain
-        - Binance Smart Chain (BSC)
-        - BOB
-        - Ethereum (ETH)
-        - Flow
-        - Gnosis
-        - HyperEVM
-        - Hyperliquid
-        - Linea
-        - Mantle
-        - Neon
-        - Optimism
-        - Plasma
-        - Polygon (MATIC)
-        - Sei
-        - Sonic
-        - Story
-        - Zilliqa
-    - **Non-EVM Chains (3 chains)**:
-        - Solana
-        - xStocks via Solana
-        - Tron
+**25+ Total Networks**
+
+#### EVM Chains (22 chains)
+1. Abstract
+2. Arbitrum
+3. Avalanche (C-Chain)
+4. Base
+5. Berachain
+6. Binance Smart Chain (BSC)
+7. BOB
+8. Ethereum (ETH)
+9. Flow
+10. Gnosis
+11. HyperEVM
+12. Hyperliquid
+13. Linea
+14. Mantle
+15. Neon
+16. Optimism
+17. Plasma
+18. Polygon (MATIC)
+19. Sei
+20. Sonic
+21. Story
+22. Zilliqa
+
+#### Non-EVM Chains (3 chains)
+23. Solana
+24. xStocks via Solana
+25. Tron
 
 ## 📦 Development Setup
 

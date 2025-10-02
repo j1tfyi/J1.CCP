@@ -80,3 +80,6 @@ CDP_SESSION_FIXED.md
 CDP_SESSION_TOKEN.md
 COINBASE_INTEGRATION.md
 CLAUDE.md
+
+# Onramp Application (private development code)
+onramp-application/
