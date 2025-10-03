@@ -805,7 +805,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
               <a
-                href="https://j1tfyi.gitbook.io/docs/utilities-and-future-plan/j1.cross-chain-portal"
+                href="https://j1tfyi.gitbook.io/docs/utilities-and-future-plan/j1.crosschain-portal"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-foreground/60 hover:text-primary transition-colors"
@@ -827,6 +827,12 @@ export default function HomePage() {
                 className="text-sm text-foreground/60 hover:text-primary transition-colors"
               >
                 Security Audits
+              </a>
+              <a
+                href="mailto:support@j1portal.com"
+                className="text-sm text-foreground/60 hover:text-primary transition-colors"
+              >
+                Support
               </a>
               <Link
                 to="/terms"
