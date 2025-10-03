@@ -195,7 +195,7 @@ export default function HomePage() {
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
-                <a href="#key-features" style={{ pointerEvents: "auto" }}>
+                <a href="#key-features" style={{ pointerEvents: "auto", color: "#f97316" }}>
                   Features
                 </a>
               </Button>
@@ -220,7 +220,7 @@ export default function HomePage() {
                   href="https://j1tfyi.gitbook.io/docs/utilities-and-future-plan/j1.crosschain-portal"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ pointerEvents: "auto" }}
+                  style={{ pointerEvents: "auto", color: "#f97316" }}
                 >
                   Docs
                 </a>
@@ -816,7 +816,8 @@ export default function HomePage() {
                 href="https://github.com/j1tfyi/ccp"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-foreground/60 hover:text-primary transition-colors"
+                className="text-sm transition-colors"
+                style={{ color: "#f97316" }}
               >
                 GitHub
               </a>
@@ -830,7 +831,8 @@ export default function HomePage() {
               </a>
               <a
                 href="mailto:support@j1portal.com"
-                className="text-sm text-foreground/60 hover:text-primary transition-colors"
+                className="text-sm transition-colors"
+                style={{ color: "#f97316" }}
               >
                 Support
               </a>
