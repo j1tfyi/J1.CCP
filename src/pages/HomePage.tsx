@@ -461,7 +461,7 @@ export default function HomePage() {
               <J1Logo className="h-24 sm:h-28" />
             </div>
             <h2 className="text-4xl font-bold text-center mb-4">
-              Coinbase<span className="gradient-text">Onramp/Offramp Integration</span>
+              Coinbase <span className="gradient-text">Onramp/Offramp Integration</span>
             </h2>
             <p className="text-xl text-foreground/80 max-w-2xl mx-auto text-center mb-12">
               Seamlessly convert between fiat and cryptocurrency using Coinbase's secure payment rails—buy crypto with USD, EUR, and other fiat currencies, or cash out your digital assets back to your bank account
