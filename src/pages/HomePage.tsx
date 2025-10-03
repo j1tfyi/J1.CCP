@@ -577,7 +577,7 @@ export default function HomePage() {
             {/* Additional Info */}
             <div className="mt-12 text-center">
               <p className="text-foreground/60 mb-4">
-                Need help? Check our documentation or join our community
+                Need More Info? Check our documentation
               </p>
               <div className="flex gap-4 justify-center">
                 <Button variant="outline" size="sm" asChild>
@@ -586,8 +586,8 @@ export default function HomePage() {
                   </a>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <a href="https://t.me/j1tfyi" target="_blank" rel="noopener noreferrer">
-                    Join Telegram
+                  <a href="https://github.com/j1tfyi/J1.CCP" target="_blank" rel="noopener noreferrer">
+                    GitHub
                   </a>
                 </Button>
               </div>
