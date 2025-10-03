@@ -308,7 +308,7 @@ export default function HomePage() {
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40">
-                <div className="text-3xl font-bold text-primary mb-2">24+</div>
+                <div className="text-3xl font-bold text-primary mb-2">25+</div>
                 <p className="text-foreground/70">Blockchain Networks</p>
               </Card>
               <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40">
@@ -398,7 +398,7 @@ export default function HomePage() {
                 <Globe className="w-12 h-12 text-primary mb-4" />
                 <h3 className="text-xl font-semibold mb-2">Multi-Chain Reach</h3>
                 <p className="text-foreground/70 text-sm">
-                  Swap seamlessly across 24+ EVM and non-EVM blockchains including Ethereum, Solana, Base, Tron, and many more.
+                  Swap seamlessly across 25+ EVM and non-EVM blockchains including Ethereum, Solana, Base, Tron, and many more.
                 </p>
               </Card>
 
@@ -539,7 +539,7 @@ export default function HomePage() {
                 <Card className="p-6 bg-card-gradient border-border">
                   <div className="flex items-center gap-3 mb-3">
                     <Globe className="w-8 h-8 text-accent" />
-                    <h3 className="text-lg font-semibold">24+ Networks</h3>
+                    <h3 className="text-lg font-semibold">25+ Networks</h3>
                   </div>
                   <p className="text-foreground/70 text-sm">
                     Connect across EVM and non-EVM chains including Solana, Ethereum, and more
