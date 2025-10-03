@@ -276,8 +276,8 @@ export default function HomePage() {
                 }
               `}</style>
               <div className="mt-0 md:-mt-56">
-                <p className="text-xl sm:text-2xl md:text-4xl mb-4 max-w-5xl mx-auto" style={{ color: "#f97316" }}>
-                  One Portal. Infinite Possibilities. Zero Risk.
+                <p className="text-xl sm:text-2xl md:text-4xl mb-4 max-w-5xl mx-auto">
+                  <span style={{ color: "#f97316" }}>One Portal.</span> <span style={{ color: "#ffffff" }}>Infinite Possibilities.</span> <span style={{ color: "#f97316" }}>Zero Risk.</span>
                 </p>
                 <p className="text-lg sm:text-xl md:text-3xl text-foreground/70 mb-5 max-w-3xl mx-auto">
                   Instant. Secure. Borderless.
