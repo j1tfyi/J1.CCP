@@ -544,7 +544,7 @@ export default function HomePage() {
               <J1Logo className="h-24 sm:h-28" />
             </div>
             <h2 className="text-4xl font-bold text-center mb-4">
-              Coinbase <span className="gradient-text">Onramp/Offramp Integration</span>
+              Coinbase <span className="gradient-text whitespace-nowrap">Onramp/Offramp</span> <span className="gradient-text">Integration</span>
             </h2>
             <p className="text-xl text-foreground/80 max-w-2xl mx-auto text-center mb-12">
               Seamlessly convert between fiat and cryptocurrency using Coinbase's secure payment rails—buy crypto with USD, EUR, and other fiat currencies, or cash out your digital assets back to your bank account
@@ -554,7 +554,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
               <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40 hover:scale-105 transition-transform">
                 <Coins className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Multiple Assets</h3>
+                <h3 className="text-xl font-semibold mb-2 text-orange-500">Multiple Assets</h3>
                 <p className="text-foreground/70 text-sm">
                   Buy ETH, USDC, and other popular cryptocurrencies directly
                 </p>
@@ -562,7 +562,7 @@ export default function HomePage() {
 
               <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40 hover:scale-105 transition-transform">
                 <Shield className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Secure & Trusted</h3>
+                <h3 className="text-xl font-semibold mb-2 text-orange-500">Secure & Trusted</h3>
                 <p className="text-foreground/70 text-sm">
                   Powered by Coinbase's industry-leading security and compliance
                 </p>
@@ -570,7 +570,7 @@ export default function HomePage() {
 
               <Card className="p-6 bg-card-gradient backdrop-blur-sm border-border/40 hover:scale-105 transition-transform">
                 <TrendingUp className="w-12 h-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Easy Payment</h3>
+                <h3 className="text-xl font-semibold mb-2 text-orange-500">Easy Payment</h3>
                 <p className="text-foreground/70 text-sm">
                   Multiple payment methods including credit/debit cards and bank transfers
                 </p>
