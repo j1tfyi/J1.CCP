@@ -47,86 +47,103 @@ export const VideoBackground: React.FC<VideoBackgroundProps> = ({
   }, [priority]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !isInView) return;
+    if (!isInView) return;
 
-    // Mobile detection
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    // Small delay to ensure DOM is ready
+    const initVideo = setTimeout(() => {
+      const video = videoRef.current;
+      if (!video) return;
 
-    // Force video attributes for mobile
-    if (isMobile) {
-      video.setAttribute('playsinline', 'true');
-      video.setAttribute('webkit-playsinline', 'true');
-      video.setAttribute('x5-playsinline', 'true');
-      video.setAttribute('x5-video-player-type', 'h5');
-      video.setAttribute('x5-video-player-fullscreen', 'false');
-    }
+      // Mobile detection
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-    // Play video function
-    const playVideo = async () => {
-      try {
-        video.muted = true;
-        video.defaultMuted = true;
-
-        // On mobile and Safari, we need to be more aggressive
-        if (isMobile || isSafari) {
-          video.currentTime = 0;
-        }
-
-        await video.play();
-      } catch (err) {
-        console.log('Video play attempt failed:', err);
-
-        // On mobile, try playing on first user interaction
-        if (isMobile) {
-          const handleFirstInteraction = async () => {
-            try {
-              video.muted = true;
-              await video.play();
-            } catch (e) {
-              console.log('Video play on interaction failed:', e);
-            }
-            document.removeEventListener('touchstart', handleFirstInteraction);
-            document.removeEventListener('click', handleFirstInteraction);
-          };
-
-          document.addEventListener('touchstart', handleFirstInteraction, { once: true });
-          document.addEventListener('click', handleFirstInteraction, { once: true });
-        }
+      // Force video attributes for mobile
+      if (isMobile) {
+        video.setAttribute('playsinline', 'true');
+        video.setAttribute('webkit-playsinline', 'true');
+        video.setAttribute('x5-playsinline', 'true');
+        video.setAttribute('x5-video-player-type', 'h5');
+        video.setAttribute('x5-video-player-fullscreen', 'false');
       }
-    };
 
-    // Force load the video
-    video.load();
+      // Play video function
+      const playVideo = async () => {
+        try {
+          video.muted = true;
+          video.defaultMuted = true;
 
-    // Try to play when ready
-    const handleCanPlay = () => {
-      playVideo();
-    };
+          // On mobile and Safari, we need to be more aggressive
+          if (isMobile || isSafari) {
+            video.currentTime = 0;
+          }
 
-    video.addEventListener('canplaythrough', handleCanPlay, { once: true });
+          await video.play();
+          console.log('Video playing successfully');
+        } catch (err) {
+          console.log('Video play attempt failed:', err);
 
-    // Fallback play attempts with delays
-    setTimeout(playVideo, 100);
-    setTimeout(playVideo, 500);
-    if (isMobile || isSafari) {
-      setTimeout(playVideo, 1000);
-      setTimeout(playVideo, 2000);
-    }
+          // On mobile, try playing on first user interaction
+          if (isMobile) {
+            const handleFirstInteraction = async () => {
+              try {
+                video.muted = true;
+                await video.play();
+              } catch (e) {
+                console.log('Video play on interaction failed:', e);
+              }
+              document.removeEventListener('touchstart', handleFirstInteraction);
+              document.removeEventListener('click', handleFirstInteraction);
+            };
 
-    // Play when page becomes visible (for mobile browsers)
-    const handleVisibilityChange = () => {
-      if (!document.hidden && video.paused) {
+            document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+            document.addEventListener('click', handleFirstInteraction, { once: true });
+          }
+        }
+      };
+
+      // Add error handling
+      const handleError = (e: Event) => {
+        console.error('Video load error:', e);
+      };
+      video.addEventListener('error', handleError);
+
+      // Force load the video
+      video.load();
+
+      // Try to play when ready
+      const handleCanPlay = () => {
         playVideo();
+      };
+
+      video.addEventListener('canplaythrough', handleCanPlay, { once: true });
+
+      // Fallback play attempts with delays
+      setTimeout(playVideo, 100);
+      setTimeout(playVideo, 500);
+      if (isMobile || isSafari) {
+        setTimeout(playVideo, 1000);
+        setTimeout(playVideo, 2000);
       }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+      // Play when page becomes visible (for mobile browsers)
+      const handleVisibilityChange = () => {
+        if (!document.hidden && video.paused) {
+          playVideo();
+        }
+      };
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+
+      return () => {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        video.removeEventListener('error', handleError);
+      };
+    }, 50);
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearTimeout(initVideo);
     };
-  }, [src]);
+  }, [isInView, src]);
 
   // Get base filename without extension
   const baseSrc = src.replace(/\.(mp4|mov|webm)$/, '');
