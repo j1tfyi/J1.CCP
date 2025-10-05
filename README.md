@@ -76,7 +76,7 @@ deBridge enables:
 
 **25+ Total Networks**
 
-#### EVM Chains (22 chains)
+#### EVM Chains (22 chains):
 1. Abstract
 2. Arbitrum
 3. Avalanche (C-Chain)
@@ -100,7 +100,7 @@ deBridge enables:
 21. Story
 22. Zilliqa
 
-#### Non-EVM Chains (3 chains)
+#### Non-EVM Chains (3 chains):
 23. Solana
 24. xStocks via Solana
 25. Tron
