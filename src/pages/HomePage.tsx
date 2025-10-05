@@ -830,7 +830,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-background to-primary/10 relative overflow-hidden">
+      <section className="py-24 px-4 relative overflow-hidden">
         <div className="w-full px-4 sm:px-6 md:container md:mx-auto text-center relative z-10">
           <h2 className="text-4xl font-bold text-center mb-6" style={{ textShadow: 'none !important', WebkitTextStroke: 'none !important', filter: 'none' }}>
             <span style={{ textShadow: 'none !important', WebkitTextStroke: 'none !important' }}>Experience the </span>
