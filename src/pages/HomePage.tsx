@@ -87,17 +87,60 @@ export default function HomePage() {
         } catch (error) {
           console.log('[deBridge] Using fallback config for development');
           // Fallback configuration for development
+          const SUPPORTED_CHAINS_EVM = [1, 10, 56, 100, 137, 146, 250, 388, 747, 999, 1088, 1329, 1514, 2741, 5000, 7141, 7171, 8453, 9745, 32769, 42161, 43114, 48900, 50104, 59144, 60808, 80094, 98866, 999999, 245022934, 728126428];
+          const SUPPORTED_CHAINS_SOLANA = [7565164];
+
           config = {
+            v: "1",
             element: 'debridgeWidget',
-            inputChain: 1,  // Ethereum
-            outputChain: 7565164,  // Solana
-            inputCurrency: '0x0000000000000000000000000000000000000000',
-            outputCurrency: '11111111111111111111111111111111',
+            title: "",
+            description: "J1.CROSS-CHAIN PORTAL",
+            width: "100%",
+            height: "850",
+            inputChain: 1,
+            outputChain: 7565164,
+            inputCurrency: '',
+            outputCurrency: 'HAqD46mR4LgY3aJiMZSabfefZoysG3Uuj6wn2ZKYE14v',  // J1TFYI token
+            address: "",
+            showSwapTransfer: true,
+            amount: "",
+            outputAmount: "",
+            isAmountFromNotModifiable: false,
+            isAmountToNotModifiable: false,
+            lang: "en",
             mode: 'deswap',
-            affiliateFeePercent: 0.5,
-            affiliateFeeRecipient: '0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E',
+            isEnableCalldata: false,
+            styles: 'eyJhcHBCYWNrZ3JvdW5kIjogInJnYmEoMCwwLDAsMCkiLCAiYXBwQmciOiAidHJhbnNwYXJlbnQiLCAibW9kYWxCZyI6ICJyZ2JhKDcxLDc1LDg0LDAuOTUpIiwgImNoYXJ0QmciOiAicmdiYSg3MSw3NSw4NCwwLjkpIiwgImJvcmRlclJhZGl1cyI6IDMwLCAiYm9yZGVyQ29sb3IiOiAicmdiYSgyNTUsMjU1LDI1NSwwLjIpIiwgImZvcm1Db250cm9sQmciOiAicmdiYSg3MSw3NSw4NCwwLjgpIiwgImNvbnRyb2xCb3JkZXIiOiAicmdiYSgyNTUsMjU1LDI1NSwwLjMpIiwgInByaW1hcnkiOiAiI2ZmZmZmZiIsICJzZWNvbmRhcnkiOiAiIzQ3NGI1NCIsICJzdWNjZXNzIjogIiMwMDY0MDciLCAiZXJyb3IiOiAiI2NkMDEwMSIsICJ3YXJuaW5nIjogIiNlNGU3MDMiLCAiZm9udEZhbWlseSI6ICJBdWRpb3dpZGUiLCAicHJpbWFyeUJ0bkJnIjogIiNmZjc3MDAiLCAicHJpbWFyeUJ0bkJnSG92ZXIiOiAiIzlmNGEwMCIsICJzZWNvbmRhcnlCdG5CZyI6ICIjYjE4NjBmIiwgInNlY29uZGFyeUJ0bkJnSG92ZXIiOiAiI2ZkYzExOSIsICJzZWNvbmRhcnlCdG5PdXRsaW5lIjogIiMwMDAwMDAiLCAiY2hhaW5CdG5QYWRkaW5nIjogIjEyIiwgImRlc2NyaXB0aW9uRm9udFNpemUiOiAiMjIiLCAiZm9ybUJnIjogInRyYW5zcGFyZW50IiwgImlucHV0QmciOiAicmdiYSg3MSw3NSw4NCwwLjYpIiwgIndpZGdldEJnIjogInRyYW5zcGFyZW50IiwgImNvbnRhaW5lckJnIjogInRyYW5zcGFyZW50IiwgImZvcm1QYWRkaW5nIjogeyJ0b3AiOiAyMCwgInJpZ2h0IjogMTUsICJib3R0b20iOiAyMCwgImxlZnQiOiAxNX0sICJmb3JtR3JvdXBQYWRkaW5nIjogeyJ0b3AiOiAyNSwgInJpZ2h0IjogMTIsICJib3R0b20iOiAyNSwgImxlZnQiOiAxMn0sICJmb3JtSGVhZEJ0blNpemUiOiAiMzUiLCAicHJpbWFyeUJ0blRleHQiOiAiIzAwMDAwMCIsICJzZWNvbmRhcnlCdG5UZXh0IjogIiMwMDAwMDAifQ==',
+            modalBg: "rgba(71,75,84,0.95)",
+            chartBg: "rgba(71,75,84,0.9)",
+            borderColor: "#ffffff",
+            tooltipBg: "#161b26",
+            formControlBg: "rgba(71,75,84,0.8)",
+            controlBorder: "#1F242F",
+            primary: "#ffffff",
+            secondary: "#474b54",
+            success: "#006407",
+            error: "#cd0101",
+            warning: "#e4e703",
+            fontColor: "#E6EDE4",
+            fontFamily: "'Audiowide', Inter, sans-serif",
+            descriptionFontSize: "35",
+            theme: "dark",
+            isHideLogo: true,  // HIDE DEBRIDGE LOGO
+            logo: "",
             r: '32422',
-            styles: 'button{background:linear-gradient(135deg,#ff6600,#ffae00)!important;color:#fff!important;border:none!important}button:hover{background:linear-gradient(135deg,#ff8800,#ffcc00)!important}*{font-family:"Inter","Roboto",sans-serif!important}'
+            affiliateFeeRecipient: '0x4A671c9424a95eA56da39D6fd13928e6aFB0Eb3E',
+            affiliateFeePercent: "1",
+            jupiterRefLink: "https://jup.ag/?referrer=EKtLGKfhtaJoUnoPodBesHzfaT8aJozCayv1zw8AKH3h&feeBps=100",
+            jupiterRefAccount: "EKtLGKfhtaJoUnoPodBesHzfaT8aJozCayv1zw8AKH3h",
+            supportedChains: JSON.stringify({
+              inputChains: Object.fromEntries(
+                [...SUPPORTED_CHAINS_EVM, ...SUPPORTED_CHAINS_SOLANA].map(id => [id, ["all"]])
+              ),
+              outputChains: Object.fromEntries(
+                [...SUPPORTED_CHAINS_EVM, ...SUPPORTED_CHAINS_SOLANA].map(id => [id, ["all"]])
+              ),
+            })
           };
         }
 
@@ -164,18 +207,19 @@ export default function HomePage() {
       <header className="sticky-header fixed top-0 left-0 right-0 z-50 border-b border-border/40 backdrop-blur-md bg-background/60">
         <div className="w-full px-2 sm:px-4 md:container md:mx-auto">
           <nav
-            className="flex items-center justify-between h-20"
+            className="flex items-center justify-between h-16 sm:h-20"
           >
             <a href="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity cursor-pointer">
-              <J1ComboLogo className="h-14 sm:h-16" />
+              <J1ComboLogo className="h-10 sm:h-14 md:h-16" />
             </a>
 
             <div
-              className="flex items-center gap-1 sm:gap-2 md:gap-4"
+              className="flex items-center gap-0.5 sm:gap-2 md:gap-4"
             >
               <Button
                 variant="ghost"
                 size="sm"
+                className="px-2 text-xs sm:text-sm sm:px-3"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
@@ -185,7 +229,8 @@ export default function HomePage() {
                   rel="noopener noreferrer"
                   style={{ pointerEvents: "auto" }}
                 >
-                  Community
+                  <span className="hidden sm:inline">Community</span>
+                  <span className="sm:hidden">Chat</span>
                 </a>
               </Button>
               <Button
@@ -202,17 +247,19 @@ export default function HomePage() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden sm:inline-flex"
+                className="px-2 text-xs sm:text-sm sm:px-3"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
                 <a href="#portal-widget" style={{ pointerEvents: "auto" }}>
-                  Portal
+                  <span className="hidden sm:inline">Portal</span>
+                  <span className="sm:hidden">Bridge</span>
                 </a>
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
+                className="px-2 text-xs sm:text-sm sm:px-3"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
@@ -228,6 +275,7 @@ export default function HomePage() {
               <Button
                 variant="ghost"
                 size="sm"
+                className="px-2 sm:px-3"
                 style={{ pointerEvents: "auto" }}
                 asChild
               >
@@ -241,10 +289,17 @@ export default function HomePage() {
                 </a>
               </Button>
 
-              {/* Coinbase Integration */}
-              <div className="border-l border-border/40 pl-2 ml-2 flex items-center gap-2">
-                <CoinbaseOnrampButton />
-              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="hidden lg:inline-flex px-2 text-xs sm:text-sm sm:px-3"
+                style={{ pointerEvents: "auto" }}
+                asChild
+              >
+                <a href="#onramp" style={{ pointerEvents: "auto", color: "#f97316" }}>
+                  Fiat ↔ Coinbase
+                </a>
+              </Button>
             </div>
           </nav>
         </div>
@@ -252,35 +307,63 @@ export default function HomePage() {
 
       <main className="relative z-10 pt-16">
       {/* Hero Section */}
-        <section className="pt-20 sm:pt-28 md:pt-24 pb-12 px-2 relative">
+        <section className="pb-12 px-2 relative pt-12 md:pt-0" style={{ paddingTop: '2rem' }}>
           <div className="container mx-auto text-center relative">
             <div className="relative z-10">
-              <div className="hidden md:block">
-                <J1Logo className="h-24 sm:h-32 mx-auto block" style={{ position: 'relative', zIndex: 1, marginBottom: '-145px' }} />
+              <div className="hidden lg:block" style={{ paddingTop: '2.5rem' }}>
+                <J1Logo className="h-24 sm:h-32 mx-auto block" style={{ position: 'relative', zIndex: 20, marginBottom: '-130px' }} />
+              </div>
+              <div className="hidden md:block lg:hidden" style={{ paddingTop: '2rem' }}>
+                <J1Logo className="h-24 mx-auto block" style={{ position: 'relative', zIndex: 20, marginBottom: '-60px' }} />
               </div>
               <div className="block md:hidden">
-                <J1Logo className="h-20 mx-auto block" style={{ position: 'relative', zIndex: 1, marginBottom: '-80px', top: '-60px' }} />
+                <J1Logo className="h-20 mx-auto block" style={{ position: 'relative', zIndex: 30, marginBottom: '-20px' }} />
               </div>
-              <img
-                src="/titlepage.png"
-                alt="J1.CrossChain Portal"
-                className="w-full h-auto max-w-none md:relative"
-                style={{ position: 'relative', zIndex: 1, top: '-40px', marginBottom: '-100px' }}
-              />
+              <picture>
+                <source media="(max-width: 767px)" srcSet="/mobiletitlepage.png" />
+                <source media="(min-width: 768px)" srcSet="/pagetitle.png" />
+                <img
+                  src="/pagetitle.png"
+                  alt="J1.CrossChain Portal"
+                  className="h-auto max-w-none md:relative w-full md:w-[110%]"
+                  style={{ position: 'relative' }}
+                />
+              </picture>
               <style jsx>{`
-                @media (min-width: 768px) {
+                @media (min-width: 1024px) {
                   img[alt="J1.CrossChain Portal"] {
-                    top: -145px !important;
-                    margin-bottom: -430px !important;
+                    width: 110% !important;
+                    max-width: 110% !important;
+                    margin-left: -5% !important;
+                    margin-bottom: -230px !important;
+                    top: -60px !important;
+                  }
+                }
+                @media (min-width: 768px) and (max-width: 1023px) {
+                  img[alt="J1.CrossChain Portal"] {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                    margin-left: 0 !important;
+                    margin-bottom: -120px !important;
+                    top: -30px !important;
+                  }
+                }
+                @media (max-width: 767px) {
+                  img[alt="J1.CrossChain Portal"] {
+                    width: 110% !important;
+                    max-width: 110% !important;
+                    margin-left: -5% !important;
+                    margin-bottom: -30px !important;
+                    top: -10px !important;
                   }
                 }
               `}</style>
-              <div className="mt-0 md:-mt-56">
+              <div className="mt-0">
                 <p className="text-xl sm:text-2xl md:text-4xl mb-4 max-w-5xl mx-auto">
-                  <span style={{ color: "#f97316" }}>One Portal.</span> <span style={{ color: "#ffffff" }}>Infinite Possibilities.</span> <span style={{ color: "#f97316" }}>Zero Risk.</span>
+                  <span className="text-orange-500">One Portal.</span> <span className="text-foreground/80">Infinite Possibilities.</span> <span className="text-orange-500">Zero Risk.</span>
                 </p>
                 <p className="text-lg sm:text-xl md:text-3xl text-foreground/70 mb-5 max-w-3xl mx-auto">
-                  Instant. Secure. Borderless.
+                  Instant. <span className="text-orange-500">Secure.</span> Borderless.
                 </p>
                 <p className="text-base sm:text-lg md:text-2xl text-foreground/70 mb-6 max-w-2xl mx-auto">
                   Cross-Chain Swap in Seconds
@@ -791,8 +874,8 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/40 backdrop-blur-md bg-background/60 py-6 sm:py-8">
-        <div className="w-full px-4 sm:px-6 md:container md:mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="w-full px-4 sm:px-6 lg:container lg:mx-auto">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
             <div>
               <a href="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity cursor-pointer">
                 <J1ComboLogo className="h-12 sm:h-14" />

@@ -23,7 +23,7 @@ export function CoinbaseOnrampButton() {
         title="Buy crypto with fiat currency via Coinbase"
       >
         <CreditCard className="h-4 w-4" />
-        <span className="hidden sm:inline">Fiat → Crypto (Coinbase)</span>
+        <span className="hidden sm:inline">Fiat → Coinbase</span>
         <span className="sm:hidden">Fiat → Crypto</span>
       </button>
 
@@ -33,7 +33,7 @@ export function CoinbaseOnrampButton() {
         title="Sell crypto for fiat currency via Coinbase"
       >
         <DollarSign className="h-4 w-4" />
-        <span className="hidden sm:inline">Crypto → Fiat (Coinbase)</span>
+        <span className="hidden sm:inline">Coinbase → Fiat</span>
         <span className="sm:hidden">Crypto → Fiat</span>
       </button>
     </div>
