@@ -360,7 +360,7 @@ export default function HomePage() {
               `}</style>
               <div className="mt-0">
                 <p className="text-xl sm:text-2xl md:text-4xl mb-4 max-w-5xl mx-auto">
-                  <span className="text-orange-500">One Portal.</span> <span className="text-foreground/80">Infinite Possibilities.</span> <span className="text-orange-500">Zero Risk.</span>
+                  <span className="text-white">One Portal.</span> <span className="text-orange-500">Infinite Possibilities.</span> <span className="text-white">Zero Risk.</span>
                 </p>
                 <p className="text-lg sm:text-xl md:text-3xl text-foreground/70 mb-5 max-w-3xl mx-auto">
                   Instant. <span className="text-orange-500">Secure.</span> Borderless.
@@ -603,7 +603,7 @@ export default function HomePage() {
                   J1.CROSS-CHAIN <span className="gradient-text">PORTAL</span>
                 </h2>
                 <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
-                  One Portal. Infinite Possibilities. Zero Risk.
+                  One Portal. <span className="gradient-text">Infinite Possibilities.</span> Zero Risk.
                 </p>
               </div>
 

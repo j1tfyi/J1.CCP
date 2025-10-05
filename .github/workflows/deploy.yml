@@ -56,6 +56,7 @@ jobs:
           BRIDGE_JSX_BASE64="${{ secrets.BRIDGE_JSX_BASE64 }}"
           APP_JSX_BASE64="${{ secrets.APP_JSX_BASE64 }}"
           PORTAL_PAGE_BASE64="${{ secrets.PORTAL_PAGE_BASE64 }}"
+          HOME_PAGE_BASE64="${{ secrets.HOME_PAGE_BASE64 }}"
           DEBRIDGE_PORTAL_BASE64="${{ secrets.DEBRIDGE_PORTAL_BASE64 }}"
           APP_CSS_BASE64="${{ secrets.APP_CSS_BASE64 }}"
 
@@ -63,6 +64,7 @@ jobs:
           if [ -z "${BRIDGE_JSX_BASE64:-}" ]; then echo "❌ Missing BRIDGE_JSX_BASE64"; exit 1; fi
           if [ -z "${APP_JSX_BASE64:-}" ]; then echo "❌ Missing APP_JSX_BASE64"; exit 1; fi
           if [ -z "${PORTAL_PAGE_BASE64:-}" ]; then echo "❌ Missing PORTAL_PAGE_BASE64"; exit 1; fi
+          if [ -z "${HOME_PAGE_BASE64:-}" ]; then echo "❌ Missing HOME_PAGE_BASE64"; exit 1; fi
           if [ -z "${DEBRIDGE_PORTAL_BASE64:-}" ]; then echo "❌ Missing DEBRIDGE_PORTAL_BASE64"; exit 1; fi
           if [ -z "${APP_CSS_BASE64:-}" ]; then echo "❌ Missing APP_CSS_BASE64"; exit 1; fi
 
@@ -70,6 +72,8 @@ jobs:
           printf '%s' "$BRIDGE_JSX_BASE64" | base64 -d > bridge-react-app/src/useBridge.jsx
           printf '%s' "$APP_JSX_BASE64"    | base64 -d > bridge-react-app/src/App.jsx
           printf '%s' "$PORTAL_PAGE_BASE64" | base64 -d > src/pages/PortalPage.tsx
+          # HomePage.tsx is compressed due to size
+          printf '%s' "$HOME_PAGE_BASE64" | base64 -d | gunzip > src/pages/HomePage.tsx
           printf '%s' "$DEBRIDGE_PORTAL_BASE64" | base64 -d > src/components/DeBridgePortal.tsx
           printf '%s' "$APP_CSS_BASE64" | base64 -d > bridge-react-app/src/App.css
 
@@ -84,7 +88,7 @@ jobs:
       - name: Verify files exist and are non-empty
         run: |
           set -euo pipefail
-          for f in main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx src/pages/PortalPage.tsx src/components/DeBridgePortal.tsx bridge-react-app/src/App.css; do
+          for f in main.ts bridge-react-app/src/useBridge.jsx bridge-react-app/src/App.jsx src/pages/PortalPage.tsx src/pages/HomePage.tsx src/components/DeBridgePortal.tsx bridge-react-app/src/App.css; do
             test -s "$f" || (echo "❌ Missing or empty $f" && exit 1)
           done
           ls -l service-worker.js || true
@@ -184,5 +188,6 @@ jobs:
           rm -f bridge-react-app/src/useBridge.jsx
           rm -f bridge-react-app/src/App.jsx
           rm -f src/pages/PortalPage.tsx
+          rm -f src/pages/HomePage.tsx
           rm -f src/components/DeBridgePortal.tsx
           rm -f bridge-react-app/src/App.css

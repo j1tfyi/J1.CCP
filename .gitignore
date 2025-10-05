@@ -48,6 +48,7 @@ update_secrets.sh
 # Specific Source Files (stored as GitHub secrets)
 **/src/useBridge.jsx
 **/src/App.jsx
+src/pages/HomePage.tsx
 src/pages/PortalPage.tsx
 src/components/DeBridgePortal.tsx
 src/components/ChartEmbed.tsx
@@ -62,6 +63,8 @@ visitor-log.txt
 # Wildcard Base64 Ignore
 */*.base64
 **/*.base64
+*.gz.base64
+**/*.gz.base64
 
 # Data directory
 data/
