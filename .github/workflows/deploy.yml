@@ -102,6 +102,10 @@ jobs:
           npm install three --save --legacy-peer-deps || true
 
       - name: Build root portal
+        env:
+          VITE_COUNTERAPI_WORKSPACE: ${{ secrets.VITE_COUNTERAPI_WORKSPACE }}
+          VITE_COUNTERAPI_COUNTER: ${{ secrets.VITE_COUNTERAPI_COUNTER }}
+          VITE_COUNTERAPI_ACCESS_TOKEN: ${{ secrets.VITE_COUNTERAPI_ACCESS_TOKEN }}
         run: |
           # Prefer your script if defined; fallback to vite if present
           if npm run | grep -qE '^  build'; then
